@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <div className="grid">
-        <h1 className="text-7xl uppercase text-center">Hello World</h1>
+        <h1 className="text-7xl uppercase text-center">Hello World everyone</h1>
       </div>
     </>
   )
