@@ -14,7 +14,11 @@ const Mentee = require("../models/mentee.model");
 router.post("/register", async (req, res) => {
   try {
     // Destructure the request body:
-    const { firstName, lastName, email, password, userType } = req.body;
+    let { firstName, lastName, email, password, userType } = req.body;
+
+    if (email.toLowerCase().endsWith("@placeholder.edu")) {
+      userType = "Mentor";
+    }
 
     // Make sure userType is provided:
     if (!userType) {
@@ -67,14 +71,15 @@ router.post("/register", async (req, res) => {
         lastName: newUser.lastName,
         email: newUser.email,
         userType: newUser.userType,
+        isProfileComplete: false, // added to keep track of profile completion (picture, bio, interest, etc.)
       },
     });
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-// TODO Route for Login
+// ! Route for Login
 // ENDPOINT: "http://localhost:4000/user/login"
 // Request type: POST
 router.post("/login", async (req, res) => {
@@ -106,11 +111,24 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // Create JWT token
+    const token = jwt.sign({ id: user._id, userType: userType }, "secret", {
+      expiresIn: "7d",
+    });
+
     res.status(200).json({
       message: `Welcome, ${user.firstName}. You have been successfuly logged in.`,
+      token: token,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        userType: userType,
+      },
     });
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
@@ -132,12 +150,27 @@ router.put("/update/:id", validateSession, async (req, res) => {
     // Empty object to hold updated info
     const updatedInfo = {};
 
-    // If fields are undefined dont update
+    // only update if provided values are NOT undefined
     if (firstName !== undefined) updatedInfo.firstName = firstName;
     if (lastName !== undefined) updatedInfo.lastName = lastName;
     if (email !== undefined) updatedInfo.email = email;
     if (password !== undefined) {
       updatedInfo.password = bcrypt.hashSync(password, 10);
+    }
+    // ToDo return the updated user info (if/else mentor/mentee)
+    let updatedUser = null;
+    if (req.userType === "Mentor") {
+      updatedUser = await Mentor.findOneAndUpdate(
+        filter,
+        updatedInfo,
+        { new: true } // Returns the updated info
+      );
+    } else {
+      updatedUser = await Mentee.findOneAndUpdate(
+        filter,
+        updatedInfo,
+        { new: true } // Returns the updated info
+      );
     }
 
     // if update not successful, give error
@@ -188,6 +221,68 @@ router.delete("/delete/:id", validateSession, async (req, res) => {
         deletedUser: "Mentee",
       });
     }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// !mRoute for updating user profile information (separate from basic account register)
+// ENDPOINT: "http://localhost:4000/user/profile/:id"
+// Request type: PUT
+router.put("/profile/:id", validateSession, async (req, res) => {
+  try {
+    // Store id in variable
+    const id = req.params.id;
+
+    // Initialize variables
+    let profileInfo = {};
+    let isProfileComplete = true;
+
+    // ! If user is mentor, update MENTOR specific profile fields
+    if (req.userType === "Mentor") {
+      // Extract mentor fields from req.body
+      const { bio, profilePhoto, interests, questionToAsk } = req.body;
+
+      profileInfo = {
+        bio: bio || "",
+        profilePhoto: profilePhoto || "",
+        interests: interests || "",
+        questionToAsk: questionToAsk || "",
+      };
+
+      // Check if all required fields are completed, if not set isProfileComplete = false
+      if (!bio || !profilePhoto || !interests || !questionToAsk) {
+        isProfileComplete = false;
+      }
+
+      // If mentee, update mentee specific profile fields
+    } else if (req.userType === "Mentee") {
+      const { age, interests, school, guardianEmail } = req.body;
+
+      profileInfo = {
+        age: age || null,
+        interests: interests || "",
+        school: school || "",
+        guardianEmail: guardianEmail || "",
+      };
+
+      // Check if all required fields are completed, if not, set profileComplete = false
+      if (!age || !interests || !school || !guardianEmail) {
+        isProfileComplete = false;
+      }
+    }
+
+    // Update user info based on user type
+    const User = req.userType === "Mentor" ? Mentor : Mentee;
+    const updatedUser = await User.findByIdAndUpdate(id, profileInfo, {
+      new: true,
+    });
+
+    // if no user found, give error
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: `Profile successfully completed` });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

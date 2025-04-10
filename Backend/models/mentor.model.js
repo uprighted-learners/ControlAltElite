@@ -19,6 +19,7 @@ const MentorSchema = new mongoose.Schema({
     required: true,
   },
   userType: {
+    type: String, 
     enum: ["Mentor", "Mentee"],
     default: "Mentor",
     required: true,
@@ -26,24 +27,25 @@ const MentorSchema = new mongoose.Schema({
 
   // Mentor specific profile fields
   //   ! match requests
-  approvedMentees: {},
-  menteeRequests: {},
+  approvedMentees: [{},],
+  menteeRequests: [{}],
 
+  // 
   profilePhoto: {
     type: String, // URL for uploaded photo
-    required: true,
+    required: false, // Changed from true to false after initial push
   },
   bio: {
     type: String,
-    required: true,
+    required: false,
   },
   interests: {
     type: String,
-    required: true,
+    required: false, 
   },
   questionToAsk: {
     type: String,
-    required: true,
+    required: false, 
   },
 });
 

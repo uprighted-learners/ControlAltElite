@@ -19,23 +19,31 @@ const MenteeSchema = new mongoose.Schema({
     required: true,
   },
   userType: {
+    type: String, // Added this line after merging
     enum: ["Mentor", "Mentee"],
     default: "Mentee",
+    required: true,
   },
 
-// Mentee specific fields:
-requestedMentors:{
-    
-},
-approvedMentors:{
-
-},
-interests: {
+  // Mentee specific fields:
+  requestedMentors: [{}],
+  approvedMentors: [{}],
+  age: {
+    type: Number,
+    required: false, // Initially false, but is required for profile completion
+  },
+  interests: {
     type: String,
-    required: true,
-},
-
-
+    required: false, // Initially false, but is required for profile completion
+  },
+  school: {
+    type: String,
+    required: false, // Initially false, but is required for profile completion
+  },
+  guardianEmail: {
+    type: String,
+    required: false, // Initially false, but is required for profile completion
+  },
 });
 
 module.exports = mongoose.model("Mentee", MenteeSchema);

@@ -15,6 +15,8 @@ const validateSession = async (req, res, next) => {
     //2. validate token & make sure it is not expired
     const decodedToken = jwt.verify(token, "secret");
 
+    const { id, userType } = decodedToken;
+
     //3. check database to verify that the user is active
     let user = null;
     // if/else statememnt to check both mentor and mentee

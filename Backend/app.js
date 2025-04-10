@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const userController = require("./controllers/user.controller");
+const matchController = require("./controllers/match.controller")
 
 // Connecting to the Database
 mongoose.connect("mongodb://localhost:27017/ctrlaltelite-db");
@@ -13,6 +14,7 @@ app.use(express.json());
 
 //  *** TODO Controller Routes BELOW ***
 app.use("/user", userController);
+app.use("/match", matchController);
 
 
 const PORT = 4000;
