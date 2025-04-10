@@ -1,9 +1,12 @@
+
 console.log("This is the match request controller");
+
 
 const router = require("express").Router();
 const validateSession = require("../middleware/validate-session");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
+
 const MatchRequest = require("../models/match-request.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -56,3 +59,7 @@ router.post("/request", validateSession, async (req, res) => {
     res.json({ message: error.message });
   }
 });
+
+
+// TODO route for mentee to request mentor
+
