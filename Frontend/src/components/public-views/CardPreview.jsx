@@ -4,13 +4,13 @@ import React from "react";
 const CardPreview = (props) => {
   return (
     <>
-      <div className="card bg-base-100 w-96 shadow-sm h-full">
+      <div className="card bg-base-100 w-full max-w-sm mx-auto shadow-sm h-full box-border">
         <figure className="px-10 pt-10">
           {/* Profile Image */}
           <img
             src={props.imageUrl}
             alt={props.title}
-            className="rounded-xl w-full h-64 object-cover"
+            className="rounded-xl w-full h-48 object-cover"
           />
         </figure>
         {/* Mentor Info */}

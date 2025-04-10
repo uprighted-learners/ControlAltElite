@@ -1,6 +1,11 @@
 // Mentor Directory (carousel)
 import React from "react";
 import CardPreview from "./CardPreview";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
 
 const MentorDirectory = (props) => {
   // Placeholder data for looping
@@ -37,34 +42,31 @@ const MentorDirectory = (props) => {
 
   return (
     <>
-      <div className="carousel w-full h-screen mt-6">
-        {/* Carousel Slide */}
-        <div className="carousel-item relative w-full h-full">
-          <div className="flex space-x-6 justify-center">
-            {/* Mount Card & Map data (todo)*/}
-            {mentorData.map((mentor, index) => (
-              <div key={mentor.id}>
-                <CardPreview
-                  imageUrl={mentor.imageUrl}
-                  title={mentor.title}
-                  description={mentor.description}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+                  {/* Swiper Carousel */}
+                  <Swiper
+                  style={{height: 'auto', width: '100%' }}
+      spaceBetween={30}
+      slidesPerView={3}
+      breakpoints={{
+        640: { slidesPerView: 1 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      }}
+      onSlideChange={() => console.log('slide change')}
+      onSwiper={(swiper) => console.log(swiper)}
+    >
+      {mentorData.map((mentor)=> (
+        <SwiperSlide key={mentor.id}>
+          <CardPreview
+          imageUrl={mentor.imageUrl}
+          title={mentor.title}
+          description={mentor.description}/>
+        </SwiperSlide>
+      ))}
 
-        {/* Carousel Navigation */}
-        {/* TO DO - navigation not working / check 'carousel-item'/slide use */}
-        <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-          <a href="#slide1" className="btn btn-circle" data-carousel-prev>
-            ❮
-          </a>
-          <a href="#slide2" className="btn btn-circle" data-carousel-next>
-            ❯
-          </a>
-        </div>
-      </div>
+    </Swiper>
+
+
     </>
   );
 };
