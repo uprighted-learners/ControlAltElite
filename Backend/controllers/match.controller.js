@@ -27,7 +27,7 @@ router.post("/request", validateSession, async (req, res) => {
     const menteeId = req.user.id;
     console.log(menteeId);
 
-    //3. Check if mentee already has an existing match request
+    //3. Check if mentee already has an existing match equest
     const existingRequest = await MatchRequest.findOne({ where: { menteeId } });
 
     if (existingRequest) {

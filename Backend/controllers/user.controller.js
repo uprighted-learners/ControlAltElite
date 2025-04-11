@@ -151,15 +151,10 @@ router.get("/mentor/profile/:id", validateSession, async (req, res) => {
     //1. store id in a variable
     const id = req.params.id;
     console.log(id);
-    //2. variable that will store user id
-    const filter = { _id: id };
-
-    // supply req.body only with fields that user should be able to update
+   
+    //2. supply req.body only with fields that user should be able to update
     // dont let user change their userType
     const { bio, interests, questionToAsk } = req.body;
-
-    // Empty object to hold updated info
-    const updatedInfo = {};
 
     // 3. Check if the user exists
     const user = await Mentor.findById(id);
@@ -204,16 +199,8 @@ router.get("/mentee/profile/:id", validateSession, async (req, res) => {
   try {
     //1. store id in a variable
     const id = req.params.id;
-
-    //2. variable that will store user id
-    const filter = { _id: id };
-
-    // supply req.body only with fields that user should be able to update
-    // dont let user change their userType
+  
     const { bio } = req.body;
-
-    // Empty object to hold updated info
-    const updatedInfo = {};
 
     // 3. Check if the user exists
     const user = await Mentee.findById(id);
