@@ -12,22 +12,40 @@ const Mentee = require("../models/mentee.model");
 // Endpoint: http://localhost:4000/user/register
 // Request Type: POST
 router.post("/register", async (req, res) => {
+  console.log("In register route");
   try {
     // Destructure the request body:
-    const { firstName, lastName, email, password, userType } = req.body;
+    const { firstName, lastName, email, password, zipCode } = req.body;
 
-    // Make sure userType is provided:
-    if (!userType) {
-      return res
-        .status(400)
-        .json({ message: "Your user type is required (Mentor or Mentee)" });
+    // Check if email ends in "bennington.edu" then assign userType to be mentor
+    let userType;
+    if (email.endsWith("@bennington.edu")) {
+      userType = "Mentor";
+    } else {
+      if (zipCode === "05201") {
+        userType = "Mentee";
+      } else {
+        throw new Error("Invalid email and district code");
+      }
+    }
+    // Append userType to the request body
+    req.body.userType = userType;
+    // Check if userType is either Mentor or Mentee
+    if (userType !== "Mentor" && userType !== "Mentee") {
+      return res.status(400).json({ message: "Invalid user type" });
     }
 
     // TODO Notify if user email has already been used
+    const existingUser =
+      (await Mentor.findOne({ email: email })) ||
+      (await Mentee.findOne({ email: email }));
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already in use" });
+    }
 
     // establish empty user variable
     let user = null;
-
+    console.log(userType); //*
     // Create user
     // use if/else statement based on userType
     if (userType === "Mentor") {
@@ -36,8 +54,6 @@ router.post("/register", async (req, res) => {
         lastName: lastName,
         email: email,
         password: bcrypt.hashSync(password, 10),
-        approvedMentees: [], //empty array to push accepted mentee into
-        menteeRequests: [], // empty array to push match requests into
       });
     } else {
       user = new Mentee({
@@ -45,21 +61,23 @@ router.post("/register", async (req, res) => {
         lastName: lastName,
         email: email,
         password: bcrypt.hashSync(password, 10),
-        approvedMentors: [], // empty array to push accepted mentor into
-        requestedMentors: [], // empty array to keep track of match request
       });
     }
-
     //  Save the new user in the database and store the response in a variable (saved user)
     const newUser = await user.save();
 
     // Create JWT token
-    const token = jwt.sign({ id: newUser._id, userType: userType }, "secret", {
-      expiresIn: "7d",
-    });
-
+    const token = jwt.sign(
+      { id: newUser._id, userType: userType },
+      process.env.JWT_SECRET || "secret",
+      {
+        // Use environment variable
+        expiresIn: "7d",
+      }
+    );
+    console.log(token);
     res.status(201).json({
-      message: ` New ${newUser.userType} successfully registered!`,
+      message: ` New ${newUser.firstName} successfully registered!`,
       token: token,
       user: {
         id: newUser._id,
@@ -105,19 +123,84 @@ router.post("/login", async (req, res) => {
     if (!isValidPassword) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
+    console.log("password is valid");
+    // If user found and password is valid, create JWT token
+    const token = jwt.sign(
+      { id: user._id, userType: userType },
+      process.env.JWT_SECRET || "secret",
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.status(200).json({
       message: `Welcome, ${user.firstName}. You have been successfuly logged in.`,
+      token: token,
+      id: user._id,
     });
   } catch (error) {
     res.json({ message: error.message });
   }
 });
 
-// TODO ROUTE TO UPDATE USER
-// ENDPOINT: "http://localhost:4000/user/update/:id"
-// Request type: PUT
-router.put("/update/:id", validateSession, async (req, res) => {
+// TODO Route to get user profile
+// ENDPOINT: "http://localhost:4000/user/profile/:id"
+// Request type: GET
+router.get("/mentor/profile/:id", validateSession, async (req, res) => {
+  try {
+    //1. store id in a variable
+    const id = req.params.id;
+    console.log(id);
+    //2. variable that will store user id
+    const filter = { _id: id };
+
+    // supply req.body only with fields that user should be able to update
+    // dont let user change their userType
+    const { bio, interests, questionToAsk } = req.body;
+
+    // Empty object to hold updated info
+    const updatedInfo = {};
+
+    // 3. Check if the user exists
+    const user = await Mentor.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    console.log("User found");
+    // 4. Update the user information using mapping
+    const updatedUser = await Mentor.findById(id);
+    //3. Update the user information
+    updatedUser.bio = bio;
+    updatedUser.interests = interests;
+    updatedUser.questionToAsk = questionToAsk;
+    //4. Save the user information
+    await updatedUser.save();
+    //5. Send back the updated user information
+    console.log(updatedUser);
+
+    console.log("User found 2", updatedUser);
+    // if update not successful, give error
+    // if (!updatedUser) {
+    //   return res.status(404).json({ message: "Error updating user" });
+    // }
+    res.status(200).json({
+      message: `User successfully updated`,
+      user: {
+        id: updatedUser._id,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        bio: updatedUser.bio,
+        interests: updatedUser.interests,
+        questionToAsk: updatedUser.questionToAsk,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/mentee/profile/:id", validateSession, async (req, res) => {
   try {
     //1. store id in a variable
     const id = req.params.id;
@@ -127,19 +210,18 @@ router.put("/update/:id", validateSession, async (req, res) => {
 
     // supply req.body only with fields that user should be able to update
     // dont let user change their userType
-    const { firstName, lastName, email, password } = req.body;
+    const { bio } = req.body;
 
     // Empty object to hold updated info
     const updatedInfo = {};
 
-    // If fields are undefined dont update
-    if (firstName !== undefined) updatedInfo.firstName = firstName;
-    if (lastName !== undefined) updatedInfo.lastName = lastName;
-    if (email !== undefined) updatedInfo.email = email;
-    if (password !== undefined) {
-      updatedInfo.password = bcrypt.hashSync(password, 10);
+    // 3. Check if the user exists
+    const user = await Mentee.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-
+    // 5. Save the user information
+    await updatedUser.save();
     // if update not successful, give error
     if (!updatedUser) {
       return res.status(404).json({ message: "Error updating user" });
