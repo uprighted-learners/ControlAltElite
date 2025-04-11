@@ -18,24 +18,26 @@ const MenteeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  userType: {
-    enum: ["Mentor", "Mentee"],
-    default: "Mentee",
-  },
+  // userType: {
+  //   enum: ["Mentor", "Mentee"],
+  //   default: "Mentee",
+  // },
 
-// Mentee specific fields:
-requestedMentors:{
+  // Mentee specific fields:
+  requestedMentors: {
     
-},
-approvedMentors:{
+  },
+  approvedMentors: {
 
-},
-interests: {
+  },
+  interests: {
     type: String,
     required: true,
-},
-
-
+  },
+  zipcode: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Mentee", MenteeSchema);

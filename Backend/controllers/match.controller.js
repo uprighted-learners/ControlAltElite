@@ -1,12 +1,9 @@
-
 console.log("This is the match request controller");
-
 
 const router = require("express").Router();
 const validateSession = require("../middleware/validate-session");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
-
 const MatchRequest = require("../models/match-request.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -14,7 +11,12 @@ const jwt = require("jsonwebtoken");
 // TODO route for mentee to request mentor
 
 // TODO match request
+// TODO match request
 // ENDPOINT: "http://localhost:4000/user/request"
+// TODO Request type: POST
+//
+// Endpoint: http://localhost:4000/user/request
+// Request Type: POST
 // Request type: POST
 router.post("/request", validateSession, async (req, res) => {
   try {
@@ -48,9 +50,16 @@ router.post("/request", validateSession, async (req, res) => {
     });
     console.log(matchRequest);
 
-    //7. Save match request to Database
-    await matchRequest.save();
-    console.log(matchRequest, " Match request saved successfully.");
+    //7. Save match request to requestedMentors array in Mentee profile
+    const mentee = await Mentee.findById(menteeId);
+    console.log(mentee);
+    mentee.requestedMentors.push(matchRequest._id);
+    await mentee.save();
+    console.log(mentee, " Mentee profile updated successfully.");
+    //8. Save request to menteeRequest array in Mentor profile
+    mentor.menteeRequests.push(matchRequest._id);
+    await mentor.save();
+    console.log(mentor, " Mentor profile updated successfully.");
 
     return res
       .status(201)
@@ -59,7 +68,3 @@ router.post("/request", validateSession, async (req, res) => {
     res.json({ message: error.message });
   }
 });
-
-
-// TODO route for mentee to request mentor
-

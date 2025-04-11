@@ -18,33 +18,35 @@ const MentorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  userType: {
-    enum: ["Mentor", "Mentee"],
-    default: "Mentor",
-    required: true,
-  },
-
-  // Mentor specific profile fields
-  //   ! match requests
-  approvedMentees: {},
-  menteeRequests: {},
-
-  profilePhoto: {
-    type: String, // URL for uploaded photo
-    required: true,
-  },
+  // userType: {
+  //   enum: ["Mentor", "Mentee"],
+  //   default: "Mentor",
+  //   required: true,
+  // },
   bio: {
     type: String,
-    required: true,
+    required: false,
   },
   interests: {
     type: String,
-    required: true,
+    required: false,
   },
   questionToAsk: {
     type: String,
-    required: true,
+    required: false,
   },
+  menteeRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MatchRequest",
+    },
+  ],
+  approvedMentees: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Mentee",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Mentor", MentorSchema);
