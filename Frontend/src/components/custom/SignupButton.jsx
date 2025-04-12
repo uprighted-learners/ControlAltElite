@@ -1,10 +1,11 @@
 import React from "react";
+import "./SignupButton.css";
 
 const SignupButton = (props) => {
   return (
-    <div className="chat-button" onClick={props.onClick}>
+    <button className="chat-button" onClick={props.onClick}>
       {props.children}
-    </div>
+    </button>
   );
 };
 
