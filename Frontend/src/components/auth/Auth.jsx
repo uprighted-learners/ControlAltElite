@@ -2,19 +2,41 @@
 
 import React, { useState } from "react";
 import SignUp from "./signup-section/SignUp";
+import Login from "./login-section/login";
 
 const Auth = (props) => {
-//   const [isSigningUp, setIsSigningUp] = useState(true);
+  const [isSigningUp, setIsSigningUp] = useState(true);
 
-    return (
-        <>
-        <div className="login-register-container">
-          "Hello from Auth"
-          
-            <SignUp />
+  return (
+    <div className="login-signup-container">
+      {isSigningUp ? (
+        <div>
+          <SignUp updateToken={props.updateToken} />
+          <p>
+            Already have a login?{" "}
+            <button
+              className="signUp-button"
+              onClick={() => setIsSigningUp(false)}
+            >
+              Click here
+            </button>
+          </p>
         </div>
-      </>
-    );
+      ) : (
+        <div>
+          <Login updateToken={props.updateToken} />
+          <p>
+            Don't have an account?{" "}
+            <button
+              className="signUp-button"
+              onClick={() => setIsSigningUp(true)}
+            >
+              Sign up here
+            </button>
+          </p>
+        </div>
+      )}
+    </div>
+  );
 };
-
 export default Auth;

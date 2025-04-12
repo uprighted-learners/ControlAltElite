@@ -1,26 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MobileNav from "./MobileNav";
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+} from "reactstrap";
 
-const Navbar = () => {
+function Navigationbar(props) {
+  const [collapsed, setCollapsed] = useState(true);
+  const toggleNavbar = () => setCollapsed(!collapsed);
+
   return (
     <>
-    <div className="bg-blue-950 text-white py-4">
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between">
-          <h2 className="uppercase">Benn Rising</h2>
-          <div className="hidden lg:flex items-center space-x-4">
-              <ul>
-                <li className="uppercase"><a href="/">Homepage</a></li>
-              </ul>
-              {/* Get Started button (login/signup) */}
-              <button className="bg-[#C6CBFF] hover:bg-[#6C50E1] px-6 py-3 rounded text-lg font-semibold text-shadow-md shadow-md">Get Started</button>
-          </div>        
-        </div>
+      <div>
+        <Navbar color="faded" light className="navbar">
+          <NavbarBrand href="/" className="me-auto font-primary bold">
+            Benn Rising
+          </NavbarBrand>
+          <NavbarToggler onClick={toggleNavbar} className="me-2" />
+          <Collapse isOpen={!collapsed} navbar>
+            <Nav navbar>
+              <NavItem>
+                <NavLink href="/">Homepage</NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
       </div>
-    </div>
-    <MobileNav />
+
+      {/* <MobileNav /> */}
     </>
   );
-};
+}
 
-export default Navbar;
+export default Navigationbar;
