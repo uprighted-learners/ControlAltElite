@@ -2,8 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { API_REGISTER } from "../../../constants/endpoints";
 import { Form, FormGroup, Input, Label } from "reactstrap";
-import SignupButton from "../../custom/SignupButton"
-
+import SignupButton from "../../custom/SignupButton";
 
 const SignUp = (props) => {
   // TODO: Create state variables for first name, last name, email, and password using the useState hook.
@@ -11,6 +10,7 @@ const SignUp = (props) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [zipcode, setZipcode] = useState("");
 
   // TODO: Create a function called handleSubmit that will console.log("Click Worked")
   function handleSubmit(e) {
@@ -21,14 +21,16 @@ const SignUp = (props) => {
 
   // TODO: Create the function for adding user to database
   const signUp = async () => {
+    console.log("Sign up function acalled");
     try {
       const requestBody = {
         firstName,
         lastName,
         email,
         password,
+        zipcode,
       };
-
+      console.log(requestBody);
       const response = await fetch(API_REGISTER, {
         method: "POST",
         headers: {
@@ -74,7 +76,6 @@ const SignUp = (props) => {
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </FormGroup>
-            {/* Form Group End First Name */}
 
             {/* Form Group for Last Name */}
             <FormGroup>
@@ -88,7 +89,6 @@ const SignUp = (props) => {
                 onChange={(e) => setLastName(e.target.value)}
               />
             </FormGroup>
-            {/* Form Group End Last Name */}
 
             {/* Form Group for Email */}
             <FormGroup>
@@ -102,8 +102,19 @@ const SignUp = (props) => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </FormGroup>
-            {/* Form Group End Email */}
+            {/* Form Group Zipcode */}
 
+            <FormGroup>
+              <Label for="zipcode">Zipcode</Label>
+              <Input
+                type="zipcode"
+                name="zipcode"
+                id="zipcode"
+                placeholder="Enter zipcode"
+                value={zipcode}
+                onChange={(e) => setZipcode(e.target.value)}
+              />
+            </FormGroup>
             {/* Form Group for Password */}
             <FormGroup>
               <Label for="password">Password</Label>
@@ -116,7 +127,6 @@ const SignUp = (props) => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormGroup>
-            {/* Form Group End Password */}
 
             <SignupButton type="submit">SIGN UP</SignupButton>
           </Form>
