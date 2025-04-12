@@ -55,7 +55,7 @@ const SignUp = (props) => {
     <>
       <div
         className="d-flex justify-content-center mt-5"
-        style={{ height: "50vh" }}
+        style={{ height: "85vh" }}
       >
         <div
           className="secondary-background p-5 rounded"
