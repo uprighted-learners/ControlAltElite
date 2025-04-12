@@ -4,55 +4,62 @@ import SignupButton from "../../custom/SignupButton";
 import { API_LOGIN } from "../../../constants/endpoints";
 
 const Login = (props) => {
-    const [email, setEmail] = useState("student@example.com");
-    const [password, setPassword] = useState("password123");
+  const [email, setEmail] = useState("student@example.com");
+  const [password, setPassword] = useState("password123");
 
-    function handleSubmit(e) {
-      e.preventDefault();
-      login();
-    }
+  function handleSubmit(e) {
+    e.preventDefault();
+    login();
+  }
 
-    async function login() {
-        try {
-          // Headers
-          let myHeaders = new Headers();
-          myHeaders.append("Content-Type", "application/json");
+  async function login() {
+    try {
+      // Headers
+      let myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
 
-          // Request Body
-          let body = {
-            email: email,
-            password: password,
-          };
+      // Request Body
+      let body = {
+        email: email,
+        password: password,
+      };
 
-          // Request Options
-          let requestOption = {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(body),
-          };
+      // Request Options
+      let requestOption = {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(body),
+      };
 
-          // Send Request
-          const response = await fetch(API_LOGIN, requestOption);
+      // Send Request
+      const response = await fetch(API_LOGIN, requestOption);
 
-          // Response Object
-          let data = await response.json();
+      // Response Object
+      let data = await response.json();
 
-          // Update Token from the App.jsx file
-          console.log(data);
-          props.updateToken(data.token);
+      // Update Token from the App.jsx file
+      console.log(data);
+      props.updateToken(data.token);
 
-          // Redirect to the profile Page
-          if (response.ok) {
-            props.updateToken(data.token); // Store token
-            alert("Login Successful!"); // Show success message
-            window.location.href = "/"; // Redirect to index page
-          } else {
-            alert("Login Failed! Check your email and password."); // Show error
-          }
-        } catch (error) {
-            console.log(error);
+      // Redirect to the profile Page
+      if (response.ok) {
+        props.updateToken(data.token); // Store token
+
+        //route to userType login
+        if (data.userType === "Mentor") {
+          window.location.href = "/mentor"; // Redirect to mentor page
+          alert(`Login Successful! as ${data.userType}`); // Show success message
+        } else {
+          window.location.href = "/mentee"; // Redirect to mentee page
+          alert(`Login Successful! as ${data.userType}`); // Show success message
         }
+      } else {
+        alert("Login Failed! Check your email and password."); // Show error
+      }
+    } catch (error) {
+      console.log(error);
     }
+  }
   return (
     <>
       <div

@@ -7,6 +7,9 @@ import Footer from "./components/public-views/Footer";
 import Auth from "./components/auth/Auth";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MainIndex from "./components/MainIndex";
+import MentorDashboard from "./components/Mentors/MentorDashboard";
+import MenteeDashboard from "./components/Mentees/MenteeDashboard";
+
 
 function App() {
   //state variable for token and initialize to the value of the token stored in local storage
@@ -34,6 +37,8 @@ function App() {
       // After nav bar
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/mentor" element={<MentorDashboard />} />
+        <Route path="/mentee" element={<MenteeDashboard />} />
       </Routes>
       <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
