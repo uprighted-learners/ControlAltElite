@@ -5,3 +5,5 @@ export const API_LOGIN = `${API}/user/login`;
 export const API_REGISTER = `${API}/user/register`;
 
 export const API_MENTOR_PROFILE = `${API}/user/mentor/profile/:id`;
+
+export const API_VIEW_MENTORS = `${API}/users/mentor/view-all`;

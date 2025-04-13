@@ -4,6 +4,8 @@ import CardPreview from "./CardPreview";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { useState } from "react";
+
 // Import Swiper styles
 import 'swiper/css';
 
@@ -39,7 +41,7 @@ const MentorDirectory = (props) => {
       description: "This is a placeholder description for Mentor 4.",
     },
   ];
-
+  
   return (
     <>
                   {/* Swiper Carousel */}
@@ -60,9 +62,10 @@ const MentorDirectory = (props) => {
           <CardPreview
           imageUrl={mentor.imageUrl}
           title={mentor.title}
-          description={mentor.description}/>
+            description={mentor.description} />
         </SwiperSlide>
       ))}
+        
 
     </Swiper>
 

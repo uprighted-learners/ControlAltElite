@@ -9,7 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import MainIndex from "./components/MainIndex";
 import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
-
+import MentorProfile from "./components/Mentors/MentorProfile";
 
 function App() {
   //state variable for token and initialize to the value of the token stored in local storage
@@ -32,13 +32,12 @@ function App() {
 
   return (
     <>
-      // TODO Import and mount main header //* NavBar import and mount
       <Navbar />
-      // After nav bar
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/mentor" element={<MentorDashboard />} />
         <Route path="/mentee" element={<MenteeDashboard />} />
+        <Route path="/updateProfile" element={<MentorProfile />} />
       </Routes>
       <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}

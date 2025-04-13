@@ -32,7 +32,7 @@ const MenteeSchema = new mongoose.Schema({
   },
   interests: {
     type: String,
-    required: true,
+    required: false,
   },
   zipcode: {
     type: String,
