@@ -11,13 +11,9 @@ const jwt = require("jsonwebtoken");
 // TODO route for mentee to request mentor
 
 // TODO match request
-// TODO match request
 // ENDPOINT: "http://localhost:4000/user/request"
 // TODO Request type: POST
 //
-// Endpoint: http://localhost:4000/user/request
-// Request Type: POST
-// Request type: POST
 router.post("/request", validateSession, async (req, res) => {
   try {
     //1.  recieve match request from mentee and store in variable
@@ -68,3 +64,5 @@ router.post("/request", validateSession, async (req, res) => {
     res.json({ message: error.message });
   }
 });
+
+// TODO route for mentee to 

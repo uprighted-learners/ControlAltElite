@@ -27,6 +27,7 @@ const validateSession = async (req, res, next) => {
     
     //4. Check if user is a mentor or mentee
     const userType = user instanceof Mentor ? "mentor" : "mentee";
+    console.log("userType", userType);
     
     // If userType is not found, give error
     if (!userType) {

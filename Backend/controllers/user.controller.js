@@ -12,17 +12,17 @@ const Mentee = require("../models/mentee.model");
 // Endpoint: http://localhost:4000/user/register
 // Request Type: POST
 router.post("/register", async (req, res) => {
-  console.log("In register route");
   try {
     // Destructure the request body:
-    const { firstName, lastName, email, password, zipCode } = req.body;
-
+    const { firstName, lastName, email, password, zipcode } = req.body;
+    
     // Check if email ends in "bennington.edu" then assign userType to be mentor
     let userType;
     if (email.endsWith("@bennington.edu")) {
       userType = "Mentor";
     } else {
-      if (zipCode === "05201") {
+      console.log("In register route", zipcode);
+      if (zipcode === "05201") {
         userType = "Mentee";
       } else {
         throw new Error("Invalid email and district code");
@@ -63,9 +63,10 @@ router.post("/register", async (req, res) => {
         password: bcrypt.hashSync(password, 10),
       });
     }
+
     //  Save the new user in the database and store the response in a variable (saved user)
     const newUser = await user.save();
-
+    console.log(newUser);
     // Create JWT token
     const token = jwt.sign(
       { id: newUser._id, userType: userType },
@@ -137,13 +138,29 @@ router.post("/login", async (req, res) => {
       message: `Welcome, ${user.firstName}. You have been successfuly logged in.`,
       token: token,
       id: user._id,
+      userType: userType,
     });
   } catch (error) {
     res.json({ message: error.message });
   }
 });
 
-// TODO Route to get user profile
+// TODO Route to view all mentors
+// ENDPOINT: "http://localhost:4000/user/mentors/view-all"
+// Request type: GET
+router.get('/mentor/view-all', async (req, res) => {
+  try {
+    //? 1. Find all the mentors in the database
+    const mentors = await Mentor.find()
+    //? 2. Send back the mentors
+    res.json({ message: `route works`, mentors:mentors});
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+})
+
+
+// TODO Route to update user profile
 // ENDPOINT: "http://localhost:4000/user/profile/:id"
 // Request type: GET
 router.get("/mentor/profile/:id", validateSession, async (req, res) => {
@@ -151,7 +168,7 @@ router.get("/mentor/profile/:id", validateSession, async (req, res) => {
     //1. store id in a variable
     const id = req.params.id;
     console.log(id);
-   
+
     //2. supply req.body only with fields that user should be able to update
     // dont let user change their userType
     const { bio, interests, questionToAsk } = req.body;
@@ -195,11 +212,13 @@ router.get("/mentor/profile/:id", validateSession, async (req, res) => {
   }
 });
 
+//! This part is not complete ----- *****
+
 router.get("/mentee/profile/:id", validateSession, async (req, res) => {
   try {
     //1. store id in a variable
     const id = req.params.id;
-  
+
     const { bio } = req.body;
 
     // 3. Check if the user exists

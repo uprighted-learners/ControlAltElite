@@ -107,7 +107,7 @@ const SignUp = (props) => {
             <FormGroup>
               <Label for="zipcode">Zipcode</Label>
               <Input
-                type="zipcode"
+                type="text"
                 name="zipcode"
                 id="zipcode"
                 placeholder="Enter zipcode"
