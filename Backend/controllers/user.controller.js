@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
 
-// TODO Register user route
+// ! Register user route
 // Endpoint: http://localhost:4000/user/register
 // Request Type: POST
 router.post("/register", async (req, res) => {
@@ -226,7 +226,7 @@ router.delete("/delete/:id", validateSession, async (req, res) => {
   }
 });
 
-// TODO route to view all mentors
+// ! route to view all mentors
 // Endpoint:http: //localhost:4000/user/all-mentors
 // request type: GET
 router.get("/all-mentors", async (req, res) => {
@@ -269,7 +269,7 @@ router.put("/profile/:id", validateSession, async (req, res) => {
     // ! If user is mentor, update MENTOR specific profile fields
     if (req.userType === "Mentor") {
       // Extract mentor fields from req.body
-      const { bio, profilePhoto, interests, questionToAsk } = req.body;
+      const { bio, profilePhoto, interests, questionToAsk, projectCategory } = req.body;
 
       profileInfo = {
         bio: bio || "",
@@ -280,7 +280,13 @@ router.put("/profile/:id", validateSession, async (req, res) => {
       };
 
       // Check if all required fields are completed, if not set isProfileComplete = false
-      if (!bio || !profilePhoto || !interests || !questionToAsk || !projectCategory) {
+      if (
+        !bio ||
+        !profilePhoto ||
+        !interests ||
+        !questionToAsk ||
+        !projectCategory
+      ) {
         isProfileComplete = false;
       }
 
@@ -301,7 +307,7 @@ router.put("/profile/:id", validateSession, async (req, res) => {
       }
     }
 
-    // Update user info based on user type
+    // Update user info based on user type (findByIdAndUpdate)
     const User = req.userType === "Mentor" ? Mentor : Mentee;
     const updatedUser = await User.findByIdAndUpdate(id, profileInfo, {
       new: true,
@@ -317,4 +323,44 @@ router.put("/profile/:id", validateSession, async (req, res) => {
   }
 });
 
+// TODO Route for photo upload
+// ENDPOINT: http://localhost:4000/user/profile-photo/:id
+// Request Type: PUT
+router.put("/profile-photo/:id", validateSession, async (req, res) => {
+  try {
+    //1. store id in a variable
+    const id = req.params.id;
+
+    //  2. get image URL from req.body
+    const { profilePhoto } = req.body;
+
+    // Check that user is a mentor before updating
+    if (req.userType !== "Mentor") {
+      return res.status(403).json({
+        message: "Only mentors need to upload a profile photo",
+      });
+    }
+    // if no photo url is found, return error
+    if (!profilePhoto) {
+      return res
+        .status(400)
+        .json({ message: "Photo seems to be missing! Try again" });
+    }
+
+    // Update user info with profilePhoto (findByIdAndUpdate)
+    const updatedMentor = await Mentor.findByIdAndUpdate(
+      id,
+      { profilePhoto: profilePhoto },
+      { new: true }
+    );
+
+      // if no user found, give error
+      if (!updatedMentor) {
+        return res.status(404).json({ message: "User not found" });
+      }
+    res.status(200).json({ message: `route works` });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 module.exports = router;
