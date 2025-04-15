@@ -6,10 +6,12 @@ const Mentee = require("../models/mentee.model");
 // TODO route for mentee to request mentor
 // ENDPOINT: http://localhost:4000/match/request
 // Request Type: POST
-router.post("/request", validateSession, async (req, res) => {
+router.post("/request/:mentorId", validateSession, async (req, res) => {
   try {
     // get mentee's id info fromn req.user
     const menteeId = req.user.id;
+    // Get mentor's id from URL parameter
+    const mentorId = req.params.mentorId;
 
     // get user from id/email
     const mentee = await Mentee.findById(menteeId);
@@ -35,12 +37,14 @@ router.post("/request", validateSession, async (req, res) => {
 // TODO route for mentor to accept request
 // ENDPOINT: http://localhost:4000/match/accept
 // Request Type: POST
-router.post("/accept", validateSession, async (req, res) => {
+router.post("/accept/:menteeId", validateSession, async (req, res) => {
   try {
     // get mentorId
     const mentorId = req.user.id;
-    // Get mentee's id from req.body
-    const { menteeId } = req.body;
+    // // Get mentee's id from req.body
+    // const { menteeId } = req.body;
+    // Get mentee's id from URL parameter
+    const menteeId = req.params.menteeId;
 
     // Find both mentor and mentee for arrays
     const mentor = await Mentor.findById(mentorId);
