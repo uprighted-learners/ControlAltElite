@@ -26,23 +26,36 @@ const MenteeSchema = new mongoose.Schema({
   },
 
   // Mentee specific fields:
-  requestedMentors: [{}],
-  approvedMentors: [{}],
+  requestedMentors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+    },
+  ],
+  approvedMentors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+    },
+  ],
   age: {
     type: Number,
-    required: false, // Initially false, but is required for profile completion
+    required: false, // Initially false for basic signup, but is required for profile completion
   },
   interests: {
     type: String,
-    required: false, // Initially false, but is required for profile completion
+    required: false,
   },
   school: {
     type: String,
-    required: false, // Initially false, but is required for profile completion
+    enum: [
+      "Grace Christian School",
+      "Mount Anthony Middle High School",
+      "Mount Anthony Union High School",
+    ],
+    required: false,
   },
   guardianEmail: {
     type: String,
-    required: false, // Initially false, but is required for profile completion
+    required: false,
   },
 });
 

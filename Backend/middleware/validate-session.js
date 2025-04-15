@@ -19,11 +19,18 @@ const validateSession = async (req, res, next) => {
 
     //3. check database to verify that the user is active
     let user = null;
-    // if/else statememnt to check both mentor and mentee
+    // if/else statememnt to check usertypes
     if (userType === "Mentor") {
       user = await Mentor.findById(id);
-    } else {
+    } else if (userType === "Mentee") {
       user = await Mentee.findById(id);
+    } else if (userType === "Admin") {
+      user = await Admin.findById(id);
+    } else if (userType === "Parent") {
+      user = await Parent.findById(id);
+    } else {
+      // Invalid user type
+      return res.status(400).json({ message: "Invalid user type" });
     }
 
     // If user doesnt exist, give error

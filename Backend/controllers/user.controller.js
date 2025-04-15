@@ -80,7 +80,7 @@ router.post("/register", async (req, res) => {
 });
 
 // ! Route for Login
-// ENDPOINT: "http://localhost:4000/user/login"
+// ENDPOINT: http://localhost:4000/user/login
 // Request type: POST
 router.post("/login", async (req, res) => {
   try {
@@ -133,7 +133,7 @@ router.post("/login", async (req, res) => {
 });
 
 // TODO ROUTE TO UPDATE USER
-// ENDPOINT: "http://localhost:4000/user/update/:id"
+// ENDPOINT: http://localhost:4000/user/update/:id
 // Request type: PUT
 router.put("/update/:id", validateSession, async (req, res) => {
   try {
@@ -192,7 +192,7 @@ router.put("/update/:id", validateSession, async (req, res) => {
 });
 
 // ToDo Route to delete user
-// ENDPOINT: "http://localhost:4000/user/delete/:id"
+// ENDPOINT: http://localhost:4000/user/delete/:id
 // Request type: DELETE
 router.delete("/delete/:id", validateSession, async (req, res) => {
   try {
@@ -226,8 +226,36 @@ router.delete("/delete/:id", validateSession, async (req, res) => {
   }
 });
 
-// !mRoute for updating user profile information (separate from basic account register)
-// ENDPOINT: "http://localhost:4000/user/profile/:id"
+// TODO route to view all mentors
+// Endpoint:http: //localhost:4000/user/all-mentors
+// request type: GET
+router.get("/all-mentors", async (req, res) => {
+  try {
+    const mentors = await Mentor.find({ userType: "Mentor" });
+
+    const formattedMentors = mentors.map((mentor) => ({
+      id: mentor._id,
+      firstName: mentor.firstName,
+      lastName: mentor.lastName,
+      email: mentor.email,
+      bio: mentor.bio || "",
+      interests: mentor.interests || "",
+      questionToAsk: mentor.questionToAsk || "",
+      profilePhoto: mentor.profilePhoto || "",
+      projectCategory: mentor.projectCategory || "",
+    }));
+
+    res.status(200).json({
+      message: `All mentors retrieved successfully`,
+      mentors: formattedMentors,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// !Route for updating user profile information (separate from basic account register)
+// ENDPOINT: http://localhost:4000/user/profile/:id
 // Request type: PUT
 router.put("/profile/:id", validateSession, async (req, res) => {
   try {
@@ -248,10 +276,11 @@ router.put("/profile/:id", validateSession, async (req, res) => {
         profilePhoto: profilePhoto || "",
         interests: interests || "",
         questionToAsk: questionToAsk || "",
+        projectCategory: projectCategory || "",
       };
 
       // Check if all required fields are completed, if not set isProfileComplete = false
-      if (!bio || !profilePhoto || !interests || !questionToAsk) {
+      if (!bio || !profilePhoto || !interests || !questionToAsk || !projectCategory) {
         isProfileComplete = false;
       }
 

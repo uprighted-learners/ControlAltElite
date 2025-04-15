@@ -19,7 +19,7 @@ const MentorSchema = new mongoose.Schema({
     required: true,
   },
   userType: {
-    type: String, 
+    type: String,
     enum: ["Mentor", "Mentee"],
     default: "Mentor",
     required: true,
@@ -27,10 +27,14 @@ const MentorSchema = new mongoose.Schema({
 
   // Mentor specific profile fields
   //   ! match requests
-  approvedMentees: [{},],
-  menteeRequests: [{}],
+  approvedMentees: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+    },
+  ],
+  menteeRequests: [{ type: mongoose.Schema.Types.ObjectId }],
 
-  // 
+  //
   profilePhoto: {
     type: String, // URL for uploaded photo
     required: false, // Changed from true to false after initial push
@@ -41,11 +45,16 @@ const MentorSchema = new mongoose.Schema({
   },
   interests: {
     type: String,
-    required: false, 
+    required: false,
   },
   questionToAsk: {
     type: String,
-    required: false, 
+    required: false,
+  },
+  projectCategory: {
+    type: String,
+    enum: ["video", "science"],
+    required: false,
   },
 });
 
