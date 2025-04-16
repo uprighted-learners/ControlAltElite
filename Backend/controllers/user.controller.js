@@ -62,6 +62,7 @@ router.post("/register", async (req, res) => {
       expiresIn: "7d",
     });
 
+    // Success message that returns updated user info
     res.status(201).json({
       message: ` New ${newUser.userType} successfully registered!`,
       token: token,
@@ -132,7 +133,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// TODO ROUTE TO UPDATE USER
+// TODO ROUTE TO UPDATE BASIC USER INFO (name, email, password, etc.) add the rest of profile info here
 // ENDPOINT: http://localhost:4000/user/update/:id
 // Request type: PUT
 router.put("/update/:id", validateSession, async (req, res) => {
@@ -204,21 +205,22 @@ router.delete("/delete/:id", validateSession, async (req, res) => {
     const deletedMentor = await Mentor.deleteOne({ _id: id });
     if (deletedMentor.deletedCount === 0) {
       const deletedMentee = await Mentee.deleteOne({ _id: id });
+
       // If no mentee was found to delete either, return user not found
       if (deletedMentee.deletedCount === 0) {
         return res.status(404).json({ message: "User not found" });
       } else {
-        //  else mentor successfull deletion
+        //  else mentee successfull deletion
         return res.status(200).json({
-          message: "Mentor successfully deleted from the database",
-          deletedUser: "Mentor",
+          message: "Mentee successfully deleted from the database",
+          deletedUser: "Mentee",
         });
       }
     } else {
-      // else mentee successful deletion
+      // else mentor successful deletion
       return res.status(200).json({
-        message: "Mentee successfully deleted from the database",
-        deletedUser: "Mentee",
+        message: "Mentor successfully deleted from the database",
+        deletedUser: "Mentor",
       });
     }
   } catch (error) {
@@ -254,10 +256,11 @@ router.get("/all-mentors", async (req, res) => {
   }
 });
 
-// !Route for updating user profile information (separate from basic account register)
-// ENDPOINT: http://localhost:4000/user/profile/:id
+// !Route for completing user profile information (separate from basic account register or update)
+// Maddie changed this on her local to be "/mentor/update/:id"
+// ENDPOINT: http://localhost:4000/user/completion/:id
 // Request type: PUT
-router.put("/profile/:id", validateSession, async (req, res) => {
+router.put("/completion/:id", validateSession, async (req, res) => {
   try {
     // Store id in variable
     const id = req.params.id;
@@ -269,7 +272,8 @@ router.put("/profile/:id", validateSession, async (req, res) => {
     // ! If user is mentor, update MENTOR specific profile fields
     if (req.userType === "Mentor") {
       // Extract mentor fields from req.body
-      const { bio, profilePhoto, interests, questionToAsk, projectCategory } = req.body;
+      const { bio, profilePhoto, interests, questionToAsk, projectCategory } =
+        req.body;
 
       profileInfo = {
         bio: bio || "",
@@ -354,13 +358,14 @@ router.put("/profile-photo/:id", validateSession, async (req, res) => {
       { new: true }
     );
 
-      // if no user found, give error
-      if (!updatedMentor) {
-        return res.status(404).json({ message: "User not found" });
-      }
+    // if no user found, give error
+    if (!updatedMentor) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.status(200).json({ message: `route works` });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 module.exports = router;
+

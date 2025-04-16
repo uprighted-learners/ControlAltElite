@@ -18,6 +18,7 @@ const MenteeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   userType: {
     type: String, // Added this line after merging
     enum: ["Mentor", "Mentee"],
@@ -56,6 +57,7 @@ const MenteeSchema = new mongoose.Schema({
   guardianEmail: {
     type: String,
     required: false,
+
   },
 });
 
