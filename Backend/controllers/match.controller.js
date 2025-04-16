@@ -8,61 +8,74 @@ const MatchRequest = require("../models/match-request.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+
+// !Test these again with ID's
+
 // TODO route for mentee to request mentor
-
-// TODO match request
-// ENDPOINT: "http://localhost:4000/user/request"
-// TODO Request type: POST
-//
-router.post("/request", validateSession, async (req, res) => {
+// ENDPOINT: http://localhost:4000/match/request
+// Request Type: POST
+router.post("/request/:mentorId", validateSession, async (req, res) => {
   try {
-    //1.  recieve match request from mentee and store in variable
-    const { mentorId } = req.body;
-
-    //2. Extract the menteeId from validateSession
+    // get mentee's id info fromn req.user
     const menteeId = req.user.id;
-    console.log(menteeId);
+    // Get mentor's id from URL parameter
+    const mentorId = req.params.mentorId;
 
-    //3. Check if mentee already has an existing match equest
-    const existingRequest = await MatchRequest.findOne({ where: { menteeId } });
-
-    if (existingRequest) {
-      return res.status(400).json({ message: "Existing match request found" });
-    }
-
-    //4. Find Mentor profile by mentorId
-    const mentor = await Mentor.findById(mentorId);
-    console.log(mentor);
-
-    //5. Check if mentor exists in the database
-    if (!mentor) {
-      return res.status(404).json({ message: "Mentor not found" });
-    }
-    //6. Create a new match request
-    const matchRequest = await MatchRequest.create({
-      menteeId,
-      mentorId,
-      status: "pending",
-    });
-    console.log(matchRequest);
-
-    //7. Save match request to requestedMentors array in Mentee profile
+    // get user from id/email
     const mentee = await Mentee.findById(menteeId);
-    console.log(mentee);
-    mentee.requestedMentors.push(matchRequest._id);
-    await mentee.save();
-    console.log(mentee, " Mentee profile updated successfully.");
-    //8. Save request to menteeRequest array in Mentor profile
-    mentor.menteeRequests.push(matchRequest._id);
-    await mentor.save();
-    console.log(mentor, " Mentor profile updated successfully.");
+    const mentor = await Mentor.findById(mentorId);
 
-    return res
-      .status(201)
-      .json({ message: "Match request created", matchRequest });
+    // Add to mentee's requestedMentors array
+    mentee.requestedMentors.push(mentorId);
+    await mentee.save();
+
+    // Add to mentor's menteeRequests array
+    mentor.menteeRequests.push(menteeId);
+    await mentor.save();
+
+    res.status(200).json({
+      message: "Mentor match request sent successfully",
+      mentorId: mentorId,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// TODO route for mentor to accept request
+// ENDPOINT: http://localhost:4000/match/accept
+// Request Type: POST
+router.post("/accept/:menteeId", validateSession, async (req, res) => {
+  try {
+    // get mentorId
+    const mentorId = req.user.id;
+    // // Get mentee's id from req.body
+    // const { menteeId } = req.body;
+    // Get mentee's id from URL parameter
+    const menteeId = req.params.menteeId;
+
+    // Find both mentor and mentee for arrays
+    const mentor = await Mentor.findById(mentorId);
+    const mentee = await Mentee.findById(menteeId);
+
+    //TODO  Remove from request arrays and add to approved arrays
+
+    // Add mentee to mentors approvedMentees
+    mentor.approvedMentees.push(menteeId);
+    await mentor.save();
+
+    // Add mentor to mentee's approvedMentors
+    mentee.approvedMentors.push(mentorId);
+    await mentee.save();
+
+    res.json({ message: `route works` });
   } catch (error) {
     res.json({ message: error.message });
   }
 });
 
-// TODO route for mentee to 
+// TODO view all requests
+
+// TODO view all matches
+
+module.exports = router;
