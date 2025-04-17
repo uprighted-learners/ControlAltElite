@@ -8,7 +8,7 @@ import Footer from "./components/public-views/Footer";
 import Auth from "./components/auth/Auth";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MainIndex from "./components/MainIndex";
-import MentorDashboard from "./components/Mentors/MentorDashboard";
+// import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
 import MentorProfile from "./components/Mentors/MentorProfile";
 
@@ -38,7 +38,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/mentor" element={<MentorDashboard />} />
+        {/* <Route path="/mentor" element={<MentorDashboard />} /> */}
         <Route path="/mentee" element={<MenteeDashboard />} />
         <Route path="/updateProfile" element={<MentorProfile />} />
         <Route path="/createMentor" element={<CreateMentor />} />
