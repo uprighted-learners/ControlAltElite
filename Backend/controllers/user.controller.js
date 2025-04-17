@@ -133,9 +133,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
-// TODO ROUTE TO UPDATE BASIC USER INFO (name, email, password, etc.) add the rest of profile info here
-
+// TODO ROUTE TO UPDATE BASIC USER INFO (name, email, password, etc.)
 // ENDPOINT: http://localhost:4000/user/update/:id
 // Request type: PUT
 router.put("/update/:id", validateSession, async (req, res) => {
@@ -259,7 +257,7 @@ router.get("/all-mentors", async (req, res) => {
 });
 
 // !Route for completing user profile information (separate from basic account register or update)
-// Maddie changed this on her local to be "/mentor/update/:id"
+// Maddie changed this on her local to be "/mentor/update/:id" 
 // ENDPOINT: http://localhost:4000/user/completion/:id
 // Request type: PUT
 router.put("/completion/:id", validateSession, async (req, res) => {
@@ -370,4 +368,3 @@ router.put("/profile-photo/:id", validateSession, async (req, res) => {
   }
 });
 module.exports = router;
-
