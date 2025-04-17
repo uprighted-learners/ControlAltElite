@@ -27,8 +27,10 @@ const MentorSchema = new mongoose.Schema({
   },
 
   // Mentor specific profile fields
-  //   ! match requests
-  
+ //   ! match requests
+  // ref allows .populate() to be used in controllers - tells mongoose which model to use
+
+
   approvedMentees: [
     {
       type: mongoose.Schema.Types.ObjectId,

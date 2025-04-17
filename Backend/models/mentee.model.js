@@ -25,16 +25,20 @@ const MenteeSchema = new mongoose.Schema({
     default: "Mentee",
     required: true,
   },
+  // ! arrays for tracking matches and requests
+  // ref allows .populate() to be used in controllers - tells mongoose which model to use
 
   // Mentee specific fields:
   requestedMentors: [
     {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "Mentor",
     },
   ],
   approvedMentors: [
     {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "Mentor",
     },
   ],
   age: {
