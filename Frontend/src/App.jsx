@@ -5,7 +5,6 @@ import HomePage from "./pages/HomePage";
 import Navbar from "./components/public-views/Navbar";
 import Footer from "./components/public-views/Footer";
 import Auth from "./components/auth/Auth";
-import "bootstrap/dist/css/bootstrap.min.css";
 import MainIndex from "./components/MainIndex";
 import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
@@ -38,11 +37,13 @@ function App() {
         <Route path="/mentor" element={<MentorDashboard />} />
         <Route path="/mentee" element={<MenteeDashboard />} />
         <Route path="/updateProfile" element={<MentorProfile />} />
+        <Route path="/signup" element={<Auth updateToken={updateToken} />} />
+        <Route path="/login" element={<MainIndex token={token} />} />
       </Routes>
-      <div className="content-body">
+      {/* <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
         {token && <MainIndex token={token} />}
-      </div>
+      </div> */}
       <Footer />
     </>
   );

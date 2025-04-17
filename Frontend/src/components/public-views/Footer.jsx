@@ -2,19 +2,17 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="bg-blue-950 py-4">
+    <div className="bg-[#1b0a5f] border-t-4 border-[#eab246] py-4">
       <div className="container mx-auto">
-        <div className="flex items-center justify-between">
-          <h2 className="uppercase">Benn Rising</h2>
-          <div className="hidden lg:flex items-center space-x-4">
-            <ul>
-              <li className="uppercase">
-                <a href="/">Homepage</a>
-              </li>
-            </ul>
-            {/* Get Started button (login/signup) */}
-            <button className="bg-[#C6CBFF] hover:bg-[#6C50E1] px-6 py-3 rounded text-lg font-semibold text-shadow-md shadow-md">Get Started</button>
-          </div>
+        <div className="flex items-center space-x-4">
+          <p className="text-white text-lg">
+            Thank you: This website was created by the UpRight team Control Altelite,{" "}
+            <span>
+              <a className="text-red-600" href="#">
+                learn more
+              </a>
+            </span>
+          </p>
         </div>
       </div>
     </div>
