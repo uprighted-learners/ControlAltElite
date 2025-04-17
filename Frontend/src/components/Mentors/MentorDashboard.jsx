@@ -1,6 +1,7 @@
 //  Mentor Dashboard
 import React, { useState } from "react";
 import MentorNavbar from "./MentorNavbar";
+import MentorProfileEdit from "./MentorProfileEdit"
 
 const MentorDashboard = (props) => {
     const [mentors, setMentors] = useState([]);
@@ -9,6 +10,7 @@ const MentorDashboard = (props) => {
     return (
         <>
             <MentorNavbar />
+            <MentorProfileEdit token={props.token}/>
             <div className="mentor-dashboard">
                 
                 <h1>Mentor Dashboard</h1>

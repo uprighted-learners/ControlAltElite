@@ -161,12 +161,12 @@ router.get('/mentor/view-all', async (req, res) => {
 
 
 // TODO Route to update user profile
-// ENDPOINT: "http://localhost:4000/user/profile/:id"
-// Request type: GET
-router.get("/mentor/profile/:id", validateSession, async (req, res) => {
+// ENDPOINT: "http://localhost:4000/user/mentor/update"
+// Request type: PUT
+router.put("/mentor/update", validateSession, async (req, res) => {
   try {
     //1. store id in a variable
-    const id = req.params.id;
+    const id = req.user.id;
     console.log(id);
 
     //2. supply req.body only with fields that user should be able to update

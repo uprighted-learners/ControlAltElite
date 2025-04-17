@@ -35,7 +35,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/mentor" element={<MentorDashboard />} />
+        <Route path="/mentor" element={<MentorDashboard token={token} />} />
         <Route path="/mentee" element={<MenteeDashboard />} />
         <Route path="/updateProfile" element={<MentorProfile />} />
       </Routes>

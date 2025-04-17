@@ -7,7 +7,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Connecting to the Database
-mongoose.connect("mongodb://localhost:27017/ctrlaltelite-db");
+mongoose.connect(
+  "mongodb+srv://ControlAltElite:Controlaltelite1@cluster0.dm2bmzz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error"));
 
