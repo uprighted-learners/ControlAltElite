@@ -136,7 +136,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// TODO ROUTE TO UPDATE BASIC USER INFO (name, email, password, etc.)
+
+// TODO ROUTE TO UPDATE BASIC USER INFO (name, email, password, etc.) add the rest of profile info here
+
 // ENDPOINT: http://localhost:4000/user/update/:id
 // Request type: PUT
 router.put("/update/:id", validateSession, async (req, res) => {
@@ -371,3 +373,4 @@ router.put("/profile-photo/:id", validateSession, async (req, res) => {
   }
 });
 module.exports = router;
+

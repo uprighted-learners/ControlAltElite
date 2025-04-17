@@ -1,7 +1,13 @@
+// console.log("This is the match request controller");
+
 const router = require("express").Router();
 const validateSession = require("../middleware/validate-session");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
+// const MatchRequest = require("../models/match-request.model");
+// const bcrypt = require("bcrypt");
+// const jwt = require("jsonwebtoken");
+
 
 // !Test these again with ID's
 
