@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
+import Login from "./auth/login-section/login";
 
 const MainIndex = (props) => {
     
     return (
         <> 
-            <h1> Hello from MainIndex </h1>
-            
+            <Login  />
         </>
     );
 }
