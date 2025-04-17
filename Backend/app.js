@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Connecting to the Database
-mongoose.connect("mongodb://localhost:27017/ctrlaltelite-db");
+mongoose.connect(process.env.MONGO_URI);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error"));
 
@@ -22,5 +22,6 @@ app.use("/user", userController);
 const PORT = 4000;
 
 app.listen(PORT, () => {
+  console.log("Connected to the Database");
   console.log(`server is running on port: ${PORT}`);
 });
