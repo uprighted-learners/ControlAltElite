@@ -37,7 +37,7 @@ const MenteeDashboard = (props) => {
   return (
     <>
       <div className="container mx-auto p-4">
-        <div className="bg-[#1b0a5f] text-white flex flex-wrap items-center justify-center md:justify-between p-4 rounded-md">
+        <div className="bg-[#1b0a5f] text-white flex flex-col md:flex-row items-center justify-center md:justify-between p-4 rounded-md">
           <h1 className="text-center uppercase text-2xl">Mentee Name</h1>
           <div className="flex gap-2.5">
             <select name="mentee" id="mentee">
