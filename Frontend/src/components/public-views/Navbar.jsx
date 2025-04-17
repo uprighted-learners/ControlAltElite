@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import MobileNav from "./MobileNav";
 import {
   Collapse,
   Navbar,
@@ -9,7 +10,7 @@ import {
   NavLink,
 } from "reactstrap";
 
-const MentorNavbar = (props) => {
+function Navigationbar(props) {
   const [collapsed, setCollapsed] = useState(true);
   const toggleNavbar = () => setCollapsed(!collapsed);
 
@@ -24,13 +25,18 @@ const MentorNavbar = (props) => {
           <Collapse isOpen={!collapsed} navbar>
             <Nav navbar>
               <NavItem>
-                <NavLink href="/updateProfile">Update-Profile</NavLink>
+                <NavLink href="/">Homepage</NavLink>
+                <NavLink href="/">Contact us</NavLink>
+
               </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
       </div>
+
+      {/* <MobileNav /> */}
     </>
   );
-};
-export default MentorNavbar;
+}
+
+export default Navigationbar;
