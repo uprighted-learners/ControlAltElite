@@ -1,4 +1,4 @@
-import './App.css'
+import "./App.css";
 import CreateMentor from "./components/Admin/Create-Mentor/CreateMentor";
 import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -11,6 +11,7 @@ import MainIndex from "./components/MainIndex";
 // import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
 import MentorProfile from "./components/Mentors/MentorProfile";
+import AdminMentorList from "./components/Admin/Mentor-List/AdminMentorList";
 
 function App() {
   //state variable for token and initialize to the value of the token stored in local storage
@@ -33,8 +34,6 @@ function App() {
 
   return (
     <>
-     
-   
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -42,6 +41,7 @@ function App() {
         <Route path="/mentee" element={<MenteeDashboard />} />
         <Route path="/updateProfile" element={<MentorProfile />} />
         <Route path="/createMentor" element={<CreateMentor />} />
+        <Route path="/adminMentorList" element={<AdminMentorList token={token}/>} />
       </Routes>
       <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
