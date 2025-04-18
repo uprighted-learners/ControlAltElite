@@ -18,13 +18,15 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
   try {
     // get mentee's id info fromn req.user
     const menteeId = req.user.id;
+    console.log("Mentee ID: ", menteeId);
     // Get mentor's id from URL parameter
     const mentorId = req.params.mentorId;
-
+console.log("Mentor ID: ", mentorId);
     // get user from id/email
     const mentee = await Mentee.findById(menteeId);
     const mentor = await Mentor.findById(mentorId);
-
+    console.log("Mentee: ", mentee);
+    console.log("Mentor: ", mentor);
     // Check if match request has already been made
     if (mentee.requestedMentors.includes(mentorId)) {
       return res.status(400).json({
