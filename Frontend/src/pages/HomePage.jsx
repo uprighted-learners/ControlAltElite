@@ -1,34 +1,58 @@
 // Home Page
 import React from 'react'
 import MentorDirectory from "../components/public-views/MentorDirectory";
+import SignUp from '../components/auth/signup-section/SignUp';
 
 const HomePage = () => {
   return (
     <>
-      <div className="relative z-0 h-screen w-full overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1531101930610-1b86e66d5fd7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="background"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black opacity-20" />
-        {/* Hero Content (div)*/}
-        <div className="relative z-10 h-full flex flex-col justify-center items-center text-center text-white px-6 pt-12">
-          {/* Program Title */}
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-shadow-lg">
+      <div className="bg-[url('https://images.unsplash.com/photo-1531101930610-1b86e66d5fd7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] relative z-0 bg-cover bg-no-repeat w-full lg:h-screen after:content-[''] after:absolute after:inset-0 after:bg-black after:opacity-50">
+        <div className="relative z-10 flex flex-col justify-center items-center text-center text-white px-6 pt-12">
+          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-shadow-lg uppercase">
             Benn Rising Mentorship Program
           </h2>
-          {/* Seocndary text/description */}
           <p className="text-3xl mb-6 text-shadow-sm pt-6">
-            Browse cool mentors to connect with.
+            Goal Statement
           </p>
-          {/* Carousel of mentor cards */}
-          <MentorDirectory />
-          {/* Footer */}
-          <p className="text-lg md:text-xl mb-6 font-bold text-shadow-sm p-10">
-            Page by CTRL+ALT+ELITE
-          </p>
+          <div className='grid grid-cols-1 lg:grid-cols-4 gap-4 p-4'>
+            <div className='col-span-1 md:col-span-2 overflow-y-scroll h-[45vh] p-4'>
+              <label className='uppercase'>Sort by Interests</label>
+              <select className='w-full border-4 border-[#1b0a5f] p-2 rounded-md' name="interests" id="interests">
+              <option value="" disabled selected>
+                Select an option
+              </option>
+                <option value="science">Science</option>
+                <option value="technology">Technology</option>
+                <option value="engineering">Engineering</option>
+                <option value="mathematics">Mathematics</option>
+              </select>
+              <div className='py-2'>
+                <MentorDirectory />
+              </div>
+              <div className='py-2'>
+                <MentorDirectory />
+              </div>
+              <div className='py-2'>
+                <MentorDirectory />
+              </div>
+            </div>
+            <div className='col-span-1 md:col-span-2'>
+              <div className="flex flex-col justify-between gap-4 items-center h-full">
+                <div className='bg-[#1b0a5f] rounded-lg p-4 w-full h-full flex flex-col justify-center items-center'>
+                  <h2 className='uppercase'>Welcome Statement</h2>
+                </div>
+                <div className='bg-[#1b0a5f] rounded-lg p-4 w-full h-full flex flex-col justify-center items-center'>
+                  <h2 className='uppercase'>Introduction to Mentee</h2>
+                </div>
+                <div className='bg-[#1b0a5f] rounded-lg p-4 w-full h-full flex flex-col justify-center items-center'>
+                  <h2 className='uppercase'>Video project statement</h2>
+                </div>
+                <div className='bg-[#1b0a5f] rounded-lg p-4 w-full h-full flex flex-col justify-center items-center'>
+                  <h2 className='uppercase'>Science Eduction project statement</h2>
+                </div>
+              </div>
+              </div>
+          </div>
         </div>
       </div>
     </>
