@@ -41,15 +41,8 @@ const validateSession = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
     
-    // //4. Check if user is a mentor or mentee
-    // const userType = user instanceof Mentor ? "mentor" : "mentee";
-    // console.log("userType", userType);
     
-    // If userType is not found, give error
-    // if (!userType) {
-    //   return res.status(403).json({ message: "User type is not valid" });
-    // }
-    //5. Create a new key on the req object called user
+    //Create a new key on the req object called user
     req.user = user;
     req.userType = userType;
 

@@ -14,7 +14,16 @@ const Mentee = require("../models/mentee.model");
 router.post("/register", async (req, res) => {
   try {
     // Destructure the request body:
-    let { firstName, lastName, email, password, userType } = req.body;
+    let {
+      firstName,
+      lastName,
+      email,
+      password,
+      userType,
+      guardianEmail,
+      school,
+      ageCheck,
+    } = req.body;
 
     if (email.toLowerCase().endsWith("@placeholder.edu")) {
       userType = "Mentor";
@@ -27,7 +36,40 @@ router.post("/register", async (req, res) => {
         .json({ message: "Your user type is required (Mentor or Mentee)" });
     }
 
+    // !Mentee specific checks:
+    // Mentees prvide additional info while mentors don't - verify they provide these
+    // Make sure age is over 13, guardian email and school are provided
+    if (userType === "Mentee") {
+      // Make sure mentee checked "over 13 y/o" box
+      if (!ageCheck) {
+        return res
+          .status(400)
+          .json({
+            message:
+              "You must confirm that you are over 13 years old to register as a mentee",
+          });
+      }
+      // Check for guardian email
+      if (!guardianEmail) {
+        return res.status(400).json({
+          message: "Guardian email is required",
+        });
+      }
+      // Check for valid school selection
+      const validSchools = [
+        "Grace Christian School",
+        "Mount Anthony Middle High School",
+        "Mount Anthony Union High School",
+      ];
+      if (!school || !validSchools.includes(school)) {
+        return res.status(400).json({
+          message: "School must be selected",
+        });
+      }
+    }
+
     // TODO Notify if user email has already been used
+    // ? this might be handles already from the model/schema
 
     // establish empty user variable
     let user = null;
@@ -49,6 +91,9 @@ router.post("/register", async (req, res) => {
         lastName: lastName,
         email: email,
         password: bcrypt.hashSync(password, 10),
+        guardianEmail: guardianEmail,
+        school: school,
+        ageCheck: ageCheck,
         approvedMentors: [], // empty array to push accepted mentor into
         requestedMentors: [], // empty array to keep track of match request
       });
@@ -133,74 +178,138 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// ! Route for mentor to update their info
+// ENDPOINT: http://localhost:4000/user/mentor/update
+// Request Type: PUT
 
-// TODO ROUTE TO UPDATE BASIC USER INFO (name, email, password, etc.) add the rest of profile info here
-
-// ENDPOINT: http://localhost:4000/user/update/:id
-// Request type: PUT
-router.put("/update/:id", validateSession, async (req, res) => {
+router.put("/mentor/update", validateSession, async (req, res) => {
   try {
-    //1. store id in a variable
-    const id = req.params.id;
+    //1. get id from JWT
+    const id = req.user._id;
 
-    //2. variable that will store user id
-    const filter = { _id: id };
-
-    // supply req.body only with fields that user should be able to update
-    // dont let user change their userType
-    const { firstName, lastName, email, password } = req.body;
+    // Get mentor's profile fields from req.body
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      bio,
+      profilePhoto,
+      interests,
+      questionToAsk,
+      projectCategory,
+    } = req.body;
 
     // Empty object to hold updated info
     const updatedInfo = {};
 
-    // only update if provided values are NOT undefined
+    // only update if provided values are NOT undefined (this way fields can be left empty)
     if (firstName !== undefined) updatedInfo.firstName = firstName;
     if (lastName !== undefined) updatedInfo.lastName = lastName;
     if (email !== undefined) updatedInfo.email = email;
-    if (password !== undefined) {
+    if (password !== undefined)
       updatedInfo.password = bcrypt.hashSync(password, 10);
-    }
-    // ToDo return the updated user info (if/else mentor/mentee)
-    let updatedUser = null;
-    if (req.userType === "Mentor") {
-      updatedUser = await Mentor.findOneAndUpdate(
-        filter,
-        updatedInfo,
-        { new: true } // Returns the updated info
-      );
-    } else {
-      updatedUser = await Mentee.findOneAndUpdate(
-        filter,
-        updatedInfo,
-        { new: true } // Returns the updated info
-      );
+    if (bio !== undefined) updatedInfo.bio = bio;
+    if (profilePhoto !== undefined) updatedInfo.profilePhoto = profilePhoto;
+    if (interests !== undefined) updatedInfo.interests = interests;
+    if (questionToAsk !== undefined) updatedInfo.questionToAsk = questionToAsk;
+    if (projectCategory !== undefined)
+      updatedInfo.projectCategory = projectCategory;
+
+    // Take new data from updatedMentor and update the mentor's info
+    const updatedMentor = await Mentor.findByIdAndUpdate(id, updatedInfo, {
+      new: true,
+    });
+
+    // error if update was unsuccessful
+    if (!updatedMentor) {
+      return res
+        .status(404)
+        .json({ message: "Error updating your profile - please try again" });
     }
 
-    // if update not successful, give error
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Error updating user" });
-    }
+    // Give success message if info is updated
     res.status(200).json({
-      message: `User successfully updated`,
+      message: "Your mentor profile was successfully updated",
       user: {
-        id: updatedUser._id,
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName,
-        email: updatedUser.email,
+        id: updatedMentor._id,
+        firstName: updatedMentor.firstName,
+        lastName: updatedMentor.lastName,
+        email: updatedMentor.email,
+        bio: updatedMentor.bio || "",
+        profilePhoto: updatedMentor.profilePhoto || "",
+        interests: updatedMentor.interests || "",
+        questionToAsk: updatedMentor.questionToAsk || "",
+        projectCategory: updatedMentor.projectCategory || "",
       },
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ message: error.message });
+  }
+});
+
+// ! Route for Mentee to update their info
+// ENDPOINT: http://localhost:4000/user/mentee/update
+// Request type: PUT
+router.put("/mentee/update", validateSession, async (req, res) => {
+  try {
+    // Get mentee's id from token
+    const id = req.user._id;
+
+    // make sure user is a mentee
+    if (req.userType !== "Mentee") {
+      return res
+        .status(403)
+        .json({ message: "This page is only valid for mentees" });
+    }
+    // Get profile fields from the req.body
+    const { firstName, lastName, email, password, guardianEmail } = req.body;
+
+    // Empty object to hold updated info:
+    const updatedInfo = {};
+
+    // only update if provided values are NOT undefined (this way fields can be left empty)
+    if (firstName !== undefined) updatedInfo.firstName = firstName;
+    if (lastName !== undefined) updatedInfo.lastName = lastName;
+    if (email !== undefined) updatedInfo.email = email;
+    if (password !== undefined)
+      updatedInfo.password = bcrypt.hashSync(password, 10);
+    if (guardianEmail !== undefined) updatedInfo.guardianEmail = guardianEmail;
+
+    // Update the mentee in database
+    const updatedMentee = await Mentee.findByIdAndUpdate(id, updatedInfo, {
+      new: true,
+    });
+    // give error if update was unsuccessful
+    if (!updatedMentee) {
+      return res
+        .status(404)
+        .json({ message: "Error updating your profile - please try again." });
+    }
+
+    // Give success message with updated info
+    res.status(200).json({
+      message: "Your mentee profile was successfully updated",
+      user: {
+        id: updatedMentee._id,
+        firstName: updatedMentee.firstName,
+        lastName: updatedMentee.lastName,
+        email: updatedMentee.email,
+        guardianEmail: updatedMentee.guardianEmail || "",
+      },
+    });
+  } catch (error) {
+    res.json({ message: error.message });
   }
 });
 
 // ToDo Route to delete user
-// ENDPOINT: http://localhost:4000/user/delete/:id
+// ENDPOINT: http://localhost:4000/user/delete/
 // Request type: DELETE
-router.delete("/delete/:id", validateSession, async (req, res) => {
+router.delete("/delete", validateSession, async (req, res) => {
   try {
-    //1. store id in a variable
-    const id = req.params.id;
+    //1. GEt user ID from the token
+    const id = req.user._id;
 
     // First try to delete from Mentors
     // if mentor delete count is zero, try deleting from mentee
@@ -258,14 +367,13 @@ router.get("/all-mentors", async (req, res) => {
   }
 });
 
-// !Route for completing user profile information (separate from basic account register or update)
-// Maddie changed this on her local to be "/mentor/update/:id"
-// ENDPOINT: http://localhost:4000/user/completion/:id
+// ! Route for completing user profile information (separate from basic account register or update)
+// ENDPOINT: http://localhost:4000/user/completion
 // Request type: PUT
-router.put("/completion/:id", validateSession, async (req, res) => {
+router.put("/completion", validateSession, async (req, res) => {
   try {
-    // Store id in variable
-    const id = req.params.id;
+    // Get user id from token
+    const id = req.user._id;
 
     // Initialize variables
     let profileInfo = {};
@@ -330,12 +438,12 @@ router.put("/completion/:id", validateSession, async (req, res) => {
 });
 
 // TODO Route for photo upload
-// ENDPOINT: http://localhost:4000/user/profile-photo/:id
+// ENDPOINT: http://localhost:4000/user/profile-photo
 // Request Type: PUT
-router.put("/profile-photo/:id", validateSession, async (req, res) => {
+router.put("/profile-photo", validateSession, async (req, res) => {
   try {
-    //1. store id in a variable
-    const id = req.params.id;
+    //1. Get Mentee's id from the token
+    const id = req.user._id;
 
     //  2. get image URL from req.body
     const { profilePhoto } = req.body;
@@ -370,4 +478,3 @@ router.put("/profile-photo/:id", validateSession, async (req, res) => {
   }
 });
 module.exports = router;
-
