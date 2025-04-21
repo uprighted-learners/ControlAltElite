@@ -40,12 +40,11 @@ function App() {
         {/* <Route path="/mentor" element={<MentorDashboard />} /> */}
         <Route path="/mentee" element={<MenteeDashboard />} />
         <Route path="/updateProfile" element={<MentorProfile />} />
-        <Route path="/createMentor" element={<CreateMentor />} />
       </Routes>
-      <div className="content-body">
+      {/* <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
         {token && <MainIndex token={token} />}
-      </div>
+      </div> */}
       <Footer />
     </>
   );

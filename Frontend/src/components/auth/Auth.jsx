@@ -1,5 +1,4 @@
 // Auth
-
 import React, { useState } from "react";
 import SignUp from "./signup-section/SignUp";
 import Login from "./login-section/login";
@@ -8,9 +7,8 @@ const Auth = (props) => {
   const [isSigningUp, setIsSigningUp] = useState(true);
 
   return (
-    <div>
       {isSigningUp ? (
-        <div>
+        <div className="py-12">
           <SignUp updateToken={props.updateToken} />
           <p>
             Already have a login?{" "}

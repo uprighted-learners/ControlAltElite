@@ -4,7 +4,6 @@ export default function CreateMentor() {
   const [firstName, setFirstName] = useState("Ceporah");
   const [lastName, setLastName] = useState("Wiggins-Mentor2");
   const [email, setEmail] = useState("email-mentor1@test.com");
-  const [password, setPassword] = useState("1234");
   const [projectCategory, setProjectCategory] = useState("");
 
   function handleSubmit(event) {

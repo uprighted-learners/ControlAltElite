@@ -1,8 +1,9 @@
+import React from 'react';
 // Mentor Profile
 const MentorProfile = (props) => {
     return (
         <>
-           <h1> Hello from MentorProfile    </h1>
+           <h1> Hello from MentorProfile</h1>
         </>
     );
 }
