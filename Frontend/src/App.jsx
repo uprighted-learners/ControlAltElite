@@ -40,10 +40,10 @@ function App() {
         <Route path="/signup" element={<Auth updateToken={updateToken} />} />
         <Route path="/login" element={<MainIndex token={token} />} />
       </Routes>
-      <div className="content-body">
+      {/* <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
         {token && <MainIndex token={token} />}
-      </div>
+      </div> */}
       <Footer />
     </>
   );
