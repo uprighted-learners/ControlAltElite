@@ -224,4 +224,39 @@ router.get("/view-matches", validateSession, async (req, res) => {
   }
 });
 
+// ! route for mentor to reject match request
+// ENDPOINT: http://localhost:4000/match/reject/:menteeId
+// Request Type: POST
+router.post("/reject/:menteeId", validateSession, async (req, res) => {
+  try {
+    // get mentorId
+    const mentorId = req.user.id;
+
+    // Get mentee's id from URL parameter
+    const menteeId = req.params.menteeId;
+
+    // Find both mentor and mentee for arrays
+    const mentor = await Mentor.findById(mentorId);
+    const mentee = await Mentee.findById(menteeId);
+
+    // Remove mentee's id from mentor's menteeRequests array
+    mentor.menteeRequests.pull(menteeId);
+    await mentor.save();
+
+    // Remove mentor's id from mentee's requestedMentors array
+    mentee.requestedMentors.pull(mentorId);
+    await mentee.save();
+
+    res.status(200).json({
+      message: `Match request from ${mentee.firstName} ${mentee.lastName} was rejected successfully`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to reject match request",
+      error: error.message,
+    });
+  }
+}
+);
+
 module.exports = router;
