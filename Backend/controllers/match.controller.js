@@ -1,12 +1,7 @@
-// console.log("This is the match request controller");
-
 const router = require("express").Router();
 const validateSession = require("../middleware/validate-session");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
-// const MatchRequest = require("../models/match-request.model");
-// const bcrypt = require("bcrypt");
-// const jwt = require("jsonwebtoken");
 
 
 // !Test these again with ID's
@@ -17,8 +12,7 @@ const Mentee = require("../models/mentee.model");
 router.post("/request/:mentorId", validateSession, async (req, res) => {
   try {
     // get mentee's id info fromn req.user
-    const menteeId = req.user.id;
-    console.log("Mentee ID: ", menteeId);
+    const menteeId = req.user._id;
     // Get mentor's id from URL parameter
     const mentorId = req.params.mentorId;
 console.log("Mentor ID: ", mentorId);
@@ -32,6 +26,7 @@ console.log("Mentor ID: ", mentorId);
       return res.status(400).json({
         message: `You have already requested to match with ${mentor.firstName} ${mentor.lastName}.`,
         mentorId: mentorId,
+        menteeId: menteeId,
       });
     }
 
@@ -45,6 +40,9 @@ console.log("Mentor ID: ", mentorId);
 
     res.status(200).json({
       message: `Mentor match request to ${mentor.firstName} ${mentor.lastName} was sent successfully`,
+      mentorId: mentorId,
+      menteeName: `${mentee.firstName} ${mentee.lastName}`,
+      menteeId: menteeId,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -57,7 +55,7 @@ console.log("Mentor ID: ", mentorId);
 router.post("/accept/:menteeId", validateSession, async (req, res) => {
   try {
     // get mentorId
-    const mentorId = req.user.id;
+    const mentorId = req.user._id;
 
     // Get mentee's id from URL parameter
     const menteeId = req.params.menteeId;
@@ -84,6 +82,8 @@ router.post("/accept/:menteeId", validateSession, async (req, res) => {
 
     res.status(200).json({
       message: `Match accepted successfully! You are now connected with ${mentee.firstName} ${mentee.lastName}.`,
+      mentorId: mentorId,
+      menteeId: menteeId,
     });
   } catch (error) {
     // Improved error handling with proper status code
@@ -101,7 +101,7 @@ router.post("/accept/:menteeId", validateSession, async (req, res) => {
 router.get("/view-requests", validateSession, async (req, res) => {
   try {
     // get userId and userType
-    const userId = req.user.id;
+    const userId = req.user._id;
     const userType = req.userType;
 
     // If usertype is MENTOR:
@@ -116,6 +116,7 @@ router.get("/view-requests", validateSession, async (req, res) => {
       }
       // format the mentee data using .map to return to mentor
       const formattedMentees = mentor.menteeRequests.map((mentee) => ({
+        menteeId: mentee._id,
         firstName: mentee.firstName,
         lastName: mentee.lastName,
         email: mentee.email,
@@ -139,18 +140,18 @@ router.get("/view-requests", validateSession, async (req, res) => {
       }
       // format the mentor data using .map inside the requestedMentor array
       const formattedMentors = mentee.requestedMentors.map((mentor) => ({
+        mentorId: mentor._id,
         profilePhoto: mentor.profilePhoto,
         firstName: mentor.firstName,
         lastName: mentor.lastName,
         email: mentor.email,
       }));
-    // give mentee a success response if successful
-    res.status(200).json({
-      message: "Match requests found successfully",
-      requests: formattedMentors,
-    });
-  }
-
+      // give mentee a success response if successful
+      res.status(200).json({
+        message: "Match requests found successfully",
+        requests: formattedMentors,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       message: "Failed to retrieve requests",
@@ -167,7 +168,7 @@ router.get("/view-requests", validateSession, async (req, res) => {
 router.get("/view-matches", validateSession, async (req, res) => {
   try {
     // get userId and userType
-    const userId = req.user.id;
+    const userId = req.user._id;
     const userType = req.userType;
 
     //  ! If userType is MENTOR:
@@ -183,6 +184,7 @@ router.get("/view-matches", validateSession, async (req, res) => {
       }
       // if array has data, format using .map
       const formattedMentees = mentor.approvedMentees.map((mentee) => ({
+        menteeId: mentee._id,
         firstName: mentee.firstName,
         lastName: mentee.lastName,
         email: mentee.email,
@@ -205,6 +207,7 @@ router.get("/view-matches", validateSession, async (req, res) => {
       }
       // if array has data, format using .map
       const formattedMatches = mentee.approvedMentors.map((mentor) => ({
+        mentorId: mentor._id,
         profilePhoto: mentor.profilePhoto,
         firstName: mentor.firstName,
         lastName: mentor.lastName,
@@ -215,9 +218,7 @@ router.get("/view-matches", validateSession, async (req, res) => {
         message: "Your matched mentors were retrieved successfully",
         matches: formattedMatches,
       });
-    } 
-    
-    
+    }
   } catch (error) {
     res.status(500).json({
       message: "Failed to find any matches",
