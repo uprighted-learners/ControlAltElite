@@ -2,12 +2,13 @@
 import React from "react";
 import CardPreview from "./CardPreview";
 // Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
 
 import { useState } from "react";
 
 // Import Swiper styles
-import 'swiper/css';
+import "swiper/css";
+import { API_VIEW_MENTORS } from "../../constants/endpoints";
 
 const MentorDirectory = (props) => {
   // Placeholder data for looping
@@ -41,35 +42,60 @@ const MentorDirectory = (props) => {
       description: "This is a placeholder description for Mentor 4.",
     },
   ];
-  
+
+  // State to hold mentor data
+  // const [mentorData, setMentorData] = useState([]);
+
+  // // function for fetching mentor data
+  // async function fetchMentorData() {
+  //   //headers
+  //   let myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/json");
+
+  //   myHeaders.append("Authorization", props.token); // pass token from props
+  //   // request options
+  //   let requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
+  //   // send request
+  //   let response = await fetch(API_VIEW_MENTORS, requestOptions);
+  //   // response object
+  //   let data = await response.json();
+  //   //set the state variable to the data
+  //   setMentorData(data.mentors);
+  // }
+  // // useEffect to fetch data when component mounts
+  // useEffect(() => {
+  //   fetchMentorData();
+  // }, []);
+
   return (
     <>
-                  {/* Swiper Carousel */}
-                  <Swiper
-                  style={{height: 'auto', width: '100%' }}
-      spaceBetween={30}
-      slidesPerView={3}
-      breakpoints={{
-        640: { slidesPerView: 1 },
-        768: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 },
-      }}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
-    >
-      {mentorData.map((mentor)=> (
-        <SwiperSlide key={mentor.id}>
-          <CardPreview
-          imageUrl={mentor.imageUrl}
-          title={mentor.title}
-            description={mentor.description} />
-        </SwiperSlide>
-      ))}
-        
-
-    </Swiper>
-
-
+      {/* Swiper Carousel */}
+      <Swiper
+        style={{ height: "auto", width: "100%" }}
+        spaceBetween={30}
+        slidesPerView={3}
+        breakpoints={{
+          640: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+        }}
+        onSlideChange={() => console.log("slide change")}
+        onSwiper={(swiper) => console.log(swiper)}
+      >
+        {mentorData.map((mentor) => (
+          <SwiperSlide key={mentor.id}>
+            <CardPreview
+              imageUrl={mentor.imageUrl}
+              title={mentor.title}
+              description={mentor.description}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </>
   );
 };

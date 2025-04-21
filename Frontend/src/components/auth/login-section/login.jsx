@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Form, FormGroup, Input, Label } from "reactstrap";
 import SignupButton from "../../custom/SignupButton";
 import { API_LOGIN } from "../../../constants/endpoints";
 
@@ -62,51 +61,41 @@ const Login = (props) => {
   }
   return (
     <>
-      <div
-        className="d-flex justify-content-center mt-5"
-        style={{ height: "50vh", marginTop: "50vh" }}
-      >
-        <div
-          className="secondary-background p-5 rounded"
-          style={{ width: "450px", height: "530px" }}
-        >
-          <h2 className="text-center font-primary bold">LOGIN FORM</h2>
-          {/* Form Goes Here */}
-          <Form onSubmit={handleSubmit}>
-            {/* Form Group for Email */}
-            <FormGroup>
-              <Label for="email">Email</Label>
-              {/* Add a value and assign it to email (read only), onChange function to update the state */}
-              <Input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                id="loginemail"
-                name="email"
-                placeholder="Enter Email"
-                type="email"
-              />
-            </FormGroup>
-
-            {/* Form Group End Email */}
-            {/* ----------------------------- */}
-            {/* Form Group for Password */}
-            <FormGroup>
-              <Label for="Password">Password</Label>
-              {/* Add a value and assign it to password (read only), onChange function to update the state */}
-              <Input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                id="loginpassword"
-                name="password"
-                placeholder="Enter Password"
-                type="password"
-              />
-            </FormGroup>
-            {/* Form Group End Password */}
-
-            {/* Button Here */}
-            <SignupButton onClick={handleSubmit}>LOGIN</SignupButton>
-          </Form>
+      <div className="flex flex-col items-center justify-center p-4 h-[80vh]">
+        <div className="bg-blue-500 w-full max-w-[34.375rem] max-h-fit rounded-sm">
+          <div className="p-5 rounded-sm flex flex-col justify-center">
+            <h2 className="text-center p-4 text-white uppercase text-4xl">login</h2>
+            {/* Form Goes Here */}
+            <form className="flex flex-col justify-center" onSubmit={handleSubmit}>
+              {/* Form Group for Email */}
+                <label className="uppercase pb-2" htmlFor="email">Email:</label>
+                {/* Add a value and assign it to email (read only), onChange function to update the state */}
+                <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  id="loginemail"
+                  name="email"
+                  placeholder="Enter Email"
+                  type="email"
+                />
+              {/* Form Group End Email */}
+              {/* ----------------------------- */}
+              {/* Form Group for Password */}
+                <label className="uppercase pb-2" htmlFor="Password">Password:</label>
+                {/* Add a value and assign it to password (read only), onChange function to update the state */}
+                <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  id="loginpassword"
+                  name="password"
+                  placeholder="Enter Password"
+                  type="password"
+                />
+              {/* Form Group End Password */}
+              {/* Button Here */}
+              <button onClick={handleSubmit} className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950 mb-2" type="submit">SIGN UP</button>
+            </form>
+          </div>
         </div>
       </div>
     </>

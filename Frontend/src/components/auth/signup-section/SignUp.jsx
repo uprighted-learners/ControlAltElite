@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { API_REGISTER } from "../../../constants/endpoints";
-import { Form, FormGroup, Input, Label } from "reactstrap";
-import SignupButton from "../../custom/SignupButton";
+// import { Form, FormGroup, Input, Label } from "reactstrap";
+// import SignupButton from "../../custom/SignupButton";
 
 const SignUp = (props) => {
   // TODO: Create state variables for first name, last name, email, and password using the useState hook.
@@ -10,7 +10,7 @@ const SignUp = (props) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [zipcode, setZipcode] = useState("");
+  // const [zipcode, setZipcode] = useState("");
 
   // TODO: Create a function called handleSubmit that will console.log("Click Worked")
   function handleSubmit(e) {
@@ -28,7 +28,6 @@ const SignUp = (props) => {
         lastName,
         email,
         password,
-        zipcode,
       };
       console.log(requestBody);
       const response = await fetch(API_REGISTER, {
@@ -54,31 +53,51 @@ const SignUp = (props) => {
   return (
     <>
       <div
-        className="d-flex justify-content-center mt-5"
-        style={{ height: "85vh" }}
-      >
-        <div
-          className="secondary-background p-5 rounded"
-          style={{ width: "450px", height: "530px" }}
-        >
-          <h2 className="text-center font-primary bold">SIGN UP FORM</h2>
+        className="flex justify-center items-center p-4">
+        <div className="bg-blue-500 w-full max-w-[34.375rem] p-8 rounded-sm flex flex-col justify-center items-center">
+          <h2 className="text-center font-bold text-3xl">SIGN UP</h2>
           {/* Form Goes Here */}
-          <Form onSubmit={handleSubmit}>
+          <form className="flex flex-col w-full" onSubmit={handleSubmit}>
             {/* Form Group for First Name */}
-            <FormGroup>
-              <Label for="firstName">First Name</Label>
-              <Input
+              <label className="pb-2 uppercase" for="firstName">First Name:</label>
+              <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
                 type="text"
                 name="firstName"
                 id="firstName"
-                placeholder="Enter First Name"
+                placeholder="First Name..."
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
-            </FormGroup>
+              <label className="pb-2 uppercase" for="lastName">Last Name:</label>
+              <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+                type="text"
+                name="lastName"
+                id="lastName"
+                placeholder="Last Name..."
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+              <label className="pb-2 uppercase" for="email">Email:</label>
+              <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <label className="pb-2 uppercase" for="password">Password:</label>
+              <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password..."
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
 
             {/* Form Group for Last Name */}
-            <FormGroup>
+            {/* <form>
               <Label for="lastName">Last Name</Label>
               <Input
                 type="text"
@@ -88,10 +107,10 @@ const SignUp = (props) => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
-            </FormGroup>
+            </form> */}
 
             {/* Form Group for Email */}
-            <FormGroup>
+            {/* <FormGroup>
               <Label for="email">Email</Label>
               <Input
                 type="email"
@@ -101,10 +120,10 @@ const SignUp = (props) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-            </FormGroup>
+            </FormGroup> */}
             {/* Form Group Zipcode */}
 
-            <FormGroup>
+            {/* <FormGroup>
               <Label for="zipcode">Zipcode</Label>
               <Input
                 type="text"
@@ -114,9 +133,9 @@ const SignUp = (props) => {
                 value={zipcode}
                 onChange={(e) => setZipcode(e.target.value)}
               />
-            </FormGroup>
+            </FormGroup> */}
             {/* Form Group for Password */}
-            <FormGroup>
+            {/* <FormGroup>
               <Label for="password">Password</Label>
               <Input
                 type="password"
@@ -126,10 +145,9 @@ const SignUp = (props) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </FormGroup>
-
-            <SignupButton type="submit">SIGN UP</SignupButton>
-          </Form>
+            </FormGroup> */}
+            <button className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950" type="submit">SIGN UP</button>
+          </form>
         </div>
       </div>
     </>
