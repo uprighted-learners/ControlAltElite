@@ -3,7 +3,6 @@ const validateSession = require("../middleware/validate-session");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
 
-
 // !Test these again with ID's
 
 // ! route for mentee to request mentor (match Request)
@@ -223,6 +222,83 @@ router.get("/view-matches", validateSession, async (req, res) => {
       message: "Failed to find any matches",
       error: error.message,
     });
+  }
+});
+
+// !Route to Cancel an outgoing match request (mentee requesting mentor)
+// Endpoint: http://localhost:4000/match/cancel/:mentorId
+// Request Type: POST
+router.post("/cancel/:mentorId", validateSession, async (req, res) => {
+  try {
+    // Get mentee's id from the token & mentors id from the URL
+    const menteeId = req.user._id;
+    const mentorId = req.params.mentorId;
+
+    // Find both users from their ID's
+    const mentee = await Mentee.findById(menteeId);
+    const mentor = await Mentor.findById(mentorId);
+
+    // make sure that the mentor that the mentee is trying to cancel request to actually exists
+    if (!mentor) {
+      return res.status(404).json({
+        message: "Invalid ID - no mentor was found",
+      });
+    }
+
+    // Remove mentor from mentee's array and save updated array
+    mentee.requestedMentors.pull(mentorId);
+    await mentee.save();
+
+    // remove mentee form MENTOR's array and save the updated array
+    mentor.menteeRequests.pull(mentorId);
+    await mentor.save();
+
+    res.status(200).json({
+      message: `Your request to match with ${mentor.firstName} ${mentor.lastName} was cancelled successfully`,
+      mentorId: mentorId,
+      menteeId: menteeId,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Route for Mentor to deny a match request
+// Endpoint: http://localhost:4000/match/deny/:menteeId
+// Request Type: POST
+router.post("/deny/:menteeId", validateSession, async (req, res) => {
+  try {
+    // get mentor's id from the token and mentee's id from the URL
+    const mentorId = req.user._id;
+    const menteeId = req.params.menteeId;
+    l;
+
+    // Find both users from their id's
+    const mentor = await Mentor.findById(mentorId);
+    const mentee = await Mentee.findById(menteeId);
+
+    // Check if the mentee actaully exists
+    if (!mentee) {
+      return res.status(404).json({
+        message: "Invalid ID - no mentee was found",
+      });
+    }
+
+    // Remove mentee from mentor's array and save
+    mentor.menteeRequests.pull(menteeId);
+    await mentor.save();
+
+    // Remove mentor from mentee's array and save
+    mentee.requestedMentors.pull(mentorId);
+    await mentee.save();
+
+    res.status(200).json({
+      message: `The match request from ${mentee.firstName} ${mentee.lastName} has been denied.`,
+      mentorId: mentorId,
+      menteeId: menteeId,
+    });
+  } catch (error) {
+    res.json({ message: error.message });
   }
 });
 

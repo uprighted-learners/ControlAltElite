@@ -42,12 +42,10 @@ router.post("/register", async (req, res) => {
     if (userType === "Mentee") {
       // Make sure mentee checked "over 13 y/o" box
       if (!ageCheck) {
-        return res
-          .status(400)
-          .json({
-            message:
-              "You must confirm that you are over 13 years old to register as a mentee",
-          });
+        return res.status(400).json({
+          message:
+            "You must confirm that you are over 13 years old to register as a mentee",
+        });
       }
       // Check for guardian email
       if (!guardianEmail) {
@@ -477,4 +475,88 @@ router.put("/profile-photo", validateSession, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// ROUTE to view single MENTOR's profile by id
+// ENDPOINT: http://localhost:4000/user/mentor/profile
+// Request Type: GET
+router.get("/mentor/profile", validateSession, async (req, res) => {
+  try {
+    // Get the Mentor's id from token
+    const id = req.user._id;
+
+    // Make sure userType = Mentor
+    if (req.userType !== "Mentor") {
+      return res
+        .status(403)
+        .json({ message: "You must be a mentor to view this page" });
+    }
+
+    // If userType is Mentor, find their data from their id
+    const mentor = await Mentor.findById(id);
+
+    // Respond with mentor profile info if successful"
+    // return empty string if field was left empty
+    res.status(200).json({
+      message: `${mentor.firstName} ${mentor.lastName}'s profile found sucessfully`,
+      user: {
+        mentorId: mentor._id,
+        firstName: mentor.firstName,
+        lastName: mentor.lastName,
+        email: mentor.email,
+        bio: mentor.bio || "",
+        profilePhoto: mentor.profilePhoto || "",
+        interests: mentor.interests || "",
+        questionToAsk: mentor.questionToAsk || "",
+        projectCategory: mentor.projectCategory || "",
+        menteeRequests: mentor.menteeRequests || [], // arrray not a string
+        approvedMentees: mentor.approvedMentees || [] // array not a string
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+// ROUTE to view single MENTEE's profile by ID:
+// ENDPOINT: http://localhost:4000/user/mentee/profile
+// Request Type: GET
+router.get('/mentee/profile', validateSession, async (req, res) => {
+try{
+// Get the Mentee's id from token
+const id = req.user._id;
+
+// Make sure userType = Mentor
+if (req.userType !== "Mentee") {
+  return res
+    .status(403)
+    .json({ message: "You must be a mentee to view this page" });
+}
+
+// If userType is Mentee, find their data from their id
+const mentee = await Mentee.findById(id);
+
+// Respond with mentor profile info if successful"
+// return empty string if field was left empty
+res.status(200).json({
+  message: `${mentee.firstName} ${mentee.lastName}'s profile found sucessfully`,
+  user: {
+    menteeId: mentee._id,
+    firstName: mentee.firstName,
+    lastName: mentee.lastName,
+    email: mentee.email,
+    guardianEmail: mentee.guardianEmail || "",
+    school: mentee.school || "",
+    ageCheck: mentee.ageCheck,
+    interests: mentee.interests || "",
+    requestedMentors: mentee.requestedMentors || [],
+    approvedMentors: mentee.approvedMentors || []
+  }
+});
+} catch (error) {
+res.status(500).json({ message: error.message });
+}
+});
+
+
 module.exports = router;
