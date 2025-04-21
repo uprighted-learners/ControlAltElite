@@ -138,7 +138,7 @@ router.post("/login", async (req, res) => {
 
 // ENDPOINT: http://localhost:4000/user/update/:id
 // Request type: PUT
-router.put("/update/:id", validateSession, async (req, res) => {
+router.put("/mentor/update", validateSession, async (req, res) => {
   try {
     //1. store id in a variable
     const id = req.params.id;
@@ -233,7 +233,7 @@ router.delete("/delete/:id", validateSession, async (req, res) => {
 // ! route to view all mentors
 // Endpoint:http: //localhost:4000/user/all-mentors
 // request type: GET
-router.get("/all-mentors", async (req, res) => {
+router.get("/mentor/view-all", async (req, res) => {
   try {
     const mentors = await Mentor.find({ userType: "Mentor" });
 
