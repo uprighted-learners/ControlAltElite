@@ -9,3 +9,7 @@ export const API_MENTOR_PROFILE = `${API}/user/mentor/profile/:id`;
 export const API_VIEW_MENTORS = `${API}/user/all-mentors`;
 
 export const API_DELETE_MENTOR = `${API}/user/delete`;
+
+export const API_VIEW_MENTOR_MATCH = `${API}/match/view-matches`;
+
+export const API_VIEW_PENDING_REQUESTS = `${API}/match/view-requests`;
