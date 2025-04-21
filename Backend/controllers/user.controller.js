@@ -233,7 +233,7 @@ router.delete("/delete/:id", validateSession, async (req, res) => {
 // ! route to view all mentors
 // Endpoint:http: //localhost:4000/user/all-mentors
 // request type: GET
-router.get("/all-mentors", async (req, res) => {
+router.get("/view-all", async (req, res) => {
   try {
     const mentors = await Mentor.find({ userType: "Mentor" });
 
