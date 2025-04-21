@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-} from "reactstrap";
+// import {
+//   Collapse,
+//   Navbar,
+//   NavbarToggler,
+//   NavbarBrand,
+//   Nav,
+//   NavItem,
+//   NavLink,
+// } from "reactstrap";
 
 const MentorNavbar = (props) => {
   const [collapsed, setCollapsed] = useState(true);
@@ -16,7 +16,7 @@ const MentorNavbar = (props) => {
   return (
     <>
       <div>
-        <Navbar color="faded" light className="navbar">
+        {/* <Navbar color="faded" light className="navbar">
           <NavbarBrand href="/" className="me-auto font-primary bold">
             Home page
           </NavbarBrand>
@@ -28,7 +28,7 @@ const MentorNavbar = (props) => {
               </NavItem>
             </Nav>
           </Collapse>
-        </Navbar>
+        </Navbar> */}
       </div>
     </>
   );

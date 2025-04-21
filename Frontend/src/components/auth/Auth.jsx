@@ -8,7 +8,7 @@ const Auth = (props) => {
   const [isSigningUp, setIsSigningUp] = useState(true);
 
   return (
-    <div className="login-signup-container">
+    <div>
       {isSigningUp ? (
         <div>
           <SignUp updateToken={props.updateToken} />
