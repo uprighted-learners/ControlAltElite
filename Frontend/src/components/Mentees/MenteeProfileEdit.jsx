@@ -64,7 +64,7 @@ const MenteeProfileEdit = (props) => {
       {/* <h1> Hello from MenteeProfileEdit </h1> */}
       {/* Toggle button */}
       <button
-        className="btn btn-outline"
+        className="btn mt-4 btn-soft btn-primary"
         onClick={() => setShowForm(!showForm)}
       >
         {showForm ? "Cancel" : "Update"}

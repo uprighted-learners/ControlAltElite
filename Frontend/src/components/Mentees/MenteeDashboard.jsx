@@ -65,7 +65,7 @@ const MenteeDashboard = (props) => {
             <button className="bg-[#1b0a5f] px-12 py-2 rounded-md uppercase"><a href="">Mentor List</a></button>
           </div>
           {/* / ! Added for Update mentee profile button */}
-          <div className="flex items-center justify-center text-black text-center p-4 rounded-md mt-4">
+          <div className="flex flex-col-reverse items-center justify-center text-black text-center p-4 rounded-md mt-4">
           <MenteeProfileEdit token={props.token}/>
           </div>
           <div className="flex items-center justify-center text-white text-center p-4 rounded-md mt-4">
