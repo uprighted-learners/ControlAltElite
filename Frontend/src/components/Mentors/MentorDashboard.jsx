@@ -10,7 +10,9 @@ const MentorDashboard = (props) => {
     return (
         <>
             <MentorNavbar />
+            <div className="flex flex-col-reverse items-center justify-center text-black text-center p-4 rounded-md mt-4">
             <MentorProfileEdit token={props.token}/>
+            </div>
             <div className="mentor-dashboard">
                 
                 <h1>Mentor Dashboard</h1>

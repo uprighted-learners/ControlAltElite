@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import { API_MENTOR_PROFILE } from "../../constants/endpoints";
 
 const MentorProfileEdit = (props) => {
+  // Update First Name
+  const [updatedFirstName, setUpdatedFirstName] = useState("");
+  // Update Last Name
+  const [updatedLastName, setUpdatedLastName] = useState();
+  // Update Email
+  const [updatedEmail, setUpdatedEmail] = useState("");
   // Update Bio
   const [updatedBio, setUpdatedBio] = useState("");
-  // Update Interests
-  const [updatedInterests, setUpdatedInterests] = useState("");
+  // Update Profile Photo
+  // const [updatedProfilePhoto, setUpdatedProfilePhoto] = useState("");
   // Update Question
   const [updatedQuestionToAsk, setUpdatedQuestionToAsk] = useState("");
 
@@ -24,13 +30,15 @@ const MentorProfileEdit = (props) => {
       console.log(props.token);
       // Request Body
       let body = {
-        updatedBio,
-        updatedInterests,
-        updatedQuestionToAsk,
-        
+        firstName: updatedFirstName,
+        lastName: updatedLastName,
+        email: updatedEmail,
+        bio: updatedBio,
+        // profilePhoto: updatedProfilePhoto,
+        questionToAsk: updatedQuestionToAsk,
       };
       console.log(body);
-      
+
       //   Request Options
       let requestOption = {
         method: "PUT",
@@ -40,8 +48,11 @@ const MentorProfileEdit = (props) => {
       // Send Request
       let response = await fetch(`${API_MENTOR_PROFILE}`, requestOption);
       //  Clear input box
+      setUpdatedFirstName("");
+      setUpdatedLastName("");
+      setUpdatedEmail("");
+      // setUpdatedProfilePhoto("");
       setUpdatedBio("");
-      setUpdatedInterests("");
       setUpdatedQuestionToAsk("");
       // Toggles whether the update form is shown
       setShowForm(false);
@@ -57,7 +68,7 @@ const MentorProfileEdit = (props) => {
     <>
       {/* Toggle button */}
       <button
-        className="btn btn-outline"
+        className="btn btn-outline mt-2 btn-soft btn-primary"
         onClick={() => setShowForm(!showForm)}
       >
         {showForm ? "Cancel" : "Update"}
@@ -66,12 +77,51 @@ const MentorProfileEdit = (props) => {
       {showForm && (
         <form
           // onSubmit={handleSubmit}
-          className="w-xs bg-base-200 border border-base-300 p-4 rounded-box"
+          className="w-xs bg-base-200 border border-base-300 p-4 rounded-box " class="flex flex-col justify-center items-center"
         >
-          <fieldset className="fieldset" >
+          <fieldset className="fieldset">
             {/* Form to update Profile */}
 
-            <label className="label-text">Update Bio Here:</label>
+            <label className="label-text font-bold">Update First Name Here:</label>
+            <input
+              className="input input-bordered bg-white text-black"
+              value={updatedFirstName}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setUpdatedFirstName(e.target.value);
+              }}
+              id="firstNameUpdate"
+              name="firstName"
+              placeholder="Type Here"
+              type="text"
+            />
+            <label className="label-text font-bold">Update Last Name Here:</label>
+            <input
+              className="input input-bordered bg-white text-black"
+              value={updatedLastName}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setUpdatedLastName(e.target.value);
+              }}
+              id="lastNameUpdate"
+              name="LastName"
+              placeholder="Type Here"
+              type="text"
+            />
+            <label className="label-text font-bold">Update Email Here:</label>
+            <input
+              className="input input-bordered bg-white text-black"
+              value={updatedEmail}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setUpdatedEmail(e.target.value);
+              }}
+              id="emailUpdate"
+              name="email"
+              placeholder="Type Here"
+              type="text"
+            />
+            <label className="label-text font-bold">Update Bio Here:</label>
             <input
               className="input input-bordered bg-white text-black"
               value={updatedBio}
@@ -84,20 +134,20 @@ const MentorProfileEdit = (props) => {
               placeholder="Type Here"
               type="text"
             />
-            <label className="label-text mt-4">Update Interests Here:</label>
+            {/* <label className="label-text mt-4">Update Profile Photo Here:</label>
             <input
               className="input input-bordered  bg-white text-black"
-              value={updatedInterests}
+              value={updatedProfilePhoto}
               onChange={(e) => {
                 console.log(e.target.value);
-                setUpdatedInterests(e.target.value);
+                setUpdatedProfilePhoto(e.target.value);
               }}
-              id="interestUpdate"
-              name="interests"
+              id="emailUpdate"
+              name="Email"
               placeholder="Type Here"
               type="text"
-            />
-            <label className="label-text mt-4">
+            /> */}
+            <label className="label-text font-bold">
               Update Question To Ask Here:
             </label>
             <input
@@ -112,7 +162,10 @@ const MentorProfileEdit = (props) => {
               type="text"
               className="input input-bordered  bg-white text-black"
             />
-            <button className="btn mt-4 btn-soft btn-primary" onClick={handleSubmit}>
+            <button
+              className="btn mt-2 btn-soft btn-primary"
+              onClick={handleSubmit}
+            >
               Update
             </button>
           </fieldset>
