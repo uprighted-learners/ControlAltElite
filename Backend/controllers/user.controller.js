@@ -338,9 +338,10 @@ router.delete("/delete", validateSession, async (req, res) => {
 });
 
 // ! route to view all mentors
-// Endpoint:http: //localhost:4000/user/all-mentors
+// Endpoint:http: //localhost:4000/user/mentor/view-all
+// Change to /mentor/view-all
 // request type: GET
-router.get("/all-mentors", async (req, res) => {
+router.get("mentor/view-all", async (req, res) => {
   try {
     const mentors = await Mentor.find({ userType: "Mentor" });
 
@@ -476,7 +477,7 @@ router.put("/profile-photo", validateSession, async (req, res) => {
   }
 });
 
-// ROUTE to view single MENTOR's profile by id
+// !ROUTE to view single MENTOR's profile by id
 // ENDPOINT: http://localhost:4000/user/mentor/profile
 // Request Type: GET
 router.get("/mentor/profile", validateSession, async (req, res) => {
@@ -518,7 +519,7 @@ router.get("/mentor/profile", validateSession, async (req, res) => {
 });
 
 
-// ROUTE to view single MENTEE's profile by ID:
+// !ROUTE to view single MENTEE's profile by ID:
 // ENDPOINT: http://localhost:4000/user/mentee/profile
 // Request Type: GET
 router.get('/mentee/profile', validateSession, async (req, res) => {
