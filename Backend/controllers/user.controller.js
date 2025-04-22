@@ -202,16 +202,22 @@ router.put("/mentor/update", validateSession, async (req, res) => {
     const updatedInfo = {};
 
     // only update if provided values are NOT undefined (this way fields can be left empty)
-    if (firstName !== undefined) updatedInfo.firstName = firstName;
-    if (lastName !== undefined) updatedInfo.lastName = lastName;
-    if (email !== undefined) updatedInfo.email = email;
-    if (password !== undefined)
+    // ! added .trim() to make sure empty fields wont overwrite existing data
+    if (firstName !== undefined && firstName.trim() !== "")
+      updatedInfo.firstName = firstName;
+    if (lastName !== undefined && lastName.trim() !== "")
+      updatedInfo.lastName = lastName;
+    if (email !== undefined && email.trim() !== "") updatedInfo.email = email;
+    if (password !== undefined && password.trim() !== "")
       updatedInfo.password = bcrypt.hashSync(password, 10);
-    if (bio !== undefined) updatedInfo.bio = bio;
-    if (profilePhoto !== undefined) updatedInfo.profilePhoto = profilePhoto;
-    if (interests !== undefined) updatedInfo.interests = interests;
-    if (questionToAsk !== undefined) updatedInfo.questionToAsk = questionToAsk;
-    if (projectCategory !== undefined)
+    if (bio !== undefined && bio.trim() !== "") updatedInfo.bio = bio;
+    if (profilePhoto !== undefined && profilePhoto.trim() !== "")
+      updatedInfo.profilePhoto = profilePhoto;
+    if (interests !== undefined && interests.trim() !== "")
+      updatedInfo.interests = interests;
+    if (questionToAsk !== undefined && questionToAsk.trim() !== "")
+      updatedInfo.questionToAsk = questionToAsk;
+    if (projectCategory !== undefined && projectCategory.trim() !== "")
       updatedInfo.projectCategory = projectCategory;
 
     // Take new data from updatedMentor and update the mentor's info
@@ -234,15 +240,15 @@ router.put("/mentor/update", validateSession, async (req, res) => {
         firstName: updatedMentor.firstName,
         lastName: updatedMentor.lastName,
         email: updatedMentor.email,
-        bio: updatedMentor.bio || "",
-        profilePhoto: updatedMentor.profilePhoto || "",
-        interests: updatedMentor.interests || "",
-        questionToAsk: updatedMentor.questionToAsk || "",
-        projectCategory: updatedMentor.projectCategory || "",
+        bio: updatedMentor.bio,
+        profilePhoto: updatedMentor.profilePhoto,
+        interests: updatedMentor.interests,
+        questionToAsk: updatedMentor.questionToAsk,
+        projectCategory: updatedMentor.projectCategory,
       },
     });
   } catch (error) {
-    res.json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
@@ -267,12 +273,16 @@ router.put("/mentee/update", validateSession, async (req, res) => {
     const updatedInfo = {};
 
     // only update if provided values are NOT undefined (this way fields can be left empty)
-    if (firstName !== undefined) updatedInfo.firstName = firstName;
-    if (lastName !== undefined) updatedInfo.lastName = lastName;
-    if (email !== undefined) updatedInfo.email = email;
-    if (password !== undefined)
+    // !Added .trim() to make sure empty fields wont overwrite existing data
+    if (firstName !== undefined && firstName.trim() !== "")
+      updatedInfo.firstName = firstName;
+    if (lastName !== undefined && lastName.trim() !== "")
+      updatedInfo.lastName = lastName;
+    if (email !== undefined && email.trim() !== "") updatedInfo.email = email;
+    if (password !== undefined && password.trim() !== "")
       updatedInfo.password = bcrypt.hashSync(password, 10);
-    if (guardianEmail !== undefined) updatedInfo.guardianEmail = guardianEmail;
+    if (guardianEmail !== undefined && guardianEmail.trim() !== "")
+      updatedInfo.guardianEmail = guardianEmail;
 
     // Update the mentee in database
     const updatedMentee = await Mentee.findByIdAndUpdate(id, updatedInfo, {
@@ -510,54 +520,52 @@ router.get("/mentor/profile", validateSession, async (req, res) => {
         questionToAsk: mentor.questionToAsk || "",
         projectCategory: mentor.projectCategory || "",
         menteeRequests: mentor.menteeRequests || [], // arrray not a string
-        approvedMentees: mentor.approvedMentees || [] // array not a string
-      }
+        approvedMentees: mentor.approvedMentees || [], // array not a string
+      },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-
 // !ROUTE to view single MENTEE's profile by ID:
 // ENDPOINT: http://localhost:4000/user/mentee/profile
 // Request Type: GET
-router.get('/mentee/profile', validateSession, async (req, res) => {
-try{
-// Get the Mentee's id from token
-const id = req.user._id;
+router.get("/mentee/profile", validateSession, async (req, res) => {
+  try {
+    // Get the Mentee's id from token
+    const id = req.user._id;
 
-// Make sure userType = Mentor
-if (req.userType !== "Mentee") {
-  return res
-    .status(403)
-    .json({ message: "You must be a mentee to view this page" });
-}
+    // Make sure userType = Mentor
+    if (req.userType !== "Mentee") {
+      return res
+        .status(403)
+        .json({ message: "You must be a mentee to view this page" });
+    }
 
-// If userType is Mentee, find their data from their id
-const mentee = await Mentee.findById(id);
+    // If userType is Mentee, find their data from their id
+    const mentee = await Mentee.findById(id);
 
-// Respond with mentor profile info if successful"
-// return empty string if field was left empty
-res.status(200).json({
-  message: `${mentee.firstName} ${mentee.lastName}'s profile found sucessfully`,
-  user: {
-    menteeId: mentee._id,
-    firstName: mentee.firstName,
-    lastName: mentee.lastName,
-    email: mentee.email,
-    guardianEmail: mentee.guardianEmail || "",
-    school: mentee.school || "",
-    ageCheck: mentee.ageCheck,
-    interests: mentee.interests || "",
-    requestedMentors: mentee.requestedMentors || [],
-    approvedMentors: mentee.approvedMentors || []
+    // Respond with mentor profile info if successful"
+    // return empty string if field was left empty
+    res.status(200).json({
+      message: `${mentee.firstName} ${mentee.lastName}'s profile found sucessfully`,
+      user: {
+        menteeId: mentee._id,
+        firstName: mentee.firstName,
+        lastName: mentee.lastName,
+        email: mentee.email,
+        guardianEmail: mentee.guardianEmail || "",
+        school: mentee.school || "",
+        ageCheck: mentee.ageCheck,
+        interests: mentee.interests || "",
+        requestedMentors: mentee.requestedMentors || [],
+        approvedMentors: mentee.approvedMentors || [],
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
-} catch (error) {
-res.status(500).json({ message: error.message });
-}
-});
-
 
 module.exports = router;
