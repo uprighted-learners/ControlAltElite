@@ -3,12 +3,12 @@ import { useFetcher } from "react-router-dom";
 import { API_MENTEE_PROFILE } from "../../constants/endpoints";
 
 const MenteeProfileEdit = (props) => {
-  // Age
-  const [updatedAge, setUpdatedAge] = useState("");
-  // Interests
-  const [updatedInterests, setUpdatedInterests] = useState("");
-  // School
-  const [updatedSchool, setUpdatedSchool] = useState("");
+  // First Name
+  const [updatedFirstName, setUpdatedFirstName] = useState("");
+  // Last Name
+  const [updatedLastName, setUpdatedLastName] = useState("");
+  // Email
+  const [updatedEmail, setUpdatedEmail] = useState("");
   // Guardian Email
   const [updatedGuardianEmail, setUpdatedGuardianEmail] = useState("");
 
@@ -27,10 +27,10 @@ const MenteeProfileEdit = (props) => {
       console.log(props.token);
       // Request Body
       let body = {
-        updatedAge,
-        updatedInterests,
-        updatedSchool,
-        updatedGuardianEmail,
+        firstName: updatedFirstName,
+        lastName: updatedLastName,
+        email: updatedEmail,
+        guardianEmail: updatedGuardianEmail,
       };
       console.log(body);
 
@@ -45,9 +45,9 @@ const MenteeProfileEdit = (props) => {
       let response = await fetch(`${API_MENTEE_PROFILE}`, requestOption);
 
       // Clear input
-      setUpdatedAge("");
-      setUpdatedInterests("");
-      setUpdatedSchool("");
+      setUpdatedFirstName("");
+      setUpdatedLastName("");
+      setUpdatedEmail("");
       setUpdatedGuardianEmail("");
       //Toggles update form
       setShowForm(false);
@@ -71,68 +71,49 @@ const MenteeProfileEdit = (props) => {
       </button>
       {/* Only shows update input box if the button (above) is clicked */}
       {showForm && (
-        <form className="w-xs bg-base-200 border border-base-300 p-4 rounded-box">
-          <fieldset className="fieldset">
-            {/* Form to update Profile */}
-
-            <label className="label-text">Update Age Here:</label>
-            <input
-              className="input input-bordered bg-white text-black"
-              value={updatedAge}
-              onChange={(e) => {
-                console.log(e.target.value);
-                setUpdatedAge(e.target.value);
-              }}
-              id="ageUpdate"
-              name="age"
-              placeholder="Type Here"
-              type="text"
-            />
-            <label className="label-text mt-4">Update Interests Here:</label>
-            <input
-              className="input input-bordered  bg-white text-black"
-              value={updatedInterests}
-              onChange={(e) => {
-                console.log(e.target.value);
-                setUpdatedInterests(e.target.value);
-              }}
-              id="interestUpdate"
-              name="interests"
-              placeholder="Type Here"
-              type="text"
-            />
-            <label className="label-text mt-4">Update School Here:</label>
-            <input
-              value={updatedSchool}
-              onChange={(e) => {
-                console.log(e.target.value);
-                setUpdatedSchool(e.target.value);
-              }}
-              id="schoolToUpdate"
-              name="school"
-              placeholder="Type Here"
-              type="text"
-              className="input input-bordered  bg-white text-black"
-            />
-            <label className="label-text mt-4">
-              Update Guardian Email Here:
+        <form className="card bg-base-200 shadow-md p-6 max-w-md">
+          <fieldset className="form-control gap-4">
+            <label className="label">
+              <span className="label-text">First Name</span>
             </label>
             <input
-              value={updatedGuardianEmail}
-              onChange={(e) => {
-                console.log(e.target.value);
-                setUpdatedGuardianEmail(e.target.value);
-              }}
-              id="guardianEmailToUpdate"
-              name="guardianEmail"
-              placeholder="Type Here"
+              className="input input-bordered"
+              value={updatedFirstName}
+              onChange={(e) => setUpdatedFirstName(e.target.value)}
               type="text"
-              className="input input-bordered  bg-white text-black"
+              placeholder="Type here"
             />
-            <button
-              className="btn mt-4 btn-soft btn-primary"
-              onClick={handleSubmit}
-            >
+            <label className="label">
+              <span className="label-text">Last Name</span>
+            </label>
+            <input
+              className="input input-bordered"
+              value={updatedLastName}
+              onChange={(e) => setUpdatedLastName(e.target.value)}
+              type="text"
+              placeholder="Type here"
+            />
+            <label className="label">
+              <span className="label-text">Email</span>
+            </label>
+            <input
+              className="input input-bordered"
+              value={updatedEmail}
+              onChange={(e) => setUpdatedEmail(e.target.value)}
+              type="email"
+              placeholder="Type here"
+            />
+            <label className="label">
+              <span className="label-text">Guardian Email</span>
+            </label>
+            <input
+              className="input input-bordered"
+              value={updatedGuardianEmail}
+              onChange={(e) => setUpdatedGuardianEmail(e.target.value)}
+              type="email"
+              placeholder="Type here"
+            />
+            <button className="btn btn-primary mt-4" onClick={handleSubmit}>
               Update
             </button>
           </fieldset>
