@@ -30,7 +30,7 @@ const MenteeProfileEdit = (props) => {
         firstName: updatedFirstName,
         lastName: updatedLastName,
         email: updatedEmail,
-        guardianEmail: updatedGuardianEmail,
+        guardianEmail:updatedGuardianEmail,
       };
       console.log(body);
 
@@ -71,49 +71,68 @@ const MenteeProfileEdit = (props) => {
       </button>
       {/* Only shows update input box if the button (above) is clicked */}
       {showForm && (
-        <form className="card bg-base-200 shadow-md p-6 max-w-md">
-          <fieldset className="form-control gap-4">
-            <label className="label">
-              <span className="label-text">First Name</span>
-            </label>
+        <form className="w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+          <fieldset className="fieldset">
+            {/* Form to update Profile */}
+
+            <label className="label-text">Update First Name Here:</label>
             <input
-              className="input input-bordered"
+              className="input input-bordered bg-white text-black"
               value={updatedFirstName}
-              onChange={(e) => setUpdatedFirstName(e.target.value)}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setUpdatedFirstName(e.target.value);
+              }}
+              id="firstNameUpdate"
+              name="firstName"
+              placeholder="Type Here"
               type="text"
-              placeholder="Type here"
             />
-            <label className="label">
-              <span className="label-text">Last Name</span>
-            </label>
+            <label className="label-text mt-4">Update Last Name Here:</label>
             <input
-              className="input input-bordered"
+              className="input input-bordered  bg-white text-black"
               value={updatedLastName}
-              onChange={(e) => setUpdatedLastName(e.target.value)}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setUpdatedLastName(e.target.value);
+              }}
+              id="lastNameUpdate"
+              name="lastName"
+              placeholder="Type Here"
               type="text"
-              placeholder="Type here"
             />
-            <label className="label">
-              <span className="label-text">Email</span>
-            </label>
+            <label className="label-text mt-4">Update Email Here:</label>
             <input
-              className="input input-bordered"
               value={updatedEmail}
-              onChange={(e) => setUpdatedEmail(e.target.value)}
-              type="email"
-              placeholder="Type here"
+              onChange={(e) => {
+                console.log(e.target.value);
+                setUpdatedEmail(e.target.value);
+              }}
+              id="emailToUpdate"
+              name="email"
+              placeholder="Type Here"
+              type="text"
+              className="input input-bordered  bg-white text-black"
             />
-            <label className="label">
-              <span className="label-text">Guardian Email</span>
+            <label className="label-text mt-4">
+              Update Guardian Email Here:
             </label>
             <input
-              className="input input-bordered"
               value={updatedGuardianEmail}
-              onChange={(e) => setUpdatedGuardianEmail(e.target.value)}
-              type="email"
-              placeholder="Type here"
+              onChange={(e) => {
+                console.log(e.target.value);
+                setUpdatedGuardianEmail(e.target.value);
+              }}
+              id="guardianEmailToUpdate"
+              name="guardianEmail"
+              placeholder="Type Here"
+              type="text"
+              className="input input-bordered  bg-white text-black"
             />
-            <button className="btn btn-primary mt-4" onClick={handleSubmit}>
+            <button
+              className="btn mt-4 btn-soft btn-primary"
+              onClick={handleSubmit}
+            >
               Update
             </button>
           </fieldset>
