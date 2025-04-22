@@ -60,8 +60,13 @@ const MenteeSchema = new mongoose.Schema({
   },
   guardianEmail: {
     type: String,
-    required: false,
-
+    required: true,
+  },
+  // Make sure user is over age of 13
+  ageCheck: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
 });
 
