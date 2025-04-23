@@ -225,6 +225,7 @@ router.get("/view-matches", validateSession, async (req, res) => {
   }
 });
 
+
 // !Route to Cancel an outgoing match request (mentee requesting mentor)
 // Endpoint: http://localhost:4000/match/cancel/:mentorId
 // Request Type: POST
@@ -289,10 +290,12 @@ router.post("/deny/:menteeId", validateSession, async (req, res) => {
     await mentor.save();
 
     // Remove mentor from mentee's array and save
+
     mentee.requestedMentors.pull(mentorId);
     await mentee.save();
 
     res.status(200).json({
+
       message: `The match request from ${mentee.firstName} ${mentee.lastName} has been denied.`,
       mentorId: mentorId,
       menteeId: menteeId,
@@ -301,5 +304,6 @@ router.post("/deny/:menteeId", validateSession, async (req, res) => {
     res.json({ message: error.message });
   }
 });
+
 
 module.exports = router;
