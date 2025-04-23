@@ -13,6 +13,10 @@ import MentorProfile from "./components/Mentors/MentorProfile";
 import AdminMentorList from "./components/Admin/Mentor-List/AdminMentorList";
 import MentorMatchList from "./components/Mentors/MentorMatchList";
 import MentorPendingRequest from "./components/Mentors/MentorPendingRequest";
+import CreateMentor from "./components/Admin/Create-Mentor";
+
+import MenteePreview from "./components/Mentors/MenteePreview";
+
 
 function App() {
   //state variable for token and initialize to the value of the token stored in local storage
@@ -38,10 +42,11 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {/* <Route path="/mentor" element={<MentorDashboard />} /> */}
-        <Route path="/mentee" element={<MenteeDashboard />} />
+        <Route path="/mentor" element={<MentorDashboard token={token} />} />
+        <Route path="/mentee" element={<MenteeDashboard token={token}/>} />
         <Route path="/updateProfile" element={<MentorProfile />} />
         <Route path="/createMentor" element={<CreateMentor />} />
+        
         <Route
           path="/adminMentorList"
           element={<AdminMentorList token={token} />}
@@ -54,6 +59,8 @@ function App() {
           path="/mentorPendingRequest"
           element={<MentorPendingRequest token={token} />}
         />
+        <Route path="/menteePreview" element={<MenteePreview />} />
+        <Route path="/mentorDashboard" element={<MentorDashboard />} />
       </Routes>
       {/* <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
