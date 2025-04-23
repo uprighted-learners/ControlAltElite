@@ -39,18 +39,19 @@ const Login = (props) => {
       // Update Token from the App.jsx file
       console.log(data);
       props.updateToken(data.token);
+      
 
       // Redirect to the profile Page
       if (response.ok) {
         props.updateToken(data.token); // Store token
 
         //route to userType login
-        if (data.userType === "Mentor") {
+        if (data.user.userType === "Mentor") {
           window.location.href = "/mentor"; // Redirect to mentor page
-          alert(`Login Successful! as ${data.userType}`); // Show success message
+          alert(`Login Successful! as ${data.user.userType}`); // Show success message
         } else {
-          window.location.href = "/mentee"; // Redirect to mentee page
-          alert(`Login Successful! as ${data.userType}`); // Show success message
+          // window.location.href = "/mentee"; // Redirect to mentee page
+          alert(`Login Successful! as ${data.user.userType}`); // Show success message
         }
       } else {
         alert("Login Failed! Check your email and password."); // Show error
