@@ -313,10 +313,12 @@ router.post("/deny/:menteeId", validateSession, async (req, res) => {
     await mentor.save();
 
     // Remove mentor from mentee's array and save
+
     mentee.requestedMentors.pull(mentorId);
     await mentee.save();
 
     res.status(200).json({
+
       message: `The match request from ${mentee.firstName} ${mentee.lastName} has been denied.`,
       mentorId: mentorId,
       menteeId: menteeId,

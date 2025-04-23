@@ -351,7 +351,8 @@ router.delete("/delete", validateSession, async (req, res) => {
 // Endpoint:http: //localhost:4000/user/mentor/view-all
 // Change to /mentor/view-all
 // request type: GET
-router.get("mentor/view-all", async (req, res) => {
+router.get("/mentor/view-all", async (req, res) => {
+
   try {
     const mentors = await Mentor.find({ userType: "Mentor" });
 
