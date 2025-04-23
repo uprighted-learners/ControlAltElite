@@ -9,6 +9,7 @@ import MainIndex from "./components/MainIndex";
 import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
 import MentorProfile from "./components/Mentors/MentorProfile";
+import MenteePreview from "./components/Mentors/MenteePreview";
 
 function App() {
   //state variable for token and initialize to the value of the token stored in local storage
@@ -34,11 +35,13 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/mentor" element={<MentorDashboard />} />
+        {/* <Route path="/mentor" element={<MentorDashboard />} /> */}
         <Route path="/mentee" element={<MenteeDashboard />} />
         <Route path="/updateProfile" element={<MentorProfile />} />
         <Route path="/signup" element={<Auth updateToken={updateToken} />} />
         <Route path="/login" element={<MainIndex token={token} />} />
+        <Route path="/menteePreview" element={<MenteePreview />} />
+        <Route path="/mentorDashboard" element={<MentorDashboard />} />
       </Routes>
       {/* <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
