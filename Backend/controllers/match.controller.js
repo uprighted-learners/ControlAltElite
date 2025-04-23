@@ -2,10 +2,10 @@ const router = require("express").Router();
 const validateSession = require("../middleware/validate-session");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
-
-// !Test these again with ID's
+const Answer = require("../models/match.model");
 
 // ! route for mentee to request mentor (match Request)
+// Mentee must answer mentor's question to request
 // ENDPOINT: http://localhost:4000/match/request/:mentorId
 // Request Type: POST
 router.post("/request/:mentorId", validateSession, async (req, res) => {
@@ -14,10 +14,23 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
     const menteeId = req.user._id;
     // Get mentor's id from URL parameter
     const mentorId = req.params.mentorId;
+    // get answer field from req.body
+    const { answer } = req.body;
 
-    // get user from id/email
+    // get user from id
     const mentee = await Mentee.findById(menteeId);
     const mentor = await Mentor.findById(mentorId);
+
+    // Only require answer if mentor has a question
+    if (mentor.questionToAsk && mentor.questionToAsk.trim() !== "") {
+      // MENTEE must then answer mentor's questionToAsk
+      if (!answer) {
+        return res.status(400).json({
+          message: `You must answer ${mentor.firstName}'s question: "${mentor.questionToAsk}"`,
+          mentorQuestion: mentor.questionToAsk,
+        });
+      }
+    }
 
     // Check if match request has already been made
     if (mentee.requestedMentors.includes(mentorId)) {
@@ -26,6 +39,17 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
         mentorId: mentorId,
         menteeId: menteeId,
       });
+    }
+
+    // Save mentee's answer to mentor's question if it was provided:
+    if (mentor.questionToAsk && mentor.questionToAsk.trim() !== "" && answer) {
+      const newAnswer = new Answer({
+        menteeId: menteeId,
+        mentorId: mentorId,
+        mentorQuestion: mentor.questionToAsk,
+        menteeAnswer: answer,
+      });
+      await newAnswer.save();
     }
 
     // Add to mentee's requestedMentors array
