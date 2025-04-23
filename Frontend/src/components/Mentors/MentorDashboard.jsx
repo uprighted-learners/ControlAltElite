@@ -1,8 +1,9 @@
-//  Mentor Dashboard
 import React, { useState, useEffect } from "react";
 import MenteePreview from "./MenteePreview";
+import MentorNavbar from "./MentorNavbar";
+import MentorProfileEdit from "./MentorProfileEdit"
 
-const MentorDashboard = () => {
+const MentorDashboard = (props) => {
   
   const [isOpen, setIsOpen] = useState(false);
 
@@ -13,7 +14,10 @@ const MentorDashboard = () => {
   };
   return (
     
-     
+       <MentorNavbar />
+          <div className="flex flex-col-reverse items-center justify-center text-black text-center p-4 rounded-md mt-4">
+            <MentorProfileEdit token={props.token}/>
+            </div>
       <div className="p-4">
       {/* Header Container with Flex */}
       <div className="flex items-center justify-between">

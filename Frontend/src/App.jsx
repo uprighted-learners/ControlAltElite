@@ -35,8 +35,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {/* <Route path="/mentor" element={<MentorDashboard />} /> */}
-        <Route path="/mentee" element={<MenteeDashboard />} />
+        <Route path="/mentor" element={<MentorDashboard token={token} />} />
+        <Route path="/mentee" element={<MenteeDashboard token={token}/>} />
         <Route path="/updateProfile" element={<MentorProfile />} />
         <Route path="/signup" element={<Auth updateToken={updateToken} />} />
         <Route path="/login" element={<MainIndex token={token} />} />
