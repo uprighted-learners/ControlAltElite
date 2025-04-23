@@ -3,12 +3,12 @@ import { useFetcher } from "react-router-dom";
 import { API_MENTEE_PROFILE } from "../../constants/endpoints";
 
 const MenteeProfileEdit = (props) => {
-  // Age
-  const [updatedAge, setUpdatedAge] = useState("");
-  // Interests
-  const [updatedInterests, setUpdatedInterests] = useState("");
-  // School
-  const [updatedSchool, setUpdatedSchool] = useState("");
+  // First Name
+  const [updatedFirstName, setUpdatedFirstName] = useState("");
+  // Last Name
+  const [updatedLastName, setUpdatedLastName] = useState("");
+  // Email
+  const [updatedEmail, setUpdatedEmail] = useState("");
   // Guardian Email
   const [updatedGuardianEmail, setUpdatedGuardianEmail] = useState("");
 
@@ -27,10 +27,10 @@ const MenteeProfileEdit = (props) => {
       console.log(props.token);
       // Request Body
       let body = {
-        updatedAge,
-        updatedInterests,
-        updatedSchool,
-        updatedGuardianEmail,
+        firstName: updatedFirstName,
+        lastName: updatedLastName,
+        email: updatedEmail,
+        guardianEmail:updatedGuardianEmail,
       };
       console.log(body);
 
@@ -45,9 +45,9 @@ const MenteeProfileEdit = (props) => {
       let response = await fetch(`${API_MENTEE_PROFILE}`, requestOption);
 
       // Clear input
-      setUpdatedAge("");
-      setUpdatedInterests("");
-      setUpdatedSchool("");
+      setUpdatedFirstName("");
+      setUpdatedLastName("");
+      setUpdatedEmail("");
       setUpdatedGuardianEmail("");
       //Toggles update form
       setShowForm(false);
@@ -64,7 +64,7 @@ const MenteeProfileEdit = (props) => {
       {/* <h1> Hello from MenteeProfileEdit </h1> */}
       {/* Toggle button */}
       <button
-        className="btn btn-outline"
+        className="btn mt-4 btn-soft btn-primary"
         onClick={() => setShowForm(!showForm)}
       >
         {showForm ? "Cancel" : "Update"}
@@ -75,41 +75,41 @@ const MenteeProfileEdit = (props) => {
           <fieldset className="fieldset">
             {/* Form to update Profile */}
 
-            <label className="label-text">Update Age Here:</label>
+            <label className="label-text">Update First Name Here:</label>
             <input
               className="input input-bordered bg-white text-black"
-              value={updatedAge}
+              value={updatedFirstName}
               onChange={(e) => {
                 console.log(e.target.value);
-                setUpdatedAge(e.target.value);
+                setUpdatedFirstName(e.target.value);
               }}
-              id="ageUpdate"
-              name="age"
+              id="firstNameUpdate"
+              name="firstName"
               placeholder="Type Here"
               type="text"
             />
-            <label className="label-text mt-4">Update Interests Here:</label>
+            <label className="label-text mt-4">Update Last Name Here:</label>
             <input
               className="input input-bordered  bg-white text-black"
-              value={updatedInterests}
+              value={updatedLastName}
               onChange={(e) => {
                 console.log(e.target.value);
-                setUpdatedInterests(e.target.value);
+                setUpdatedLastName(e.target.value);
               }}
-              id="interestUpdate"
-              name="interests"
+              id="lastNameUpdate"
+              name="lastName"
               placeholder="Type Here"
               type="text"
             />
-            <label className="label-text mt-4">Update School Here:</label>
+            <label className="label-text mt-4">Update Email Here:</label>
             <input
-              value={updatedSchool}
+              value={updatedEmail}
               onChange={(e) => {
                 console.log(e.target.value);
-                setUpdatedSchool(e.target.value);
+                setUpdatedEmail(e.target.value);
               }}
-              id="schoolToUpdate"
-              name="school"
+              id="emailToUpdate"
+              name="email"
               placeholder="Type Here"
               type="text"
               className="input input-bordered  bg-white text-black"

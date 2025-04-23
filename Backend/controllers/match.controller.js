@@ -225,7 +225,6 @@ router.get("/view-matches", validateSession, async (req, res) => {
   }
 });
 
-
 // !Route to Cancel an outgoing match request (mentee requesting mentor)
 // Endpoint: http://localhost:4000/match/cancel/:mentorId
 // Request Type: POST
@@ -304,6 +303,5 @@ router.post("/deny/:menteeId", validateSession, async (req, res) => {
     res.json({ message: error.message });
   }
 });
-
 
 module.exports = router;

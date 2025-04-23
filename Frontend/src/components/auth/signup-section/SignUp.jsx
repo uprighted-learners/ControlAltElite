@@ -59,7 +59,7 @@ const SignUp = (props) => {
           {/* Form Goes Here */}
           <form className="flex flex-col w-full" onSubmit={handleSubmit}>
             {/* Form Group for First Name */}
-              <label className="pb-2 uppercase" for="firstName">First Name:</label>
+              <label className="pb-2 uppercase" htmlFor="firstName">First Name:</label>
               <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
                 type="text"
                 name="firstName"
@@ -68,7 +68,7 @@ const SignUp = (props) => {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
-              <label className="pb-2 uppercase" for="lastName">Last Name:</label>
+              <label className="pb-2 uppercase" htmlFor="lastName">Last Name:</label>
               <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
                 type="text"
                 name="lastName"
@@ -77,7 +77,7 @@ const SignUp = (props) => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
-              <label className="pb-2 uppercase" for="email">Email:</label>
+              <label className="pb-2 uppercase" htmlFor="email">Email:</label>
               <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
                 type="email"
                 name="email"
@@ -86,7 +86,7 @@ const SignUp = (props) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <label className="pb-2 uppercase" for="password">Password:</label>
+              <label className="pb-2 uppercase" htmlFor="password">Password:</label>
               <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
                 type="password"
                 name="password"
