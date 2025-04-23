@@ -23,12 +23,13 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
 
     // Only require answer if mentor has a question
     if (mentor.questionToAsk && mentor.questionToAsk.trim() !== "") {
-    // MENTEE must then answer mentor's questionToAsk 
-    if (!answer) {
-      return res.status(400).json({
-        message: `You must answer ${mentor.firstName}'s question: "${mentor.questionToAsk}"`,
-        mentorQuestion: mentor.questionToAsk
-      });
+      // MENTEE must then answer mentor's questionToAsk
+      if (!answer) {
+        return res.status(400).json({
+          message: `You must answer ${mentor.firstName}'s question: "${mentor.questionToAsk}"`,
+          mentorQuestion: mentor.questionToAsk,
+        });
+      }
     }
 
     // Check if match request has already been made
@@ -40,14 +41,16 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
       });
     }
 
-    // Save mentee's answer to mentor's question
-    const newAnswer = new Answer({
-      menteeId: menteeId,
-      mentorId: mentorId,
-      mentorQuestion: mentor.questionToAsk,
-      menteeAnswer: answer
-    });
-    await newAnswer.save();
+    // Save mentee's answer to mentor's question if it was provided:
+    if (mentor.questionToAsk && mentor.questionToAsk.trim() !== "" && answer) {
+      const newAnswer = new Answer({
+        menteeId: menteeId,
+        mentorId: mentorId,
+        mentorQuestion: mentor.questionToAsk,
+        menteeAnswer: answer,
+      });
+      await newAnswer.save();
+    }
 
     // Add to mentee's requestedMentors array
     mentee.requestedMentors.push(mentorId);
