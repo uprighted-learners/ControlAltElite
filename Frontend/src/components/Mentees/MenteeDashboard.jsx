@@ -38,7 +38,7 @@ const MenteeDashboard = (props) => {
 
   return (
     <>
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 h-full">
         <div className="bg-[#1b0a5f] text-white flex flex-col md:flex-row items-center justify-center md:justify-between p-4 rounded-md">
           <h1 className="text-center uppercase text-2xl">Mentee Name</h1>
           <div className="flex gap-2.5">
@@ -51,14 +51,14 @@ const MenteeDashboard = (props) => {
             </select>
           </div>
         </div>
-        <div className="container">
-          <div className="flex items-center justify-center bg-gray-400/70 max-w-[450px] mx-auto text-white p-4 rounded-md mt-4">
+        <div className="container mx-auto py-18">
+          <div className="flex items-center justify-center bg-black/50 uppercase max-w-[450px] mx-auto text-white p-4 rounded-md mt-4">
             <p>Match Request Sent</p>
           </div>
-          <div className="flex items-center justify-center bg-gray-400/70 max-w-[650px] mx-auto text-white text-center p-4 rounded-md mt-4">
+          <div className="flex items-center justify-center bg-black/50 max-w-[650px] mx-auto text-white text-center p-4 rounded-md mt-4">
             <p>Your request to connect with [Mentor Name] has  been sent. They will be notified and will review your profile.</p>
           </div>
-          <div className="flex items-center justify-center bg-gray-400/70 max-w-[650px] mx-auto text-white text-center p-4 rounded-md mt-4">
+          <div className="flex items-center justify-center bg-black/50 max-w-[650px] mx-auto text-white text-center p-4 rounded-md mt-4">
             <p>You will receive an email notification when they respond to your request. You can also check the status in your dashboard.</p>
           </div>
           <div className="flex items-center justify-center text-white text-center p-4 rounded-md mt-4">
