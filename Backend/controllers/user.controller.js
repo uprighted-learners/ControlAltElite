@@ -273,7 +273,7 @@ router.put("/mentee/update", validateSession, async (req, res) => {
     const updatedInfo = {};
 
     // only update if provided values are NOT undefined (this way fields can be left empty)
-    // !Added .trim() to make sure empty fields wont overwrite existing data
+    // !Added .trim() to make sure empty fields wont overwrite existing data when updating
     if (firstName !== undefined && firstName.trim() !== "")
       updatedInfo.firstName = firstName;
     if (lastName !== undefined && lastName.trim() !== "")
@@ -303,7 +303,7 @@ router.put("/mentee/update", validateSession, async (req, res) => {
         firstName: updatedMentee.firstName,
         lastName: updatedMentee.lastName,
         email: updatedMentee.email,
-        guardianEmail: updatedMentee.guardianEmail || "",
+        guardianEmail: updatedMentee.guardianEmail,
       },
     });
   } catch (error) {
