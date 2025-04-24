@@ -128,7 +128,6 @@ const AdminMentorList = (props) => {
               <td>
                 <button onClick={() => handleUpdate(mentor.id)}>Update</button>
                 <button onClick={() => handleDelete(mentor.id)}>Delete</button>
-                <button onClick={() => handleAdd()}>Add</button>
               </td>
             </tr>
           ))}
