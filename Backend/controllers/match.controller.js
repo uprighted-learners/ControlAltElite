@@ -2,11 +2,10 @@ const router = require("express").Router();
 const validateSession = require("../middleware/validate-session");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
-
-
-// !Test these again with ID's
+const Answer = require("../models/match.model");
 
 // ! route for mentee to request mentor (match Request)
+// Mentee must answer mentor's question to request
 // ENDPOINT: http://localhost:4000/match/request/:mentorId
 // Request Type: POST
 router.post("/request/:mentorId", validateSession, async (req, res) => {
@@ -15,12 +14,29 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
     const menteeId = req.user._id;
     // Get mentor's id from URL parameter
     const mentorId = req.params.mentorId;
+
 console.log("Mentor ID: ", mentorId);
-    // get user from id/email
+    // get answer field from req.body
+    const { answer } = req.body;
+
+    // get user from id
     const mentee = await Mentee.findById(menteeId);
     const mentor = await Mentor.findById(mentorId);
     console.log("Mentee: ", mentee);
     console.log("Mentor: ", mentor);
+
+    // Only require answer if mentor has a question
+    if (mentor.questionToAsk && mentor.questionToAsk.trim() !== "") {
+      // MENTEE must then answer mentor's questionToAsk
+      if (!answer) {
+        return res.status(400).json({
+          message: `You must answer ${mentor.firstName}'s question: "${mentor.questionToAsk}"`,
+          mentorQuestion: mentor.questionToAsk,
+        });
+      }
+    }
+
+
     // Check if match request has already been made
     if (mentee.requestedMentors.includes(mentorId)) {
       return res.status(400).json({
@@ -28,6 +44,17 @@ console.log("Mentor ID: ", mentorId);
         mentorId: mentorId,
         menteeId: menteeId,
       });
+    }
+
+    // Save mentee's answer to mentor's question if it was provided:
+    if (mentor.questionToAsk && mentor.questionToAsk.trim() !== "" && answer) {
+      const newAnswer = new Answer({
+        menteeId: menteeId,
+        mentorId: mentorId,
+        mentorQuestion: mentor.questionToAsk,
+        menteeAnswer: answer,
+      });
+      await newAnswer.save();
     }
 
     // Add to mentee's requestedMentors array
@@ -227,39 +254,83 @@ router.get("/view-matches", validateSession, async (req, res) => {
   }
 });
 
-// ! route for mentor to reject match request
-// ENDPOINT: http://localhost:4000/match/reject/:menteeId
+// !Route to Cancel an outgoing match request (mentee requesting mentor)
+// Endpoint: http://localhost:4000/match/cancel/:mentorId
 // Request Type: POST
-router.post("/reject/:menteeId", validateSession, async (req, res) => {
+router.post("/cancel/:mentorId", validateSession, async (req, res) => {
   try {
-    // get mentorId
-    const mentorId = req.user.id;
+    // Get mentee's id from the token & mentors id from the URL
+    const menteeId = req.user._id;
+    const mentorId = req.params.mentorId;
 
-    // Get mentee's id from URL parameter
+    // Find both users from their ID's
+    const mentee = await Mentee.findById(menteeId);
+    const mentor = await Mentor.findById(mentorId);
+
+    // make sure that the mentor that the mentee is trying to cancel request to actually exists
+    if (!mentor) {
+      return res.status(404).json({
+        message: "Invalid ID - no mentor was found",
+      });
+    }
+
+    // Remove mentor from mentee's array and save updated array
+    mentee.requestedMentors.pull(mentorId);
+    await mentee.save();
+
+    // remove mentee form MENTOR's array and save the updated array
+    mentor.menteeRequests.pull(mentorId);
+    await mentor.save();
+
+    res.status(200).json({
+      message: `Your request to match with ${mentor.firstName} ${mentor.lastName} was cancelled successfully`,
+      mentorId: mentorId,
+      menteeId: menteeId,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Route for Mentor to deny a match request
+// Endpoint: http://localhost:4000/match/deny/:menteeId
+// Request Type: POST
+router.post("/deny/:menteeId", validateSession, async (req, res) => {
+  try {
+    // get mentor's id from the token and mentee's id from the URL
+    const mentorId = req.user._id;
     const menteeId = req.params.menteeId;
+    l;
 
-    // Find both mentor and mentee for arrays
+    // Find both users from their id's
     const mentor = await Mentor.findById(mentorId);
     const mentee = await Mentee.findById(menteeId);
 
-    // Remove mentee's id from mentor's menteeRequests array
+    // Check if the mentee actaully exists
+    if (!mentee) {
+      return res.status(404).json({
+        message: "Invalid ID - no mentee was found",
+      });
+    }
+
+    // Remove mentee from mentor's array and save
     mentor.menteeRequests.pull(menteeId);
     await mentor.save();
 
-    // Remove mentor's id from mentee's requestedMentors array
+    // Remove mentor from mentee's array and save
+
     mentee.requestedMentors.pull(mentorId);
     await mentee.save();
 
     res.status(200).json({
-      message: `Match request from ${mentee.firstName} ${mentee.lastName} was rejected successfully`,
+
+      message: `The match request from ${mentee.firstName} ${mentee.lastName} has been denied.`,
+      mentorId: mentorId,
+      menteeId: menteeId,
     });
   } catch (error) {
-    res.status(500).json({
-      message: "Failed to reject match request",
-      error: error.message,
-    });
+    res.json({ message: error.message });
   }
-}
-);
+});
 
 module.exports = router;
