@@ -1,5 +1,5 @@
 import "./App.css";
-import CreateMentor from "./components/Admin/Create-Mentor/CreateMentor";
+import CreateMentor from "./components/Admin/Create-Mentor";
 import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
@@ -45,7 +45,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/mentor" element={<MentorDashboard token={token} />} />
         <Route path="/mentee" element={<MenteeDashboard token={token}/>} />
-        <Route path="/updateProfile" element={<MentorProfile />} />
+        {/* <Route path="/updateProfile" element={<MentorProfile />} /> */}
         <Route path="/createMentor" element={<CreateMentor />} />
         
         <Route
@@ -62,6 +62,8 @@ function App() {
         />
         <Route path="/menteePreview" element={<MenteePreview />} />
         <Route path="/mentorDashboard" element={<MentorDashboard />} />
+        <Route path="/signup" element={<Auth updateToken={updateToken} />} />
+       
       </Routes>
       {/* <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
