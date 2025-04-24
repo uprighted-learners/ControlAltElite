@@ -14,12 +14,16 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
     const menteeId = req.user._id;
     // Get mentor's id from URL parameter
     const mentorId = req.params.mentorId;
+
+console.log("Mentor ID: ", mentorId);
     // get answer field from req.body
     const { answer } = req.body;
 
     // get user from id
     const mentee = await Mentee.findById(menteeId);
     const mentor = await Mentor.findById(mentorId);
+    console.log("Mentee: ", mentee);
+    console.log("Mentor: ", mentor);
 
     // Only require answer if mentor has a question
     if (mentor.questionToAsk && mentor.questionToAsk.trim() !== "") {
@@ -31,6 +35,7 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
         });
       }
     }
+
 
     // Check if match request has already been made
     if (mentee.requestedMentors.includes(mentorId)) {

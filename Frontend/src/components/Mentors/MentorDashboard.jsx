@@ -13,7 +13,7 @@ const MentorDashboard = (props) => {
     setIsOpen(!isOpen);
   };
   return (
-    
+    <>
        <MentorNavbar />
           <div className="flex flex-col-reverse items-center justify-center text-black text-center p-4 rounded-md mt-4">
             <MentorProfileEdit token={props.token}/>
@@ -40,6 +40,7 @@ const MentorDashboard = (props) => {
       </div>
     </div>
   </div>
+  </>
   );
 };
 

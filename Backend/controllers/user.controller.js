@@ -82,6 +82,9 @@ router.post("/register", async (req, res) => {
         password: bcrypt.hashSync(password, 10),
         approvedMentees: [], //empty array to push accepted mentee into
         menteeRequests: [], // empty array to push match requests into
+        projectCategory: req.body.projectCategory
+          ? req.body.projectCategory
+          : "",
       });
     } else {
       user = new Mentee({
