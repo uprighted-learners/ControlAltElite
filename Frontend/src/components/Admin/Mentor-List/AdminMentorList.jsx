@@ -106,92 +106,134 @@ const AdminMentorList = (props) => {
     }
   }
   return (
-    <div>
-      <h1>Mentor List</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Project Category</th>
+    <>
+    <div className="container mx-auto p-4">
+  <h1 className="text-4xl text-center py-4 uppercase">Mentor List</h1>
+  <div className="overflow-x-auto">
+    <table className="w-full bg-white rounded-sm">
+      <thead>
+        <tr className="text-left text-black">
+          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">ID:</th>
+          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">First Name:</th>
+          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">Last Name:</th>
+          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">Email:</th>
+          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">Project Category:</th>
+          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">Actions:</th>
+        </tr>
+      </thead>
+      <tbody>
+        {mentors.map((mentor) => (
+          <tr key={mentor.id} className="hover:bg-gray-100">
+            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.id}</td>
+            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.firstName}</td>
+            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.lastName}</td>
+            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.email}</td>
+            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.projectCategory || "N/A"}</td>
+            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">
+              <div className="flex flex-col md:flex-row gap-2">
+              <button className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition" onClick={() => handleAdd()}>Add</button>
+                <button
+                  className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition"
+                  onClick={() => handleUpdate(mentor.id)}
+                >
+                  Update
+                </button>
+                <button
+                  className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition"
+                  onClick={() => handleDelete(mentor.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {mentors.map((mentor) => (
-            <tr key={mentor.id}>
-              <td>{mentor.id}</td>
-              <td>{mentor.firstName}</td>
-              <td>{mentor.lastName}</td>
-              <td>{mentor.email}</td>
-              <td>{mentor.projectCategory || "N/A"}</td>
-              <td>
-                <button onClick={() => handleUpdate(mentor.id)}>Update</button>
-                <button onClick={() => handleDelete(mentor.id)}>Delete</button>
-                <button onClick={() => handleAdd()}>Add</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="projectCategory">Project Category:</label>
-          <select
-            id="projectCategory"
-            value={projectCategory}
-            onChange={(e) => setProjectCategory(e.target.value)}
-            required
-          >
-            <option value="">Select a category</option>
-            <option value="video">Video</option>
-            <option value="science">Science</option>
-          </select>
-        </div>
-        <button type="submit">Add Mentor</button>
-      </form>
-    </div>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div className="container mx-auto p-4">
+  <div className="bg-blue-500 w-full mx-auto max-w-[450px] p-8 rounded-sm flex flex-col justify-center items-center">
+    <form className="w-full" onSubmit={handleSubmit}>
+      <h2 className="text-3xl text-center py-4 uppercase">Add Mentor</h2>
+      <div className="flex flex-col w-full">
+        <label className="pb-2 uppercase" htmlFor="firstName">
+          First Name:
+        </label>
+        <input
+          className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+          type="text"
+          id="firstName"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+      </div>
+      <div className="flex flex-col w-full">
+        <label className="pb-2 uppercase" htmlFor="lastName">
+          Last Name:
+        </label>
+        <input
+          className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+          type="text"
+          id="lastName"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+        />
+      </div>
+      <div className="flex flex-col w-full">
+        <label className="pb-2 uppercase" htmlFor="email">
+          Email:
+        </label>
+        <input
+          className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <div className="flex flex-col w-full">
+        <label className="pb-2 uppercase" htmlFor="password">
+          Password:
+        </label>
+        <input
+          className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <div className="flex flex-col w-full">
+        <label className="pb-2 uppercase" htmlFor="projectCategory">
+          Project Category:
+        </label>
+        <select
+          className="bg-white text-black border-2 border-gray-300 rounded-md p-2 mb-4"
+          id="projectCategory"
+          value={projectCategory}
+          onChange={(e) => setProjectCategory(e.target.value)}
+          required
+        >
+          <option value="">Select a category</option>
+          <option value="video">Video</option>
+          <option value="science">Science</option>
+        </select>
+      </div>
+      <button
+        className="bg-blue-950 rounded-sm text-white px-12 py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950 w-full"
+        type="submit"
+      >
+        Add Mentor
+      </button>
+    </form>
+  </div>
+</div>
+    </>
   );
 };
 
