@@ -2,6 +2,10 @@
 
 export const navMenu = [
     {
+        name: "Home",
+        href: "/",
+    },
+    {
         name: "Mentees",
         href: "/mentee",
     },

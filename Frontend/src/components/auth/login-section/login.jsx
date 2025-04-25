@@ -64,14 +64,14 @@ const Login = (props) => {
     <>
       <div className="flex flex-col items-center justify-center p-4 h-[80vh]">
         <div className="bg-blue-500 w-full max-w-[34.375rem] max-h-fit rounded-sm">
-          <div className="p-5 rounded-sm flex flex-col justify-center">
-            <h2 className="text-center p-4 text-white uppercase text-4xl">login</h2>
+          <div className="flex flex-col justify-center p-5 rounded-sm">
+            <h2 className="p-4 text-4xl text-center text-white uppercase">login</h2>
             {/* Form Goes Here */}
             <form className="flex flex-col justify-center" onSubmit={handleSubmit}>
               {/* Form Group for Email */}
-                <label className="uppercase pb-2" htmlFor="email">Email:</label>
+                <label className="pb-2 uppercase" htmlFor="email">Email:</label>
                 {/* Add a value and assign it to email (read only), onChange function to update the state */}
-                <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+                <input className="p-2 mb-4 bg-white border-2 border-gray-300 rounded-md"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   id="loginemail"
@@ -82,9 +82,9 @@ const Login = (props) => {
               {/* Form Group End Email */}
               {/* ----------------------------- */}
               {/* Form Group for Password */}
-                <label className="uppercase pb-2" htmlFor="Password">Password:</label>
+                <label className="pb-2 uppercase" htmlFor="Password">Password:</label>
                 {/* Add a value and assign it to password (read only), onChange function to update the state */}
-                <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+                <input className="p-2 mb-4 bg-white border-2 border-gray-300 rounded-md"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   id="loginpassword"
@@ -94,7 +94,7 @@ const Login = (props) => {
                 />
               {/* Form Group End Password */}
               {/* Button Here */}
-              <button onClick={handleSubmit} className="bg-blue-950 rounded-sm text-white uppercase py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950 mb-2" type="submit">Login</button>
+              <button onClick={handleSubmit} className="py-2 mb-2 text-white uppercase rounded-sm bg-blue-950 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950" type="submit">Login</button>
             </form>
           </div>
         </div>
