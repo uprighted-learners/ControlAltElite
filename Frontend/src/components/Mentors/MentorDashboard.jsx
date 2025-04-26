@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MenteePreview from "./MenteePreview";
 import MentorNavbar from "./MentorNavbar";
 import MentorProfileEdit from "./MentorProfileEdit";
+import MentorPendingRequest from "./MentorPendingRequest";
 
 const MentorDashboard = (props) => {
   const [isOpen, setIsOpen] = useState(false);
