@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SignupButton from "../../custom/SignupButton";
+// import SignupButton from "../../custom/SignupButton";
 import { API_LOGIN } from "../../../constants/endpoints";
 
 const Login = (props) => {
@@ -94,7 +94,9 @@ const Login = (props) => {
                 />
               {/* Form Group End Password */}
               {/* Button Here */}
-              <button onClick={handleSubmit} className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950 mb-2" type="submit">Login</button>
+
+              <button onClick={handleSubmit} className="bg-blue-950 rounded-sm text-white uppercase py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950 mb-2" type="submit">Login</button>
+
             </form>
           </div>
         </div>

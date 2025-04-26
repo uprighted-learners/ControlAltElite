@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { API_REGISTER } from "../../../constants/endpoints";
-// import { Form, FormGroup, Input, Label } from "reactstrap";
-// import SignupButton from "../../custom/SignupButton";
 
 const SignUp = (props) => {
   // TODO: Create state variables for first name, last name, email, and password using the useState hook.
@@ -14,6 +12,7 @@ const SignUp = (props) => {
   const [school, setSchool] = useState(""); // added by nick
   const [ageCheck, setAgeCheck] = useState(false); // added by nick
   // const [zipcode, setZipcode] = useState("");
+
 
   // TODO: Create a function called handleSubmit that will console.log("Click Worked")
   function handleSubmit(e) {
@@ -68,6 +67,7 @@ const SignUp = (props) => {
             <label className="pb-2 uppercase" htmlFor="firstName">
               First Name:
             </label>
+
             <input
               className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
               type="text"
@@ -172,56 +172,7 @@ const SignUp = (props) => {
                 I confirm that I am over 13 years old
               </label>
             </div>
-            {/* Form Group for Last Name */}
-            {/* <form>
-              <Label for="lastName">Last Name</Label>
-              <Input
-                type="text"
-                name="lastName"
-                id="lastName"
-                placeholder="Enter Last Name"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </form> */}
-
-            {/* Form Group for Email */}
-            {/* <FormGroup>
-              <Label for="email">Email</Label>
-              <Input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </FormGroup> */}
-            {/* Form Group Zipcode */}
-
-            {/* <FormGroup>
-              <Label for="zipcode">Zipcode</Label>
-              <Input
-                type="text"
-                name="zipcode"
-                id="zipcode"
-                placeholder="Enter zipcode"
-                value={zipcode}
-                onChange={(e) => setZipcode(e.target.value)}
-              />
-            </FormGroup> */}
-            {/* Form Group for Password */}
-            {/* <FormGroup>
-              <Label for="password">Password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </FormGroup> */}
+ 
             <button
               className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950"
               type="submit"
