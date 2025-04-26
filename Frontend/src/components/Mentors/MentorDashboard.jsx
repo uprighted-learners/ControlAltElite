@@ -5,7 +5,7 @@ import MentorProfileEdit from "./MentorProfileEdit";
 import MentorPendingRequest from "./MentorPendingRequest";
 
 
-cconst MentorDashboard = (props) => {
+const MentorDashboard = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showMenteePreview, setShowMenteePreview] = useState(false);
   const toggleDropdown = () => {
