@@ -15,7 +15,7 @@ router.post("/request/:mentorId", validateSession, async (req, res) => {
     // Get mentor's id from URL parameter
     const mentorId = req.params.mentorId;
 
-console.log("Mentor ID: ", mentorId);
+    console.log("Mentor ID: ", mentorId);
     // get answer field from req.body
     const { answer } = req.body;
 
@@ -35,7 +35,6 @@ console.log("Mentor ID: ", mentorId);
         });
       }
     }
-
 
     // Check if match request has already been made
     if (mentee.requestedMentors.includes(mentorId)) {
@@ -99,19 +98,33 @@ router.post("/accept/:menteeId", validateSession, async (req, res) => {
     mentee.requestedMentors.pull(mentorId);
 
     // ! Then, push into the approved match arrays for each user
-    // Add mentee to mentor's approvedMentees
-    mentor.approvedMentees.push(menteeId);
-    await mentor.save();
+    // Add mentee to mentor's approvedMentees if they are not already there
+    if (!mentor.approvedMentees.includes(menteeId)) {
+      mentor.approvedMentees.push(menteeId);
+      await mentor.save();
 
-    // Add mentor to mentee's approvedMentors
-    mentee.approvedMentors.push(mentorId);
-    await mentee.save();
+      // Add mentor to mentee's approvedMentors if they are not already there
+      const mentee = await Mentee.findById(menteeId);
+      if (!mentee.approvedMentors.includes(mentorId)) {
+        mentee.approvedMentors.push(mentorId);
+        await mentee.save();
+      }
 
-    res.status(200).json({
-      message: `Match accepted successfully! You are now connected with ${mentee.firstName} ${mentee.lastName}.`,
-      mentorId: mentorId,
-      menteeId: menteeId,
-    });
+      res.status(200).json({
+        message: `Match accepted successfully! You are now connected with ${mentee.firstName} ${mentee.lastName}.`,
+        mentorId: mentorId,
+        menteeId: menteeId,
+      });
+    } else {
+      // Mentee was already approved
+      res
+        .status(200)
+        .json({
+          message: "Mentee was already approved",
+          mentorId: mentorId,
+          menteeId: menteeId,
+        });
+    }
   } catch (error) {
     // Improved error handling with proper status code
     res.status(500).json({
@@ -323,7 +336,6 @@ router.post("/deny/:menteeId", validateSession, async (req, res) => {
     await mentee.save();
 
     res.status(200).json({
-
       message: `The match request from ${mentee.firstName} ${mentee.lastName} has been denied.`,
       mentorId: mentorId,
       menteeId: menteeId,
