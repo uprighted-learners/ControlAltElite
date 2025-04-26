@@ -25,6 +25,9 @@ router.post("/register", async (req, res) => {
       ageCheck,
     } = req.body;
 
+    userType = "Mentee"; // Default to Mentee for existing fron-end signup roite
+
+
     if (email.toLowerCase().endsWith("@placeholder.edu")) {
       userType = "Mentor";
     }
@@ -47,12 +50,12 @@ router.post("/register", async (req, res) => {
             "You must confirm that you are over 13 years old to register as a mentee",
         });
       }
-      // Check for guardian email
-      if (!guardianEmail) {
-        return res.status(400).json({
-          message: "Guardian email is required",
-        });
-      }
+      // // Check for guardian email
+      // if (!guardianEmail) {
+      //   return res.status(400).json({
+      //     message: "Guardian email is required",
+      //   });
+      // }
       // Check for valid school selection
       const validSchools = [
         "Grace Christian School",
@@ -92,9 +95,9 @@ router.post("/register", async (req, res) => {
         lastName: lastName,
         email: email,
         password: bcrypt.hashSync(password, 10),
-        guardianEmail: guardianEmail,
-        school: school,
-        ageCheck: ageCheck,
+        guardianEmail: "placeholder@placeholder.com",
+        school: "Grace Christian School",
+        ageCheck: true,
         approvedMentors: [], // empty array to push accepted mentor into
         requestedMentors: [], // empty array to keep track of match request
       });
