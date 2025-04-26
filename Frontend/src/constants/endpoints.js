@@ -18,3 +18,7 @@ export const API_MENTEE_PROFILE = `${API}/user/mentee/update`;
 
 export const API_VIEW_MENTORS = `${API}/user/mentor/view-all`;
 
+export const API_ACCEPT_REQUEST = `${API}/match/accept`;
+
+export const API_REJECT_REQUEST = `${API}/match/deny`;
+
