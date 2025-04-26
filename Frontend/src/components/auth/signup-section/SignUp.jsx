@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { API_REGISTER } from "../../../constants/endpoints";
-// import { Form, FormGroup, Input, Label } from "reactstrap";
-// import SignupButton from "../../custom/SignupButton";
 
 const SignUp = (props) => {
   // TODO: Create state variables for first name, last name, email, and password using the useState hook.
@@ -10,7 +8,11 @@ const SignUp = (props) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [guardianEmail, setGuardianEmail] = useState(""); // added by nick
+  const [school, setSchool] = useState(""); // added by nick
+  const [ageCheck, setAgeCheck] = useState(false); // added by nick
   // const [zipcode, setZipcode] = useState("");
+
 
   // TODO: Create a function called handleSubmit that will console.log("Click Worked")
   function handleSubmit(e) {
@@ -28,6 +30,10 @@ const SignUp = (props) => {
         lastName,
         email,
         password,
+        userType: "Mentee", // Explicitly set this
+        guardianEmail,
+        school,
+        ageCheck,
       };
       console.log(requestBody);
       const response = await fetch(API_REGISTER, {
@@ -52,101 +58,127 @@ const SignUp = (props) => {
 
   return (
     <>
-      <div
-        className="flex justify-center items-center p-4">
+      <div className="flex justify-center items-center p-4">
         <div className="bg-blue-500 w-full max-w-[34.375rem] p-8 rounded-sm flex flex-col justify-center items-center">
-          <h2 className="text-center font-bold text-3xl">SIGN UP</h2>
+          <h2 className="text-center font-bold text-3xl">MENTEE SIGN UP</h2>
           {/* Form Goes Here */}
           <form className="flex flex-col w-full" onSubmit={handleSubmit}>
             {/* Form Group for First Name */}
-              <label className="pb-2 uppercase" htmlFor="firstName">First Name:</label>
-              <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
-                type="text"
-                name="firstName"
-                id="firstName"
-                placeholder="First Name..."
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-              <label className="pb-2 uppercase" htmlFor="lastName">Last Name:</label>
-              <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
-                type="text"
-                name="lastName"
-                id="lastName"
-                placeholder="Last Name..."
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-              <label className="pb-2 uppercase" htmlFor="email">Email:</label>
-              <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email..."
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <label className="pb-2 uppercase" htmlFor="password">Password:</label>
-              <input className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password..."
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <label className="pb-2 uppercase" htmlFor="firstName">
+              First Name:
+            </label>
 
-            {/* Form Group for Last Name */}
-            {/* <form>
-              <Label for="lastName">Last Name</Label>
-              <Input
-                type="text"
-                name="lastName"
-                id="lastName"
-                placeholder="Enter Last Name"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </form> */}
+            <input
+              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+              type="text"
+              name="firstName"
+              id="firstName"
+              placeholder="First Name..."
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+            <label className="pb-2 uppercase" htmlFor="lastName">
+              Last Name:
+            </label>
+            <input
+              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+              type="text"
+              name="lastName"
+              id="lastName"
+              placeholder="Last Name..."
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+            <label className="pb-2 uppercase" htmlFor="email">
+              Your Email:
+            </label>
+            <input
+              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email..."
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <label className="pb-2 uppercase" htmlFor="password">
+              Password:
+            </label>
+            <input
+              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            {/* Guardian Email field */}
+            <label className="pb-2 uppercase" htmlFor="guardianEmail">
+              Guardian Email:
+            </label>
+            <input
+              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+              type="email"
+              name="guardianEmail"
+              id="guardianEmail"
+              placeholder="Guardian Email..."
+              value={guardianEmail}
+              onChange={(e) => setGuardianEmail(e.target.value)}
+              // required
+            />
 
-            {/* Form Group for Email */}
-            {/* <FormGroup>
-              <Label for="email">Email</Label>
-              <Input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </FormGroup> */}
-            {/* Form Group Zipcode */}
+            {/* TODO dropdown for Select School */}
+            <label className="pb-2 uppercase" htmlFor="school">
+              School:
+            </label>
+            <select
+              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+              name="school"
+              id="school"
+              value={school}
+              onChange={(e) => setSchool(e.target.value)}
+              required
+            >
+              <option value="">Select School...</option>
+              <option value="Grace Christian School">
+                Grace Christian School
+              </option>
+              <option value="Mount Anthony Middle High School">
+                Mount Anthony Middle High School
+              </option>
+              <option value="Mount Anthony Union High School">
+                Mount Anthony Union High School
+              </option>
+            </select>
 
-            {/* <FormGroup>
-              <Label for="zipcode">Zipcode</Label>
-              <Input
-                type="text"
-                name="zipcode"
-                id="zipcode"
-                placeholder="Enter zipcode"
-                value={zipcode}
-                onChange={(e) => setZipcode(e.target.value)}
+            {/* TODO checkbox for age verification */}
+            {/* Age Check */}
+            <div className="flex items-center mb-4">
+              <input
+                className="mr-2 h-4 w-4"
+                type="checkbox"
+                name="ageCheck"
+                id="ageCheck"
+                checked={ageCheck}
+                onChange={(e) => setAgeCheck(e.target.checked)}
+                required
               />
-            </FormGroup> */}
-            {/* Form Group for Password */}
-            {/* <FormGroup>
-              <Label for="password">Password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </FormGroup> */}
-            <button className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950" type="submit">SIGN UP</button>
+              <label htmlFor="ageCheck">
+                I confirm that I am over 13 years old
+              </label>
+            </div>
+ 
+            <button
+              className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950"
+              type="submit"
+            >
+              SIGN UP AS A MENTEE
+            </button>
           </form>
         </div>
       </div>
