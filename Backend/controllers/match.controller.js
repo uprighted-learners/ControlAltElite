@@ -300,7 +300,7 @@ router.post("/deny/:menteeId", validateSession, async (req, res) => {
     // get mentor's id from the token and mentee's id from the URL
     const mentorId = req.user._id;
     const menteeId = req.params.menteeId;
-    l;
+    
 
     // Find both users from their id's
     const mentor = await Mentor.findById(mentorId);
