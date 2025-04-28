@@ -30,7 +30,7 @@ const SignUp = (props) => {
         lastName,
         email,
         password,
-        userType: "Mentee", // Explicitly set this
+        userType: "Mentee",
         guardianEmail,
         school,
         ageCheck,

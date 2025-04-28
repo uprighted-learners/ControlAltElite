@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
       ageCheck,
     } = req.body;
 
-    userType = "Mentee"; // Default to Mentee for existing fron-end signup roite
+    // userType = "Mentee"; // Default to Mentee for existing fron-end signup roite
 
 
     if (email.toLowerCase().endsWith("@placeholder.edu")) {

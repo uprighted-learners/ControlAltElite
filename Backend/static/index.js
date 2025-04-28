@@ -6,7 +6,9 @@ imgForm.addEventListener("submit", async (e) => {
 
   // fetch to server endpoint to get link from s3
   //   takes imageUrl from upload, sends response and then updates URL variable with image url
-  const url = await fetch("/geturl").then((res) => res.json());
+  const response = await fetch("/geturl").then((res) => res.json());
+  // Handle both string and object response
+  const url = typeof response === "string" ? response : response.url;
   // fetch to s3 top upload the image (PUT)
   await fetch(url, {
     method: "PUT",
@@ -14,12 +16,11 @@ imgForm.addEventListener("submit", async (e) => {
   });
 
   const imgURL = url.split("?")[0];
-//   console.log(imgURL);
+  //   console.log(imgURL);
 
-const img = document.createElement("img")
-img.src = imgURL
-document.body.appendChild(img)
-  
+  const img = document.createElement("img");
+  img.src = imgURL;
+  document.body.appendChild(img);
+
   // fetch to our server's db to post the link
-
 });

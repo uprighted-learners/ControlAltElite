@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { API_MENTOR_PROFILE } from "../../constants/endpoints";
+import ProfilePhotoUpload from "./PhotoUpload.jsx";
 
 const MentorProfileEdit = (props) => {
   // Update First Name
@@ -11,12 +12,17 @@ const MentorProfileEdit = (props) => {
   // Update Bio
   const [updatedBio, setUpdatedBio] = useState("");
   // Update Profile Photo
-  // const [updatedProfilePhoto, setUpdatedProfilePhoto] = useState("");
+  const [updatedProfilePhoto, setUpdatedProfilePhoto] = useState("");
   // Update Question
   const [updatedQuestionToAsk, setUpdatedQuestionToAsk] = useState("");
 
   // Toggle for update form
   const [showForm, setShowForm] = useState(false);
+
+  function handlePhotoSaved(photoUrl) {
+    console.log("Photo uploaded:", photoUrl);
+    setUpdatedProfilePhoto(photoUrl);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -34,12 +40,12 @@ const MentorProfileEdit = (props) => {
         lastName: updatedLastName,
         email: updatedEmail,
         bio: updatedBio,
-        // profilePhoto: updatedProfilePhoto,
+        profilePhoto: updatedProfilePhoto,
         questionToAsk: updatedQuestionToAsk,
       };
       console.log(body);
 
-      //   Request Options
+      //  Request Options
       let requestOption = {
         method: "PUT",
         headers: myHeaders,
@@ -51,7 +57,7 @@ const MentorProfileEdit = (props) => {
       setUpdatedFirstName("");
       setUpdatedLastName("");
       setUpdatedEmail("");
-      // setUpdatedProfilePhoto("");
+      setUpdatedProfilePhoto("");
       setUpdatedBio("");
       setUpdatedQuestionToAsk("");
       // Toggles whether the update form is shown
@@ -77,12 +83,15 @@ const MentorProfileEdit = (props) => {
       {showForm && (
         <form
           // onSubmit={handleSubmit}
-          className="w-xs bg-base-200 border border-base-300 p-4 rounded-box " class="flex flex-col justify-center items-center"
+          className="w-xs bg-base-200 border border-base-300 p-4 rounded-box "
+          class="flex flex-col justify-center items-center"
         >
           <fieldset className="fieldset">
             {/* Form to update Profile */}
 
-            <label className="label-text font-bold">Update First Name Here:</label>
+            <label className="label-text font-bold">
+              Update First Name Here:
+            </label>
             <input
               className="input input-bordered bg-white text-black"
               value={updatedFirstName}
@@ -95,7 +104,9 @@ const MentorProfileEdit = (props) => {
               placeholder="Type Here"
               type="text"
             />
-            <label className="label-text font-bold">Update Last Name Here:</label>
+            <label className="label-text font-bold">
+              Update Last Name Here:
+            </label>
             <input
               className="input input-bordered bg-white text-black"
               value={updatedLastName}
@@ -121,6 +132,15 @@ const MentorProfileEdit = (props) => {
               placeholder="Type Here"
               type="text"
             />
+            {/* Profile Photo Upload Component */}
+            <ProfilePhotoUpload onPhotoSaved={handlePhotoSaved} />
+
+            {/* Show success message when photo is uploaded */}
+            {updatedProfilePhoto && (
+              <p className="text-green-500 mt-1">
+                Photo uploaded successfully!
+              </p>
+            )}
             <label className="label-text font-bold">Update Bio Here:</label>
             <input
               className="input input-bordered bg-white text-black"
@@ -134,19 +154,7 @@ const MentorProfileEdit = (props) => {
               placeholder="Type Here"
               type="text"
             />
-            {/* <label className="label-text mt-4">Update Profile Photo Here:</label>
-            <input
-              className="input input-bordered  bg-white text-black"
-              value={updatedProfilePhoto}
-              onChange={(e) => {
-                console.log(e.target.value);
-                setUpdatedProfilePhoto(e.target.value);
-              }}
-              id="emailUpdate"
-              name="Email"
-              placeholder="Type Here"
-              type="text"
-            /> */}
+
             <label className="label-text font-bold">
               Update Question To Ask Here:
             </label>
