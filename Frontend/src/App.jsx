@@ -1,5 +1,4 @@
 import "./App.css";
-import CreateMentor from "./components/Admin/Create-Mentor";
 import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
@@ -10,7 +9,7 @@ import MainIndex from "./components/MainIndex";
 import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
 import MentorProfile from "./components/Mentors/MentorProfile";
-import AdminMentorList from "./components/Admin/Mentor-List/AdminMentorList";
+import AdminDashboard from "./pages/AdminDashboard";
 import MentorMatchList from "./components/Mentors/MentorMatchList";
 import MentorPendingRequest from "./components/Mentors/MentorPendingRequest";
 
@@ -44,6 +43,11 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/mentor" element={<MentorDashboard />} />
+        <Route path="/mentee" element={<MenteeDashboard />} />
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
+        <Route path="/mentorMatchList" element={<MentorMatchList />} />
+        <Route path="/updateProfile" element={<MentorProfile />} />
         <Route path="/mentor" element={<MentorDashboard token={token} />} />
         <Route path="/mentee" element={<MenteeDashboard token={token}/>} />
         <Route path="/admin" element={<AdminDashboard token={token}/>} />
@@ -66,7 +70,7 @@ function App() {
         {/* Commented out because using in route /mentor instead (see above) */}
         {/* <Route path="/mentorDashboard" element={<MentorDashboard />} /> */}
         <Route path="/signup" element={<Auth updateToken={updateToken} />} />
-       
+        <Route path="/login" element={<MainIndex token={token} />} />
       </Routes>
       {/* <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
