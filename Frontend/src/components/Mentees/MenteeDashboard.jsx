@@ -1,7 +1,6 @@
 // Mentee Dashboard
 import React, { useState, useEffect } from "react";
 import MentorProfile from "../Mentors/MentorProfile";
-import MentorDirectory from "../public-views/MentorDirectory";
 import MenteeProfileEdit from "./MenteeProfileEdit";
 import { API_VIEW_MENTORS } from "../../constants/endpoints";
 
@@ -38,9 +37,9 @@ const MenteeDashboard = (props) => {
 
   return (
     <>
-      <div className="container mx-auto p-4 h-full">
+      <div className="container h-full p-4 mx-auto">
         <div className="bg-[#1b0a5f] text-white flex flex-col md:flex-row items-center justify-center md:justify-between p-4 rounded-md">
-          <h1 className="text-center uppercase text-2xl">Mentee Name</h1>
+          <h1 className="text-2xl text-center uppercase">Mentee Name</h1>
           <div className="flex gap-2.5">
             <select name="mentee" id="mentee">
               <option value="" disabled selected>
@@ -61,19 +60,19 @@ const MenteeDashboard = (props) => {
           <div className="flex items-center justify-center bg-black/50 max-w-[650px] mx-auto text-white text-center p-4 rounded-md mt-4">
             <p>You will receive an email notification when they respond to your request. You can also check the status in your dashboard.</p>
           </div>
-          <div className="flex items-center justify-center text-white text-center p-4 rounded-md mt-4">
+          <div className="flex items-center justify-center p-4 mt-4 text-center text-white rounded-md">
             <button className="bg-[#1b0a5f] px-12 py-2 rounded-md uppercase"><a href="">Mentor List</a></button>
           </div>
           {/* / ! Added for Update mentee profile button */}
-          <div className="flex flex-col-reverse items-center justify-center text-black text-center p-4 rounded-md mt-4">
+          <div className="flex flex-col-reverse items-center justify-center p-4 mt-4 text-center text-black rounded-md">
           <MenteeProfileEdit token={props.token}/>
           </div>
-          <div className="flex items-center justify-center text-white text-center p-4 rounded-md mt-4">
+          <div className="flex items-center justify-center p-4 mt-4 text-center text-white rounded-md">
             <button className="bg-[#1b0a5f] px-12 py-2 rounded-md uppercase"><a href="/mentor">Dashboard</a></button>
           </div>
         </div>
       </div>
-      {/* <MentorProfile mentor={mentor} onMentorSelect={handleSubmit} /> */}
+      <MentorProfile mentor={mentor} onMentorSelect={handleSubmit} />
     </>
   );
 };

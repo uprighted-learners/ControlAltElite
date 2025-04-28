@@ -9,6 +9,8 @@ import MainIndex from "./components/MainIndex";
 import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
 import MentorProfile from "./components/Mentors/MentorProfile";
+import AdminDashboard from "./pages/AdminDashboard";
+import MentorMatchList from "./components/Mentors/MentorMatchList";
 
 function App() {
   //state variable for token and initialize to the value of the token stored in local storage
@@ -36,6 +38,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/mentor" element={<MentorDashboard />} />
         <Route path="/mentee" element={<MenteeDashboard />} />
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
+        <Route path="/mentorMatchList" element={<MentorMatchList />} />
         <Route path="/updateProfile" element={<MentorProfile />} />
         <Route path="/signup" element={<Auth updateToken={updateToken} />} />
         <Route path="/login" element={<MainIndex token={token} />} />
