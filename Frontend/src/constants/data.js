@@ -6,14 +6,6 @@ export const navMenu = [
         href: "/",
     },
     {
-        name: "Mentees",
-        href: "/mentee",
-    },
-    {
-        name: "Mentors",
-        href: "/mentor",
-    },
-    {
         name: "Parents",
         href: "/parents",
     },
