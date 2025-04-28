@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function CreateMentor() {
+export default function CreateMentor(props) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,12 +39,13 @@ export default function CreateMentor() {
       };
 
       let response = await fetch(
-        "http://localhost:4000/user/register",
+        "http://localhost:4000/admin/mentor/create",
         requestOption
       );
 
       let data = await response.json();
       console.log(data);
+      props.setRefreshMentors(true);
 
       if (!response.ok) {
         alert("Mentor Creation Failed! " + data.message);
@@ -62,7 +63,10 @@ export default function CreateMentor() {
         <h2 className="text-2xl font-bold text-center text-[#eab246] mb-8 uppercase">
           Create Mentor
         </h2>
-        <form onSubmit={handleSubmit} className="bg-white  p-8 space-y-4 rounded-md">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white  p-8 space-y-4 rounded-md"
+        >
           <div>
             <label
               htmlFor="firstName"

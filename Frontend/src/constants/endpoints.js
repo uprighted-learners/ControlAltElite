@@ -7,7 +7,6 @@ export const API_REGISTER = `${API}/user/register`;
 export const API_MENTOR_PROFILE = `${API}/user/mentor/update`;
 
 
-
 export const API_DELETE_MENTOR = `${API}/user/delete`;
 
 export const API_VIEW_MENTOR_MATCH = `${API}/match/view-matches`;
@@ -21,4 +20,8 @@ export const API_VIEW_MENTORS = `${API}/user/mentor/view-all`;
 export const API_ACCEPT_REQUEST = `${API}/match/accept`;
 
 export const API_REJECT_REQUEST = `${API}/match/deny`;
+
+export const API_ADMIN_UPDATE_MENTOR = `${API}/admin/mentor/update`;
+
+export const API_ADMIN_DELETE_MENTOR = `${API}/admin/mentor/delete`
 
