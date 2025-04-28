@@ -6,9 +6,7 @@ import MentorPendingRequest from "./MentorPendingRequest";
 
 const MentorDashboard = (props) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const [showMenteePreview, setShowMenteePreview] = useState(false);
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -19,6 +17,8 @@ const MentorDashboard = (props) => {
   return (
     <>
       <MentorNavbar />
+     <MentorPendingRequest token={props.token} />
+
       <div className="flex flex-col-reverse items-center justify-center text-black text-center p-4 rounded-md mt-4">
         <MentorProfileEdit token={props.token} />
       </div>
@@ -53,6 +53,7 @@ const MentorDashboard = (props) => {
           <MenteePreview />
         </div>
       )}
+
     </>
   );
 };

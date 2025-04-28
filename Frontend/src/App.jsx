@@ -17,6 +17,7 @@ import MentorPendingRequest from "./components/Mentors/MentorPendingRequest";
 
 
 import MenteePreview from "./components/Mentors/MenteePreview";
+import AdminDashboard from "./components/Admin/AdminDashboard";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/mentor" element={<MentorDashboard token={token} />} />
         <Route path="/mentee" element={<MenteeDashboard token={token}/>} />
+        <Route path="/admin" element={<AdminDashboard token={token}/>} />
         {/* <Route path="/updateProfile" element={<MentorProfile />} /> */}
         <Route path="/createMentor" element={<CreateMentor />} />
         
@@ -61,7 +63,8 @@ function App() {
           element={<MentorPendingRequest token={token} />}
         />
         <Route path="/menteePreview" element={<MenteePreview />} />
-        <Route path="/mentorDashboard" element={<MentorDashboard />} />
+        {/* Commented out because using in route /mentor instead (see above) */}
+        {/* <Route path="/mentorDashboard" element={<MentorDashboard />} /> */}
         <Route path="/signup" element={<Auth updateToken={updateToken} />} />
        
       </Routes>
