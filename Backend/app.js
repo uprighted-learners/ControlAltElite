@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 const userController = require("./controllers/user.controller");
 const matchController = require("./controllers/match.controller");
+const adminController = require("./controllers/admin.controller");
 
 
 // ! Connecting to the Database
@@ -22,6 +23,7 @@ app.use(cors());
 //  *** TODO Controller Routes BELOW ***
 app.use("/user", userController);
 app.use("/match", matchController);
+app.use("/admin", adminController);
 
 const HOST = process.env.HOST;
 const PORT = 4000;

@@ -1,73 +1,95 @@
 import React, { useState, useEffect } from "react";
 import {
+  API_ADMIN_DELETE_MENTOR,
+  API_ADMIN_UPDATE_MENTOR,
   API_DELETE_MENTOR,
-  API_REGISTER,
   API_VIEW_MENTORS,
 } from "../../../constants/endpoints";
+import UpdateMentorForm from "./UpdateMentorForm";
 const AdminMentorList = (props) => {
   const [mentors, setMentors] = useState([]);
-  const [firstName, setFirstName] = useState("Ceporah");
-  const [lastName, setLastName] = useState("Wiggins-Mentor2");
-  const [email, setEmail] = useState("email-mentor1@test.com");
-  const [password, setPassword] = useState("1234");
-  const [projectCategory, setProjectCategory] = useState("");
-  function handleSubmit(event) {
-    event.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", { firstName, lastName, email, password });
-    createMentor();
-    // Reset form fields
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-    setProjectCategory("");
-  }
 
-  async function createMentor() {
-    try {
-      //Headers
-      let headers = new Headers();
-      headers.append("Content-Type", "application/json");
-      // Request Body
-      let body = JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-        userType: "Mentor",
-        projectCategory: projectCategory,
-      });
-      // Request Options
-      let requestOption = {
-        method: "POST",
-        headers: headers,
-        body: body,
-      };
-      // Send Request
-      let response = await fetch(
-        "http://localhost:4000/user/register",
-        requestOption
-      ); //TODO Use API_LOGIN and import at top of file
 
-      // Response Object
-      let data = await response.json();
-      // Update Token from the App.jsx file
-      console.log(data);
-      // Check if the response is ok (status code 200-299)
-      if (!response.ok) {
-        alert("Mentor Creation Failed! " + data.message);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      alert("Mentor Created Successfully!");
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // for the Update Modal
+  const [showModal, setShowModal] = useState(false);
+  const [mentorToUpdate, setMentorToUpdate] = useState(null);
+
+  const handleOpenModal = (mentor) => {
+    console.log("Opening modal for mentor:", mentor);
+    setMentorToUpdate(mentor);
+
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setMentorToUpdate(null);
+  };
+  // const [firstName, setFirstName] = useState("Ceporah");
+  // const [lastName, setLastName] = useState("Wiggins-Mentor2");
+  // const [email, setEmail] = useState("email-mentor1@test.com");
+  // const [password, setPassword] = useState("1234");
+  // const [projectCategory, setProjectCategory] = useState("");
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  //   // Handle form submission logic here
+  //   console.log("Form submitted:", { firstName, lastName, email, password });
+  //   createMentor();
+  //   // Reset form fields
+  //   setFirstName("");
+  //   setLastName("");
+  //   setEmail("");
+  //   setPassword("");
+  //   setProjectCategory("");
+  // }
+
+  // async function createMentor() {
+  //   try {
+  //     //Headers
+  //     let headers = new Headers();
+  //     headers.append("Content-Type", "application/json");
+  //     // Request Body
+  //     let body = JSON.stringify({
+  //       firstName: firstName,
+  //       lastName: lastName,
+  //       email: email,
+  //       password: password,
+  //       userType: "Mentor",
+  //       projectCategory: projectCategory,
+  //     });
+  //     // Request Options
+  //     let requestOption = {
+  //       method: "POST",
+  //       headers: headers,
+  //       body: body,
+  //     };
+  //     // Send Request
+  //     let response = await fetch(
+  //       "http://localhost:4000/user/register",
+  //       requestOption
+  //     ); //TODO Use API_LOGIN and import at top of file
+
+  //     // Response Object
+  //     let data = await response.json();
+  //     // Update Token from the App.jsx file
+  //     console.log(data);
+  //     // Check if the response is ok (status code 200-299)
+  //     if (!response.ok) {
+  //       alert("Mentor Creation Failed! " + data.message);
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     alert("Mentor Created Successfully!");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   useEffect(() => {
     fetchMentors();
-  }, []);
+    // after fetch, reset the refresh flag to stop it form triggering
+    props.setRefreshMentors(false);
+  }, [props.refreshMentors]);
+
   async function fetchMentors() {
     try {
       const response = await fetch(API_VIEW_MENTORS);
@@ -78,8 +100,60 @@ const AdminMentorList = (props) => {
     }
   }
 
-  function handleUpdate(mentorId) {
-    console.log(`Update mentor with ID: ${mentorId}`);
+  //! Handle Update button function
+  async function handleUpdate(mentorId, updatedData) {
+    if (!mentorToUpdate || !mentorToUpdate.id) {
+      console.error("Mentor ID is missing");
+      return; // Don't proceed if there's no ID
+    }
+
+    try {
+      console.log("Update Clicked");
+      // Headers
+      let myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      // Add an authorization to the headers if you need a token for that route
+      myHeaders.append("Authorization", props.token);
+      console.log(props.token);
+      // Request Body
+      let body = {
+        firstName: updatedData.firstName,
+        lastName: updatedData.lastName,
+        email: updatedData.email,
+        projectCategory: updatedData.projectCategory,
+      };
+      //   Request Options
+      let requestOption = {
+        method: "PUT",
+        headers: myHeaders,
+        body: JSON.stringify(body),
+      };
+
+      console.log("Updating mentor with this ID: ", mentorId);
+
+      // Send Request
+      let response = await fetch(
+        `${API_ADMIN_UPDATE_MENTOR}/${mentorId}`,
+        requestOption
+      );
+
+      if (!response.ok) {
+        // If not, throw an error with status code
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Response Object
+      let data = await response.json();
+      console.log(data);
+
+      // Re-fetch mentors
+      fetchMentors();
+
+      // Close modal
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error occured during update: ", error);
+    }
   }
 
   async function handleDelete(mentorId) {
@@ -88,10 +162,11 @@ const AdminMentorList = (props) => {
     );
     if (confirmDelete) {
       try {
-        const response = await fetch(`${API_DELETE_MENTOR}/${mentorId}`, {
+        const response = await fetch(`${API_ADMIN_DELETE_MENTOR}/${mentorId}`, {
           method: "DELETE",
           headers: {
-            Authorization: `${props.token}`,
+            "Content-Type": "application/json",
+            "Authorization": `${props.token}`,
           },
         });
         if (response.ok) {
@@ -107,52 +182,81 @@ const AdminMentorList = (props) => {
   }
   return (
     <>
-    <div className="container mx-auto p-4">
-  <h1 className="text-4xl text-center py-4 uppercase">Mentor List</h1>
-  <div className="overflow-x-auto">
-    <table className="w-full bg-white rounded-sm">
-      <thead>
-        <tr className="text-left text-black">
-          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">ID:</th>
-          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">First Name:</th>
-          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">Last Name:</th>
-          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">Email:</th>
-          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">Project Category:</th>
-          <th className="px-4 border-2 border-[#1b0a5f] text-black p-4">Actions:</th>
-        </tr>
-      </thead>
-      <tbody>
-        {mentors.map((mentor) => (
-          <tr key={mentor.id} className="hover:bg-gray-100">
-            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.id}</td>
-            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.firstName}</td>
-            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.lastName}</td>
-            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.email}</td>
-            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">{mentor.projectCategory || "N/A"}</td>
-            <td className="px-4 border-2 border-[#1b0a5f] text-black p-4">
-              <div className="flex flex-col md:flex-row gap-2">
-              <button className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition" onClick={() => handleAdd()}>Add</button>
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition"
-                  onClick={() => handleUpdate(mentor.id)}
-                >
-                  Update
-                </button>
-                <button
-                  className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition"
-                  onClick={() => handleDelete(mentor.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</div>
-<div className="container mx-auto p-4">
+      <div className="container mx-auto p-4">
+        <h1 className="text-4xl text-center py-4 uppercase">Mentor List</h1>
+        <div className="overflow-x-auto">
+          <table className="w-full bg-white rounded-lg shadow-md">
+            <thead className="sticky top-0 bg-[#1b0a5f]">
+              <tr className="text-left text-white">
+                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                  ID:
+                </th>
+                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                  First Name:
+                </th>
+                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                  Last Name:
+                </th>
+                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                  Email:
+                </th>
+                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                  Project Category:
+                </th>
+                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                  Actions:
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {mentors.map((mentor) => (
+                <tr key={mentor.id} className="hover:bg-blue-100 transition-colors">
+                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                    {mentor.id}
+                  </td>
+                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                    {mentor.firstName}
+                  </td>
+                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                    {mentor.lastName}
+                  </td>
+                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                    {mentor.email}
+                  </td>
+                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                    {mentor.projectCategory || "N/A"}
+                  </td>
+                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                    <div className="flex justify-center gap-4">
+                      <button
+                        className="btn btn-soft btn-primary px-2 py-1 rounded-md transition"
+                        onClick={() => handleOpenModal(mentor)}
+                      >
+                        Update
+                      </button>
+                      <button
+                        className="btn btn-soft btn-error px-2 py-1 rounded-md transition"
+                        onClick={() => handleDelete(mentor.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {/* Conditionally render the modal if showModal is true */}
+        {showModal && mentorToUpdate && (
+          <UpdateMentorForm
+            mentorData={mentorToUpdate}
+            handleUpdateMentor={handleUpdate}
+            handleClose={handleCloseModal} // Pass the close function to the modal
+          />
+        )}
+      </div>
+      {/* <div className="container mx-auto p-4">
   <div className="bg-blue-500 w-full mx-auto max-w-[450px] p-8 rounded-sm flex flex-col justify-center items-center">
     <form className="w-full" onSubmit={handleSubmit}>
       <h2 className="text-3xl text-center py-4 uppercase">Add Mentor</h2>
@@ -232,7 +336,7 @@ const AdminMentorList = (props) => {
       </button>
     </form>
   </div>
-</div>
+</div> */}
     </>
   );
 };
