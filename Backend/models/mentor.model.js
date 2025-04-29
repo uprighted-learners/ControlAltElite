@@ -21,9 +21,8 @@ const MentorSchema = new mongoose.Schema({
 
   userType: {
     type: String,
-    enum: ["Mentor", "Mentee"],
     default: "Mentor",
-    required: true,
+    immutable: true,
   },
 
   // Mentor specific profile fields

@@ -13,7 +13,6 @@ const SignUp = (props) => {
   const [ageCheck, setAgeCheck] = useState(false); // added by nick
   // const [zipcode, setZipcode] = useState("");
 
-
   // TODO: Create a function called handleSubmit that will console.log("Click Worked")
   function handleSubmit(e) {
     e.preventDefault();
@@ -50,6 +49,15 @@ const SignUp = (props) => {
       // Handle response
       if (data.token) {
         props.updateToken(data.token);
+
+        // Redirect to mentee dashboard page after registere
+        window.location.href = "/mentee"; 
+        alert(`You were successfully registered! Welcome, ${firstName}!`);
+      } else {
+        alert(
+          data.message ||
+            "Registration failed. Please make sure required fields are filled oout and try again."
+        );
       }
     } catch (error) {
       console.error(error);
@@ -73,7 +81,7 @@ const SignUp = (props) => {
               type="text"
               name="firstName"
               id="firstName"
-              placeholder="First Name..."
+              placeholder="First Name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
@@ -86,7 +94,7 @@ const SignUp = (props) => {
               type="text"
               name="lastName"
               id="lastName"
-              placeholder="Last Name..."
+              placeholder="Last Name"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
@@ -99,7 +107,7 @@ const SignUp = (props) => {
               type="email"
               name="email"
               id="email"
-              placeholder="Email..."
+              placeholder="example@domain.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -112,7 +120,7 @@ const SignUp = (props) => {
               type="password"
               name="password"
               id="password"
-              placeholder="Password..."
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -126,7 +134,7 @@ const SignUp = (props) => {
               type="email"
               name="guardianEmail"
               id="guardianEmail"
-              placeholder="Guardian Email..."
+              placeholder="Guardian Email"
               value={guardianEmail}
               onChange={(e) => setGuardianEmail(e.target.value)}
               // required
@@ -144,7 +152,7 @@ const SignUp = (props) => {
               onChange={(e) => setSchool(e.target.value)}
               required
             >
-              <option value="">Select School...</option>
+              <option value="">Please select your school</option>
               <option value="Grace Christian School">
                 Grace Christian School
               </option>
@@ -172,7 +180,7 @@ const SignUp = (props) => {
                 I confirm that I am over 13 years old
               </label>
             </div>
- 
+
             <button
               className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950"
               type="submit"

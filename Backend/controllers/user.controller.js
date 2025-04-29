@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 // Model Imports
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
+const Admin = require("../models/admin.model");
 
 // ! Register user route
 // Endpoint: http://localhost:4000/user/register
@@ -25,18 +26,15 @@ router.post("/register", async (req, res) => {
       ageCheck,
     } = req.body;
 
-    userType = "Mentee"; // Default to Mentee for existing fron-end signup roite
-
-
     if (email.toLowerCase().endsWith("@placeholder.edu")) {
       userType = "Mentor";
     }
 
-    // Make sure userType is provided:
-    if (!userType) {
+    // Make sure a valid usertype is provided
+    if (!["Admin", "Mentor", "Mentee"].includes(userType)) {
       return res
         .status(400)
-        .json({ message: "Your user type is required (Mentor or Mentee)" });
+        .json({ message: "you must enter a valid usertype" });
     }
 
     // !Mentee specific checks:
@@ -77,7 +75,14 @@ router.post("/register", async (req, res) => {
 
     // Create user
     // use if/else statement based on userType
-    if (userType === "Mentor") {
+    if (userType === "Admin") {
+      user = new Admin({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: bcrypt.hashSync(password, 10),
+      });
+    } else if (userType === "Mentor") {
       user = new Mentor({
         firstName: firstName,
         lastName: lastName,
@@ -102,7 +107,6 @@ router.post("/register", async (req, res) => {
         requestedMentors: [], // empty array to keep track of match request
       });
     }
-
     //  Save the new user in the database and store the response in a variable (saved user)
     const newUser = await user.save();
 
@@ -140,19 +144,26 @@ router.post("/login", async (req, res) => {
     //  ?Check the database to see if the user email exists
     // const user = await User.findOne({ email: email });
 
-    // ? Check datatbase for user (must check both mentor and mentee)
-    // look first in saved mentors, then saved mentees if no match.
-    // if no user found in either, give error message
-    let user = await Mentor.findOne({ email: email });
-    let userType = "Mentor";
+    // ? Check database for user (must check admin, mentor, and mentee)
+    // Try to find user in admin list first
+    let user = await Admin.findOne({ email: email });
+    let userType = "Admin";
 
+    // If not an admin, check if they're a mentor
     if (!user) {
-      user = await Mentee.findOne({ email: email });
-      userType = "Mentee";
-    }
-    //  If user doesn't exist anywhere, give error
-    if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      user = await Mentor.findOne({ email: email });
+      userType = "Mentor";
+
+      // If not a mentor, check if they're a mentee
+      if (!user) {
+        user = await Mentee.findOne({ email: email });
+        userType = "Mentee";
+
+        // If user not found anywhere, return error
+        if (!user) {
+          return res.status(401).json({ message: "Invalid email or password" });
+        }
+      }
     }
 
     // Check/compare provided password if user found
@@ -358,7 +369,6 @@ router.delete("/delete", validateSession, async (req, res) => {
 // Change to /mentor/view-all
 // request type: GET
 router.get("/mentor/view-all", async (req, res) => {
-
   try {
     const mentors = await Mentor.find({ userType: "Mentor" });
 

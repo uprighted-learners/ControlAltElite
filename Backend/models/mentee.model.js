@@ -20,10 +20,9 @@ const MenteeSchema = new mongoose.Schema({
   },
 
   userType: {
-    type: String, // Added this line after merging
-    enum: ["Mentor", "Mentee"],
+    type: String,
     default: "Mentee",
-    required: true,
+    immutable: true, 
   },
   // ! arrays for tracking matches and requests
   // ref allows .populate() to be used in controllers - tells mongoose which model to use
