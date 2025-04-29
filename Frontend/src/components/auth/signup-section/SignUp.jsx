@@ -13,7 +13,6 @@ const SignUp = (props) => {
   const [ageCheck, setAgeCheck] = useState(false); // added by nick
   // const [zipcode, setZipcode] = useState("");
 
-
   // TODO: Create a function called handleSubmit that will console.log("Click Worked")
   function handleSubmit(e) {
     e.preventDefault();
@@ -50,6 +49,15 @@ const SignUp = (props) => {
       // Handle response
       if (data.token) {
         props.updateToken(data.token);
+
+        // Redirect to mentee dashboard page after registere
+        window.location.href = "/mentee"; 
+        alert(`You were successfully registered! Welcome, ${firstName}!`);
+      } else {
+        alert(
+          data.message ||
+            "Registration failed. Please make sure required fields are filled oout and try again."
+        );
       }
     } catch (error) {
       console.error(error);
@@ -172,7 +180,7 @@ const SignUp = (props) => {
                 I confirm that I am over 13 years old
               </label>
             </div>
- 
+
             <button
               className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950"
               type="submit"
