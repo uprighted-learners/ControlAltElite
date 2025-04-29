@@ -40,15 +40,6 @@ const MenteeDashboard = (props) => {
       <div className="container h-full p-4 mx-auto">
         <div className="bg-[#1b0a5f] text-white flex flex-col md:flex-row items-center justify-center md:justify-between p-4 rounded-md">
           <h1 className="text-2xl text-center uppercase">Mentee Name</h1>
-          <div className="flex gap-2.5">
-            {/* <select name="mentee" id="mentee">
-              <option value="" disabled selected>
-                Select an option
-              </option>
-              <option value="edit">edit profile</option>
-              <option value="resources">Resources</option>
-            </select> */}
-          </div>
         </div>
         <div className="container mx-auto py-18">
           <div className="flex items-center justify-center bg-black/50 uppercase max-w-[450px] mx-auto text-white p-4 rounded-md mt-4">
