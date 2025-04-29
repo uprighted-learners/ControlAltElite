@@ -1,21 +1,40 @@
 // Mentor Dashboard Page
 import React, { useCallback, useEffect, useState } from "react";
+import { API_VIEW_MENTOR_MATCH } from "../../constants/endpoints";
 
-const MenteePreview = () => {
+const MenteePreview = ({token}) => {
   //mentee holding the data like name etc/ setMentee used to update/null cause no data yet
   const [mentee, setMentee] = useState(null);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     //calling API to get data with fetchMenteeData
     const fetchMenteeData = async () => {
-      const menteeData = {
-        //!need to fetch call to backend for mentee data
-      };
+      
+        //fetch call to backend for mentee data
+        try {
+          const response = await fetch(API_VIEW_MENTOR_MATCH, {
+            headers: {
+              //! need help here with the token, see if its setup right ?
+              Authorization: `Bearer ${token}`
+            }
+            
+          });
+          const data = await response.json()
+          setMentee(data[0])
+          
+        } catch (error) {
+          console.log("Error fetching mentee data", error);
+          
+          
+        }
+
+      
     };
     fetchMenteeData();
 
     //empty array to run useEffect
-  }, []);
+  }, [token]);
 
   //Before mentee data loads, once loaded it will show dashboard
   // if (!mentee) return <div className="text-center mt-10">Loading...</div>;
