@@ -9,7 +9,7 @@ import MainIndex from "./components/MainIndex";
 import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
 import MentorProfile from "./components/Mentors/MentorProfile";
-import AdminDashboard from "./pages/AdminDashboard";
+// import AdminDashboard from "./pages/AdminDashboard";
 import MentorMatchList from "./components/Mentors/MentorMatchList";
 import MentorPendingRequest from "./components/Mentors/MentorPendingRequest";
 
@@ -17,6 +17,7 @@ import MentorPendingRequest from "./components/Mentors/MentorPendingRequest";
 
 import MenteePreview from "./components/Mentors/MenteePreview";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import AdminMentorList from "./components/Admin/Mentor-List/AdminMentorList";
 
 
 function App() {
@@ -43,16 +44,16 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/mentor" element={<MentorDashboard />} />
-        <Route path="/mentee" element={<MenteeDashboard />} />
-        <Route path="/adminDashboard" element={<AdminDashboard />} />
+        {/* <Route path="/mentor" element={<MentorDashboard />} /> */}
+        {/* <Route path="/mentee" element={<MenteeDashboard />} /> */}
+        {/* <Route path="/adminDashboard" element={<AdminDashboard />} /> */}
         <Route path="/mentorMatchList" element={<MentorMatchList />} />
         <Route path="/updateProfile" element={<MentorProfile />} />
         <Route path="/mentor" element={<MentorDashboard token={token} />} />
         <Route path="/mentee" element={<MenteeDashboard token={token}/>} />
         <Route path="/admin" element={<AdminDashboard token={token}/>} />
         {/* <Route path="/updateProfile" element={<MentorProfile />} /> */}
-        <Route path="/createMentor" element={<CreateMentor />} />
+        {/* <Route path="/createMentor" element={<CreateMentor />} /> */}
         
         <Route
           path="/adminMentorList"
