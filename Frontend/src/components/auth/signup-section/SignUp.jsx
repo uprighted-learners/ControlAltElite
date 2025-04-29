@@ -73,7 +73,7 @@ const SignUp = (props) => {
               type="text"
               name="firstName"
               id="firstName"
-              placeholder="First Name..."
+              placeholder="First Name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
@@ -86,7 +86,7 @@ const SignUp = (props) => {
               type="text"
               name="lastName"
               id="lastName"
-              placeholder="Last Name..."
+              placeholder="Last Name"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
@@ -99,7 +99,7 @@ const SignUp = (props) => {
               type="email"
               name="email"
               id="email"
-              placeholder="Email..."
+              placeholder="example@domain.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -112,7 +112,7 @@ const SignUp = (props) => {
               type="password"
               name="password"
               id="password"
-              placeholder="Password..."
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -126,7 +126,7 @@ const SignUp = (props) => {
               type="email"
               name="guardianEmail"
               id="guardianEmail"
-              placeholder="Guardian Email..."
+              placeholder="Guardian Email"
               value={guardianEmail}
               onChange={(e) => setGuardianEmail(e.target.value)}
               // required
@@ -144,7 +144,7 @@ const SignUp = (props) => {
               onChange={(e) => setSchool(e.target.value)}
               required
             >
-              <option value="">Select School...</option>
+              <option value="">Please select your school</option>
               <option value="Grace Christian School">
                 Grace Christian School
               </option>

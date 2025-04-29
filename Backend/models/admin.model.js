@@ -20,13 +20,9 @@ const AdminSchema = new mongoose.Schema({
   },
   userType: {
     type: String,
-    enum: ["Admin", "Mentor", "Mentee", "Parent"],
     default: "Admin",
-    required: true,
+    immutable: true,
   },
-  
-  
 });
-
 
 module.exports = mongoose.model("Admin", AdminSchema);
