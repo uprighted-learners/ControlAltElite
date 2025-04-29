@@ -18,24 +18,56 @@ const MenteeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   userType: {
+    type: String, // Added this line after merging
     enum: ["Mentor", "Mentee"],
     default: "Mentee",
+    required: true,
   },
+  // ! arrays for tracking matches and requests
+  // ref allows .populate() to be used in controllers - tells mongoose which model to use
 
-// Mentee specific fields:
-requestedMentors:{
-    
-},
-approvedMentors:{
-
-},
-interests: {
+  // Mentee specific fields:
+  requestedMentors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Mentor",
+    },
+  ],
+  approvedMentors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Mentor",
+    },
+  ],
+  age: {
+    type: Number,
+    required: false, // Initially false for basic signup, but is required for profile completion
+  },
+  interests: {
+    type: String,
+    required: false,
+  },
+  school: {
+    type: String,
+    enum: [
+      "Grace Christian School",
+      "Mount Anthony Middle High School",
+      "Mount Anthony Union High School",
+    ],
+    required: false,
+  },
+  guardianEmail: {
     type: String,
     required: true,
-},
-
-
+  },
+  // Make sure user is over age of 13
+  ageCheck: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Mentee", MenteeSchema);

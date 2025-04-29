@@ -1,9 +1,23 @@
 const mongoose = require("mongoose");
 
-let matchRequestSchema = new mongoose.Schema({
-    menteeId: { type: String, required: true },
-    mentorId: { type: String, required: true },
-    status: { type: String, default: "pending" },
-}, { timestamps: true });
+const AnswerSchema = new mongoose.Schema({
+  menteeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Mentee",
+    required: true,
+  },
+  mentorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Mentor",
+    required: true,
+  },
+  mentorQuestion: {
+    type: String,
+  },
+  menteeAnswer: {
+    type: String,
+    required: true,
+  },
+});
 
-module.exports = mongoose.model("MatchRequest", matchRequestSchema);
+module.exports = mongoose.model("Answer", AnswerSchema);
