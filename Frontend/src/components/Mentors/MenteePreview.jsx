@@ -1,43 +1,53 @@
 // Mentor Dashboard Page
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
+import { API_VIEW_MENTOR_MATCH } from "../../constants/endpoints";
 
-const MenteePreview = () => {
-  //mentee holding the data like name etc/ setMentee used to update/null cause no data yet
+const MenteePreview = ({ token }) => {
   const [mentee, setMentee] = useState(null);
 
   useEffect(() => {
-    //calling API to get data with fetchMenteeData
     const fetchMenteeData = async () => {
-      const menteeData = {
-        //!need to fetch call to backend for mentee data
-      };
+      try {
+        const response = await fetch(API_VIEW_MENTOR_MATCH, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch mentee data");
+
+        const data = await response.json();
+
+        // Adjust this depending on the shape of your backend response
+        setMentee(data.mentee || data); 
+      } catch (error) {
+        console.error("Error fetching mentee data:", error);
+      }
     };
-    fetchMenteeData();
 
-    //empty array to run useEffect
-  }, []);
+    if (token) fetchMenteeData();
+  }, [token]);
 
-  //Before mentee data loads, once loaded it will show dashboard
-  // if (!mentee) return <div className="text-center mt-10">Loading...</div>;
+  if (!mentee) return <div className="text-center mt-10">Loading...</div>;
 
-  //styling with tailwind
   return (
-   
     <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-3xl mx-auto">
       {/* Project Title */}
       <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-6 border-b pb-2">
-        Project: {false && mentee.project} 
+        Project: {mentee.project}
       </h2>
 
       {/* Mentee Info Card */}
       <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <span className="font-medium text-gray-700">Name:</span>
-          <span className="text-gray-900 text-lg">{false && mentee.name}</span>
+          <span className="text-gray-900 text-lg">{mentee.name}</span>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <span className="font-medium text-gray-700">Interest:</span>
-          <span className="text-gray-900 text-lg">{false && mentee.interest}</span> 
+          <span className="text-gray-900 text-lg">{mentee.interest}</span>
         </div>
       </div>
     </div>
