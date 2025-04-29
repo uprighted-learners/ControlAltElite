@@ -4,12 +4,6 @@ import MentorNavbar from "./MentorNavbar";
 import MentorProfileEdit from "./MentorProfileEdit";
 import MentorPendingRequest from "./MentorPendingRequest";
 
-const MentorDashboard = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const [hasPengingMatch, setHasPendingMatch] = useState(false);
-
-
 
 const MentorDashboard = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +41,7 @@ const MentorDashboard = (props) => {
         </div>
       </div>
       <MenteePreview token={props.token} />
-      <MentorPendingRequest />
+
      <MentorPendingRequest token={props.token} />
 
       <div className="flex flex-col-reverse items-center justify-center p-4 mt-4 text-center text-black rounded-md">
