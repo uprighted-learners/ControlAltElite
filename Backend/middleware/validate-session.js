@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
+const Admin = require("../models/admin.model");
 
 const validateSession = async (req, res, next) => {
   try {

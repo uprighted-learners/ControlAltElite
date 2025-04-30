@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const validateSession = require("../middleware/validate-session");
+const validateAdmin = require("../middleware/validate-admin");
+
 // Import JSONWEBTOKEN for token creation
 const jwt = require("jsonwebtoken");
 // Import BCRYPT to hash passwords
@@ -9,7 +11,7 @@ const Admin = require("../models/admin.model");
 const Mentor = require("../models/mentor.model");
 
 // TODO POST /admin/mentor/create
-router.post("/mentor/create", async (req, res) => {
+router.post("/mentor/create", validateSession, validateAdmin, async (req, res) => {
   try {
     let { firstName, lastName, email, password, userType, projectCategory } =
       req.body;
@@ -61,7 +63,7 @@ router.post("/mentor/create", async (req, res) => {
 
 // ! ADD VALIDATE SESSION
 // TODO PUT /admin/mentor/update/:id
-router.put("/mentor/update/:id", async (req, res) => {
+router.put("/mentor/update/:id", validateSession, validateAdmin, async (req, res) => {
   try {
     const mentorId = req.params.id;
     console.log("Received mentor ID: ", mentorId);
@@ -113,7 +115,7 @@ router.put("/mentor/update/:id", async (req, res) => {
 // TODO PUT /admin/mentee/update/:id
 
 // TODO DELETE /admin/mentor/delete/:id
-router.delete("/mentor/delete/:id", async (req, res) => {
+router.delete("/mentor/delete/:id", validateSession, validateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const deletedMentor = await Mentor.deleteOne({ _id: id });
