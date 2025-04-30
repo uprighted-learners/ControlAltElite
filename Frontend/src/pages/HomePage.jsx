@@ -21,10 +21,10 @@ const HomePage = () => {
               <option value="" disabled selected>
                 Select an option
               </option>
-                <option value="science">Science</option>
-                <option value="technology">Technology</option>
-                <option value="engineering">Engineering</option>
-                <option value="mathematics">Mathematics</option>
+                <option value="science" className="text-black">Science</option>
+                <option value="technology" className="text-black">Technology</option>
+                <option value="engineering" className="text-black">Engineering</option>
+                <option value="mathematics" className="text-black">Mathematics</option>
               </select>
               <div className='py-2'>
                 <MentorDirectory />

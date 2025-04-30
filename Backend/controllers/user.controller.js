@@ -24,6 +24,8 @@ router.post("/register", async (req, res) => {
       guardianEmail,
       school,
       ageCheck,
+      interests,
+      project,
     } = req.body;
 
     if (email.toLowerCase().endsWith("@placeholder.edu")) {
@@ -103,6 +105,8 @@ router.post("/register", async (req, res) => {
         guardianEmail: "placeholder@placeholder.com",
         school: "Grace Christian School",
         ageCheck: true,
+        interests: interests,
+        project: project,
         approvedMentors: [], // empty array to push accepted mentor into
         requestedMentors: [], // empty array to keep track of match request
       });
@@ -284,7 +288,7 @@ router.put("/mentee/update", validateSession, async (req, res) => {
         .json({ message: "This page is only valid for mentees" });
     }
     // Get profile fields from the req.body
-    const { firstName, lastName, email, password, guardianEmail } = req.body;
+    const { firstName, lastName, email, password, guardianEmail, interests } = req.body;
 
     // Empty object to hold updated info:
     const updatedInfo = {};
@@ -300,6 +304,8 @@ router.put("/mentee/update", validateSession, async (req, res) => {
       updatedInfo.password = bcrypt.hashSync(password, 10);
     if (guardianEmail !== undefined && guardianEmail.trim() !== "")
       updatedInfo.guardianEmail = guardianEmail;
+    if (interests !== undefined && interests.trim() !== "")
+      updatedInfo.interests = interests;
 
     // Update the mentee in database
     const updatedMentee = await Mentee.findByIdAndUpdate(id, updatedInfo, {
@@ -321,6 +327,8 @@ router.put("/mentee/update", validateSession, async (req, res) => {
         lastName: updatedMentee.lastName,
         email: updatedMentee.email,
         guardianEmail: updatedMentee.guardianEmail,
+        interests: updatedMentee.interests,
+        project: updatedMentee.project,
       },
     });
   } catch (error) {
@@ -576,6 +584,7 @@ router.get("/mentee/profile", validateSession, async (req, res) => {
         school: mentee.school || "",
         ageCheck: mentee.ageCheck,
         interests: mentee.interests || "",
+        project: mentee.project || "",
         requestedMentors: mentee.requestedMentors || [],
         approvedMentors: mentee.approvedMentors || [],
       },

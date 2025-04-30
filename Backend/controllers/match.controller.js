@@ -117,13 +117,11 @@ router.post("/accept/:menteeId", validateSession, async (req, res) => {
       });
     } else {
       // Mentee was already approved
-      res
-        .status(200)
-        .json({
-          message: "Mentee was already approved",
-          mentorId: mentorId,
-          menteeId: menteeId,
-        });
+      res.status(200).json({
+        message: "Mentee was already approved",
+        mentorId: mentorId,
+        menteeId: menteeId,
+      });
     }
   } catch (error) {
     // Improved error handling with proper status code
@@ -160,6 +158,8 @@ router.get("/view-requests", validateSession, async (req, res) => {
         firstName: mentee.firstName,
         lastName: mentee.lastName,
         email: mentee.email,
+        interests: mentee.interests,
+        project: mentee.project,
       }));
       // give success response when matches are found
       res.status(200).json({
@@ -228,6 +228,8 @@ router.get("/view-matches", validateSession, async (req, res) => {
         firstName: mentee.firstName,
         lastName: mentee.lastName,
         email: mentee.email,
+        interests: mentee.interests,
+        project: mentee.project,
       }));
       res.status(200).json({
         message: "Your matched mentees were retrieved successfully",
@@ -313,7 +315,6 @@ router.post("/deny/:menteeId", validateSession, async (req, res) => {
     // get mentor's id from the token and mentee's id from the URL
     const mentorId = req.user._id;
     const menteeId = req.params.menteeId;
-    
 
     // Find both users from their id's
     const mentor = await Mentor.findById(mentorId);
