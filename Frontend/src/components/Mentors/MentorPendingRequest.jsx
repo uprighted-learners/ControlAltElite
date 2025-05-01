@@ -81,7 +81,7 @@ const MentorPendingRequest = (props) => {
       <div className="w-1/2 mx-auto">
         <ul className="list rounded-box shadow-md">
           <li className="p-4 pb-2 text-lg opacity-90 tracking-wide font-semibold text-white bg-[#1b0a5f] rounded-box shadow-md text-center">
-            Pending Mentor Requests
+            Pending Requests
           </li>
 
           {mentees.map((mentee, index) => (
