@@ -11,6 +11,8 @@ const SignUp = (props) => {
   const [guardianEmail, setGuardianEmail] = useState(""); // added by nick
   const [school, setSchool] = useState(""); // added by nick
   const [ageCheck, setAgeCheck] = useState(false); // added by nick
+  const [project, setProject] = useState(""); //added by Maddie
+  const [interests, setInterests] = useState("");//added by Maddie
   // const [zipcode, setZipcode] = useState("");
 
   // TODO: Create a function called handleSubmit that will console.log("Click Worked")
@@ -33,6 +35,8 @@ const SignUp = (props) => {
         guardianEmail,
         school,
         ageCheck,
+        project,
+        interests,
       };
       console.log(requestBody);
       const response = await fetch(API_REGISTER, {
@@ -163,7 +167,32 @@ const SignUp = (props) => {
                 Mount Anthony Union High School
               </option>
             </select>
-
+            <label className="pb-2 uppercase" htmlFor="interests">
+              Interests:
+            </label>
+            <input
+              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+              type="text"
+              name="interests"
+              id="interests"
+              placeholder="Interests"
+              value={interests}
+              onChange={(e) => setInterests(e.target.value)}
+              // required
+            />
+            <label className="pb-2 uppercase" htmlFor="project">
+              Project: (Must Chose "Video" or "Science")
+            </label>
+            <input
+              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
+              type="text"
+              name="project"
+              id="project"
+              placeholder="Project"
+              value={project}
+              onChange={(e) => setProject(e.target.value)}
+              // required
+            />
             {/* TODO checkbox for age verification */}
             {/* Age Check */}
             <div className="flex items-center mb-4">
@@ -179,6 +208,7 @@ const SignUp = (props) => {
               <label htmlFor="ageCheck">
                 I confirm that I am over 13 years old
               </label>
+              
             </div>
 
             <button

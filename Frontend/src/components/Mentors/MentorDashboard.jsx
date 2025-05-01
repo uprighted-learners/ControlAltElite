@@ -17,7 +17,8 @@ const MentorDashboard = (props) => {
       try {
         const res = await fetch(API_VIEW_MENTOR_MATCH, {
           headers: {
-            Authorization: `Bearer ${props.token}`,
+            Authorization: `${props.token}`,
+             "Content-Type": "application/json",
           },
         });
         const data = await res.json();

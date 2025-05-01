@@ -38,7 +38,7 @@ const Login = (props) => {
 
       // Update Token from the App.jsx file
       console.log(data);
-      // props.updateToken(data.token);
+      props.updateToken(data.token);
 
       //route to userType login
       if (data.user.userType === "Admin") {

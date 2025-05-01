@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import MentorProfile from "../Mentors/MentorProfile";
 import MenteeProfileEdit from "./MenteeProfileEdit";
 import { API_VIEW_MENTORS } from "../../constants/endpoints";
+import MentorDirectory from "../public-views/MentorDirectory";
+import MenteeProfile from "./MenteeProfile";
 
 const MenteeDashboard = (props) => {
   const [mentor, setMentor] = useState({});
@@ -42,7 +44,9 @@ const MenteeDashboard = (props) => {
           <h1 className="text-2xl text-center uppercase">Mentee Name</h1>
         </div>
         <div className="container mx-auto py-18">
-          <div className="flex items-center justify-center bg-black/50 uppercase max-w-[450px] mx-auto text-white p-4 rounded-md mt-4">
+        <MentorDirectory token={props.token}/> 
+        <MenteeProfile token={props.token}/>
+          {/* <div className="flex items-center justify-center bg-black/50 uppercase max-w-[450px] mx-auto text-white p-4 rounded-md mt-4">
             <p>Match Request Sent</p>
           </div>
           <div className="flex items-center justify-center bg-black/50 max-w-[650px] mx-auto text-white text-center p-4 rounded-md mt-4">
@@ -53,7 +57,7 @@ const MenteeDashboard = (props) => {
           </div>
           <div className="flex items-center justify-center p-4 mt-4 text-center text-white rounded-md">
             <button className="bg-[#1b0a5f] px-12 py-2 rounded-md uppercase"><a href="">Mentor List</a></button>
-          </div>
+          </div> */}
           {/* / ! Added for Update mentee profile button */}
           <div className="flex flex-col-reverse items-center justify-center p-4 mt-4 text-center text-black rounded-md">
           <MenteeProfileEdit token={props.token}/>
