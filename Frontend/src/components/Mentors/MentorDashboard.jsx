@@ -53,9 +53,9 @@ const MentorDashboard = (props) => {
       <MentorPendingRequest token={props.token} />
 
       {/* Just Project Preview */}
-      <div className="p-4 mt-4 rounded-md shadow bg-base-200">
+      {/* <div className="p-4 mt-4 rounded-md shadow bg-base-200">
         <MenteePreview token={props.token} />
-      </div>
+      </div> */}
 
       {/* Toggle Preview Button */}
       <button className="mt-4 btn" onClick={togglePreview}>

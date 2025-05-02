@@ -13,7 +13,7 @@ const MentorPreview = ({ token }) => {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              'Authorization': `${token}`,
             },
           });
   
@@ -23,12 +23,7 @@ const MentorPreview = ({ token }) => {
           console.log("Mentor data from match:", data); // Check structure in console
   
           // Example assuming response like { mentor: { name, interest, ... }, mentee: { interest, answer } }
-          setMentor(data.mentor ? { 
-            name: data.mentor.name, 
-            interest: data.mentor.interest, 
-            menteeInterest: data.mentee?.interest, 
-            menteeAnswer: data.mentee?.answer 
-          } : null);
+          setMentor(data.matches[0] || data);
         } catch (error) {
           console.error("Error fetching mentor data:", error);
         }
