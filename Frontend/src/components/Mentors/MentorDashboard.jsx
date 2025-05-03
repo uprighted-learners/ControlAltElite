@@ -3,6 +3,7 @@ import MenteePreview from "./MenteePreview";
 import MentorNavbar from "./MentorNavbar";
 import MentorPendingRequest from "./MentorPendingRequest";
 import { API_VIEW_MENTOR_MATCH } from "../../constants/endpoints";
+import { Link } from "react-router-dom";
 
 const MentorDashboard = (props) => {
   const [showMenteePreview, setShowMenteePreview] = useState(false);
@@ -35,7 +36,6 @@ const MentorDashboard = (props) => {
     fetchMentorInfo();
   }, [props.token]);
 
-
   return (
     <>
       {/* <MentorNavbar /> */}
@@ -45,6 +45,11 @@ const MentorDashboard = (props) => {
           <h1 className="text-2xl font-bold text-center uppercase">
             Mentor Name: {mentorName}
           </h1>
+        </div>
+        <div className="mt-4 flex justify-center">
+          <Link to="/updateProfile" className="btn btn-primary">
+            View/Edit Profile
+          </Link>
         </div>
       </div>
 
