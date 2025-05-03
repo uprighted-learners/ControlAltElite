@@ -6,7 +6,6 @@ export const API_REGISTER = `${API}/user/register`;
 
 export const API_MENTOR_PROFILE = `${API}/user/mentor/update`;
 
-
 export const API_DELETE_MENTOR = `${API}/user/delete`;
 
 export const API_VIEW_MENTOR_MATCH = `${API}/match/view-matches`;
@@ -28,5 +27,7 @@ export const API_ADMIN_DELETE_MENTOR = `${API}/admin/mentor/delete`;
 export const API_REQUEST_MENTOR = `${API}/match/request`;
 
 export const API_MENTEE_PROFILE_PREVIEW = `${API}/user/mentee/profile`;
+
+export const API_MENTOR_PROFILE_PREVIEW = `${API}/user/mentor/profile`;
 
 
