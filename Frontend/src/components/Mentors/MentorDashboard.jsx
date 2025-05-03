@@ -3,6 +3,7 @@ import MenteePreview from "./MenteePreview";
 import MentorNavbar from "./MentorNavbar";
 import MentorPendingRequest from "./MentorPendingRequest";
 import { API_VIEW_MENTOR_MATCH } from "../../constants/endpoints";
+import MentorProfileEdit from "./MentorProfileEdit";
 
 const MentorDashboard = (props) => {
   const [showMenteePreview, setShowMenteePreview] = useState(false);
@@ -15,14 +16,14 @@ const MentorDashboard = (props) => {
   useEffect(() => {
     const fetchMentorInfo = async () => {
       try {
+        // TODO: need to check backend fetch endpoint to make mentor name dynamic
         const res = await fetch(API_VIEW_MENTOR_MATCH, {
           headers: {
-            Authorization: `${props.token}`,
+            Authorization: `Bearer ${props.token}`,
             "Content-Type": "application/json",
           },
         });
         const data = await res.json();
-        // assuming the name is in data.mentor.name or similar
         if (data && data.mentor && data.mentor.name) {
           setMentorName(data.mentor.name);
         } else {
@@ -35,7 +36,6 @@ const MentorDashboard = (props) => {
 
     fetchMentorInfo();
   }, [props.token]);
-
 
   return (
     <>
@@ -53,14 +53,17 @@ const MentorDashboard = (props) => {
       <MentorPendingRequest token={props.token} />
 
       {/* Just Project Preview */}
-      <div className="p-4 mt-4 rounded-md shadow bg-base-200">
+      {/* <div className="p-4 mt-4 rounded-md shadow bg-base-200">
         <MenteePreview token={props.token} />
-      </div>
+      </div> */}
 
       {/* Toggle Preview Button */}
       <button className="mt-4 btn" onClick={togglePreview}>
         {showMenteePreview ? "Hide Matched Mentee " : "View Matched Mentee"}
       </button>
+      <div className="flex flex-col-reverse items-center justify-center p-4 mt-4 text-center text-black rounded-md">
+        <MentorProfileEdit token={props.token} />
+      </div>
 
       {showMenteePreview && (
         <div className="p-4 mt-4 rounded-md shadow bg-base-200">

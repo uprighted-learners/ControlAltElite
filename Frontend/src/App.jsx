@@ -9,17 +9,12 @@ import MainIndex from "./components/MainIndex";
 import MentorDashboard from "./components/Mentors/MentorDashboard";
 import MenteeDashboard from "./components/Mentees/MenteeDashboard";
 import MentorProfile from "./components/Mentors/MentorProfile";
-// import AdminDashboard from "./pages/AdminDashboard";
 import MentorMatchList from "./components/Mentors/MentorMatchList";
 import MentorPendingRequest from "./components/Mentors/MentorPendingRequest";
-
-
-
 import MenteePreview from "./components/Mentors/MenteePreview";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import AdminMentorList from "./components/Admin/Mentor-List/AdminMentorList";
 import Login from "./components/auth/login-section/login";
-
 
 function App() {
   //state variable for token and initialize to the value of the token stored in local storage

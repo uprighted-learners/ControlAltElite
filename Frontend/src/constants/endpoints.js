@@ -27,3 +27,6 @@ export const API_ADMIN_DELETE_MENTOR = `${API}/admin/mentor/delete`;
 
 export const API_REQUEST_MENTOR = `${API}/match/request`;
 
+export const API_MENTEE_PROFILE_PREVIEW = `${API}/user/mentee/profile`;
+
+

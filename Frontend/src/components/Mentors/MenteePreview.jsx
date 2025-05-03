@@ -12,16 +12,17 @@ const MenteePreview = ({ token }) => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            'Authorization': `${token}`,
           },
         });
 
         if (!response.ok) throw new Error("Failed to fetch mentee data");
 
         const data = await response.json();
+        console.log(data)
 
         // Adjust this depending on the shape of your backend response
-        setMentee(data.mentee || data); 
+        setMentee(data.matches[0] || data); 
       } catch (error) {
         console.error("Error fetching mentee data:", error);
       }
@@ -31,7 +32,6 @@ const MenteePreview = ({ token }) => {
   }, [token]);
 
   if (!mentee) return <div className="text-center mt-10">Loading...</div>;
-
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-3xl mx-auto">
       {/* Project Title */}
@@ -43,11 +43,11 @@ const MenteePreview = ({ token }) => {
       <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <span className="font-medium text-gray-700">Name:</span>
-          <span className="text-gray-900 text-lg">{mentee.name}</span>
+          <span className="text-gray-900 text-lg">{mentee.firstName+" "+mentee.lastName}</span>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-medium text-gray-700">Interest:</span>
-          <span className="text-gray-900 text-lg">{mentee.interest}</span>
+          <span className="font-medium text-gray-700">Interests: {mentee.interests}</span>
+          <span className="text-gray-900 text-lg">{mentee.interests}</span>
         </div>
       </div>
     </div>

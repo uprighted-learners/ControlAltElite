@@ -46,6 +46,12 @@ const MenteeSchema = new mongoose.Schema({
   },
   interests: {
     type: String,
+    enum: [
+      "Science",
+      "Technology",
+      "Engineering",
+      "Mathematics",
+    ],
     required: false,
   },
   school: {
@@ -60,6 +66,14 @@ const MenteeSchema = new mongoose.Schema({
   guardianEmail: {
     type: String,
     required: true,
+  },
+  project: {
+    type: String,
+    enum: [
+      "Science",
+      "Video",
+    ],
+    required: false,
   },
   // Make sure user is over age of 13
   ageCheck: {
