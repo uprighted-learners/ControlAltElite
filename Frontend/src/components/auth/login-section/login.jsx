@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import SignupButton from "../../custom/SignupButton";
 import { API_LOGIN } from "../../../constants/endpoints";
 
 const Login = (props) => {
   const [email, setEmail] = useState("student@example.com");
   const [password, setPassword] = useState("password123");
+  const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -42,13 +44,16 @@ const Login = (props) => {
 
       //route to userType login
       if (data.user.userType === "Admin") {
-        window.location.href = "/admin"; // Redirect to admin dashboard
+        // window.location.href = "/admin"; // Redirect to admin dashboard
+        navigate("/admin");;
         alert(`Login Successful! as ${data.user.userType}`); // Show success message
       } else if (data.user.userType === "Mentor") {
-        window.location.href = "/mentor"; // Redirect to mentor page
+        // window.location.href = "/mentor"; // Redirect to mentor page
+        navigate("/mentor");
         alert(`Login Successful! as ${data.user.userType}`); // Show success message
       } else if (data.user.userType === "Mentee") {
-        window.location.href = "/mentee"; // Redirect to mentee page
+        // window.location.href = "/mentee"; // Redirect to mentee page
+        navigate("/mentee");
         alert(`Login Successful! as ${data.user.userType}`); // Show success message
       } else {
         alert("Login Failed! Check your email and password."); // Show error

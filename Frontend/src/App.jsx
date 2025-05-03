@@ -15,6 +15,7 @@ import MenteePreview from "./components/Mentors/MenteePreview";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import AdminMentorList from "./components/Admin/Mentor-List/AdminMentorList";
 import Login from "./components/auth/login-section/login";
+import Logout from "./components/auth/Logout";
 
 function App() {
   //state variable for token and initialize to the value of the token stored in local storage
@@ -37,7 +38,7 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar token={token}/>
       <Routes>
         <Route path="/" element={<HomePage token={token}/>} />
         {/* <Route path="/mentor" element={<MentorDashboard />} /> */}
@@ -48,6 +49,7 @@ function App() {
         <Route path="/mentor" element={<MentorDashboard token={token} />} />
         <Route path="/mentee" element={<MenteeDashboard token={token}/>} />
         <Route path="/admin" element={<AdminDashboard token={token}/>} />
+        <Route path="/logout" element={<Logout setToken={setToken}/>} />
         {/* <Route path="/updateProfile" element={<MentorProfile />} /> */}
         {/* <Route path="/createMentor" element={<CreateMentor />} /> */}
         
