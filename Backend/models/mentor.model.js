@@ -50,7 +50,7 @@ const MentorSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  interests: {
+  interests: [{
     type: String,
     enum: [
       "Music (listening and/or dancing, singing)",
@@ -66,11 +66,9 @@ const MentorSchema = new mongoose.Schema({
       "Pets and animals",
       "Gardening",
       "Cars, motorcycles, boats, power equipment",
-      "Technology",
       "Government, politics, debating",
     ],
-    required: false,
-  },
+  }],
   questionToAsk: {
     type: String,
     required: false,
