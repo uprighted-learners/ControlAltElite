@@ -15,6 +15,6 @@ export const navMenu = [
     },
     {
         name: "Upright",
-        href: "/upright",
+        href: "https://www.uprighted.com/",
     }
 ]

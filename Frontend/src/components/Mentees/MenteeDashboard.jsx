@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import MentorProfile from "../Mentors/MentorProfile";
 import MenteeProfileEdit from "./MenteeProfileEdit";
-import { API_VIEW_MENTORS } from "../../constants/endpoints";
+import { API_MENTEE_PROFILE_PREVIEW, API_VIEW_MENTORS } from "../../constants/endpoints";
 import MentorDirectory from "../public-views/MentorDirectory";
 import MenteeProfile from "./MenteeProfile";
 import MentorPreview from "./MentorPreview";
@@ -10,10 +10,26 @@ import MentorPreview from "./MentorPreview";
 const MenteeDashboard = (props) => {
   const [mentor, setMentor] = useState({});
   const [showMentorPreview, setShowMentorPreview] = useState(false);
-
+  const [mentee, setMentee] = useState({});
   const toggleMentorPreview = () => {
     setShowMentorPreview(!showMentorPreview);
   };
+
+  async function getMentee() {
+    //Headers
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", props.token);
+  //Request
+    let requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+  //Send Request
+    let response = await fetch(API_MENTEE_PROFILE_PREVIEW, requestOptions);
+    let menteeData = await response.json();
+    setMentee(menteeData.user);
+  }
 
   async function getMentor() {
     //Headers
@@ -36,6 +52,7 @@ const MenteeDashboard = (props) => {
 
   useEffect(() => {
     getMentor();
+    getMentee();
   }, []);
 
   // Function to handle mentor selection
@@ -48,7 +65,7 @@ const MenteeDashboard = (props) => {
     <>
       <div className="container h-full p-4 mx-auto">
         <div className="bg-[#1b0a5f] text-white flex flex-col md:flex-row items-center justify-center md:justify-between p-4 rounded-md">
-          <h1 className="text-2xl text-center uppercase">Mentee Name: </h1>
+          <h1 className="text-2xl text-center uppercase">Mentee Name: {`${mentee?.firstName} ${mentee?.lastName}` || "Loading..."}</h1>
         </div>
         <div className="container mx-auto py-18">
           <MentorDirectory token={props.token} />
