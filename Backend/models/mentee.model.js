@@ -44,7 +44,7 @@ const MenteeSchema = new mongoose.Schema({
     type: Number,
     required: false, // Initially false for basic signup, but is required for profile completion
   },
-  interests: {
+  interests: [{
     type: String,
     enum: [
       "Music (listening and/or dancing, singing)",
@@ -60,11 +60,9 @@ const MenteeSchema = new mongoose.Schema({
       "Pets and animals",
       "Gardening",
       "Cars, motorcycles, boats, power equipment",
-      "Technology",
       "Government, politics, debating",
     ],
-    required: false,
-  },
+  }],
   school: {
     type: String,
     enum: [
