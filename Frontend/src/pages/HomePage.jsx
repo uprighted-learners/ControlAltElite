@@ -3,7 +3,7 @@ import React from 'react'
 import MentorDirectory from "../components/public-views/MentorDirectory";
 import SignUp from '../components/auth/signup-section/SignUp';
 
-const HomePage = () => {
+const HomePage = (props) => {
   return (
     <>
       <div className="bg-[url('https://images.unsplash.com/photo-1531101930610-1b86e66d5fd7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] relative z-0 bg-cover bg-no-repeat w-full lg:h-screen after:content-[''] after:absolute after:inset-0 after:bg-black after:opacity-50">
@@ -27,13 +27,13 @@ const HomePage = () => {
                 <option value="mathematics">Mathematics</option>
               </select>
               <div className='py-2'>
-                <MentorDirectory />
+                <MentorDirectory token={props.token}/>
               </div>
               <div className='py-2'>
-                <MentorDirectory />
+                <MentorDirectory token={props.token}/>
               </div>
               <div className='py-2'>
-                <MentorDirectory />
+                <MentorDirectory token={props.token}/>
               </div>
             </div>
             <div className='col-span-1 md:col-span-2'>

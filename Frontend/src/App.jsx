@@ -18,6 +18,7 @@ import MentorPendingRequest from "./components/Mentors/MentorPendingRequest";
 import MenteePreview from "./components/Mentors/MenteePreview";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import AdminMentorList from "./components/Admin/Mentor-List/AdminMentorList";
+import Login from "./components/auth/login-section/login";
 
 
 function App() {
@@ -43,7 +44,7 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage token={token}/>} />
         {/* <Route path="/mentor" element={<MentorDashboard />} /> */}
         {/* <Route path="/mentee" element={<MenteeDashboard />} /> */}
         {/* <Route path="/adminDashboard" element={<AdminDashboard />} /> */}
@@ -71,7 +72,7 @@ function App() {
         {/* Commented out because using in route /mentor instead (see above) */}
         {/* <Route path="/mentorDashboard" element={<MentorDashboard />} /> */}
         <Route path="/signup" element={<Auth updateToken={updateToken} />} />
-        <Route path="/login" element={<MainIndex token={token} />} />
+        <Route path="/login" element={<Login token={token} updateToken={updateToken}  />} />
       </Routes>
       {/* <div className="content-body">
         {!token && <Auth updateToken={updateToken} />}
