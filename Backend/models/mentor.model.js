@@ -26,9 +26,8 @@ const MentorSchema = new mongoose.Schema({
   },
 
   // Mentor specific profile fields
- //   ! match requests
+  //   ! match requests
   // ref allows .populate() to be used in controllers - tells mongoose which model to use
-
 
   approvedMentees: [
     {
@@ -53,6 +52,23 @@ const MentorSchema = new mongoose.Schema({
   },
   interests: {
     type: String,
+    enum: [
+      "Music (listening and/or dancing, singing)",
+      "Technology",
+      "Sports",
+      "Outdoors activities (hiking, camping, fishing, etc.)",
+      "Books and writing",
+      "Creating (art, knitting, etc.)",
+      "Working out",
+      "Food (cooking and yummy eating)",
+      "Video gaming",
+      "Non-video gaming",
+      "Pets and animals",
+      "Gardening",
+      "Cars, motorcycles, boats, power equipment",
+      "Technology",
+      "Government, politics, debating",
+    ],
     required: false,
   },
   questionToAsk: {
@@ -65,7 +81,6 @@ const MentorSchema = new mongoose.Schema({
     enum: ["video", "science"],
     required: false,
   },
-
 });
 
 module.exports = mongoose.model("Mentor", MentorSchema);
