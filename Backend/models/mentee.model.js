@@ -22,7 +22,7 @@ const MenteeSchema = new mongoose.Schema({
   userType: {
     type: String,
     default: "Mentee",
-    immutable: true, 
+    immutable: true,
   },
   // ! arrays for tracking matches and requests
   // ref allows .populate() to be used in controllers - tells mongoose which model to use
@@ -47,10 +47,21 @@ const MenteeSchema = new mongoose.Schema({
   interests: {
     type: String,
     enum: [
-      "Science",
+      "Music (listening and/or dancing, singing)",
       "Technology",
-      "Engineering",
-      "Mathematics",
+      "Sports",
+      "Outdoors activities (hiking, camping, fishing, etc.)",
+      "Books and writing",
+      "Creating (art, knitting, etc.)",
+      "Working out",
+      "Food (cooking and yummy eating)",
+      "Video gaming",
+      "Non-video gaming",
+      "Pets and animals",
+      "Gardening",
+      "Cars, motorcycles, boats, power equipment",
+      "Technology",
+      "Government, politics, debating",
     ],
     required: false,
   },
@@ -69,10 +80,7 @@ const MenteeSchema = new mongoose.Schema({
   },
   project: {
     type: String,
-    enum: [
-      "Science",
-      "Video",
-    ],
+    enum: ["Science", "Video"],
     required: false,
   },
   // Make sure user is over age of 13
