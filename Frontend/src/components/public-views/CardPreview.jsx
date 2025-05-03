@@ -31,7 +31,7 @@ const CardPreview = (props) => {
   }
   return (
     <>
-      <div className="box-border w-full max-w-sm mx-auto bg-white rounded-sm shadow-sm card">
+      <div className="flex justify-center mt-4 box-border w-full max-w-sm mx-auto bg-white rounded-sm shadow-sm card">
         <figure className="px-10 pt-10">
           {/* Profile Image */}
           <img
@@ -48,11 +48,11 @@ const CardPreview = (props) => {
           </h2>
           {/* Mentor description */}
           <p className="text-lg text-black">Interests: {props.interests}</p>
-          <div className="text-center card-actions">
+          <div className="flex justify-center mt-4">
             {/* Connect button */}
             {/* <a className="mx-auto text-center" href="/MentorMatchList"> */}
               <button onClick={handleMatchRequest} 
-              className="px-6 py-2 rounded-md bg-[#1B0A5F] hover:bg-[#6C50E1] text-lg">
+              className="px-6 py-2 rounded-md bg-[#1B0A5F] hover:bg-[#6C50E1] text-lg text-white">
                 Request Mentor
               </button>
             {/* </a> */}

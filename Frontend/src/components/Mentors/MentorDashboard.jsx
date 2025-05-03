@@ -12,7 +12,6 @@ const MentorDashboard = (props) => {
   const [showMenteePreview, setShowMenteePreview] = useState(false);
   const [mentorName, setMentorName] = useState("");
   const [mentor, setMentor] = useState({});
-  const [refreshKey, setRefreshKey] = useState(0);
 
   const togglePreview = () => {
     setShowMenteePreview(!showMenteePreview);
@@ -38,18 +37,6 @@ const MentorDashboard = (props) => {
     };
     fetchMentorInfo();
   }, [props.token]);
-  
-  // const handleAccept = async (menteeId) => {
-  //   await fetch(`http://localhost:4000/match/accept/${menteeId}`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${props.token}`,
-  //     },
-  //   });
-  
-  //   setRefreshKey(prev => prev + 1); // Force re-render
-  // };
 
   return (
     <>
@@ -68,11 +55,6 @@ const MentorDashboard = (props) => {
 
       {/* View Pending Requests */}
       <MentorPendingRequest token={props.token} />
-
-      {/* Just Project Preview */}
-      {/* <div className="p-4 mt-4 rounded-md shadow bg-base-200">
-        <MenteePreview token={props.token} />
-      </div> */}
 
       {/* Toggle Preview Button */}
       <button className="mt-4 btn" onClick={togglePreview}>
