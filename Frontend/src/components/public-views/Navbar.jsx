@@ -3,6 +3,7 @@ import { navMenu } from "../../constants/data";
 import MobileNav from "./MobileNav";
 
 function Navigationbar(props) {
+  const { token } = props;
   return (
     <>
       <div className="relative top-0 z-10 w-full bg-[#1b0a5f] border-b-4 border-[#eab246]">
@@ -15,8 +16,20 @@ function Navigationbar(props) {
                 </li>
               ))}
               <div className="ml-4 space-x-4">
-                <button className="bg-[#eab246] text-white uppercase px-6 py-2 rounded-md"><a href="/signup">Sign Up</a></button>
-                <button className="bg-[#eab246] text-white uppercase px-6 py-2 rounded-md"><a href="/login">Login</a></button>
+              {!token ? (
+                  <>
+                    <button className="bg-[#eab246] text-white uppercase px-6 py-2 rounded-md">
+                      <a href="/signup">Sign Up</a>
+                    </button>
+                    <button className="bg-[#eab246] text-white uppercase px-6 py-2 rounded-md">
+                      <a href="/login">Login</a>
+                    </button>
+                  </>
+                ) : (
+                  <button className="bg-[#eab246] text-white uppercase px-6 py-2 rounded-md">
+                    <a href="/logout">Logout</a>
+                  </button>
+                )}
               </div>
             </ul>
           </div>
