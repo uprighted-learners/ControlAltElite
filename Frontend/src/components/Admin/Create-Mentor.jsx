@@ -22,6 +22,7 @@ export default function CreateMentor(props) {
     try {
       let headers = new Headers();
       headers.append("Content-Type", "application/json");
+      headers.append("Authorization", props.token);
 
       let body = JSON.stringify({
         firstName: firstName,
@@ -45,13 +46,17 @@ export default function CreateMentor(props) {
 
       let data = await response.json();
       console.log(data);
-      props.setRefreshMentors(true);
 
+      // Status error if creating mentor fails
       if (!response.ok) {
-        alert("Mentor Creation Failed! " + data.message);
+        alert("Mentor creation failed! ", data.message);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      alert("Mentor Created Successfully!");
+
+      // Refresh list of mentors and alert that mentor creation successful
+      props.setRefreshMentors(true);
+      alert("Mentor created successfully!");
+
     } catch (error) {
       console.log(error);
     }
