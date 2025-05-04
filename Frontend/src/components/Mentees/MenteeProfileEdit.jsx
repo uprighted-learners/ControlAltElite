@@ -67,7 +67,7 @@ const MenteeProfileEdit = (props) => {
         className="btn mt-4 btn-soft btn-primary"
         onClick={() => setShowForm(!showForm)}
       >
-        {showForm ? "Cancel" : "Update"}
+        {showForm ? "Cancel" : "Update Profile"}
       </button>
       {/* Only shows update input box if the button (above) is clicked */}
       {showForm && (

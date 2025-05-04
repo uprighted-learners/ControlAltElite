@@ -254,6 +254,9 @@ router.get("/view-matches", validateSession, async (req, res) => {
         firstName: mentor.firstName,
         lastName: mentor.lastName,
         email: mentor.email,
+        interests: mentor.interests,
+        projectCategory: mentor.projectCategory,
+        questionToAsk: mentor.questionToAsk,
       }));
       // Give success message
       res.status(200).json({

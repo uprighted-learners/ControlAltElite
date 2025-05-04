@@ -66,7 +66,7 @@ const MentorDashboard = (props) => {
 
       {showMenteePreview && (
         <div className="p-4 mt-4 rounded-md shadow bg-base-200">
-          <MenteePreview token={props.token} key={refreshKey} />
+          <MenteePreview token={props.token} />
         </div>
       )}
     </>
