@@ -5,7 +5,7 @@ const MentorProfileEdit = (props) => {
   // Update First Name
   const [updatedFirstName, setUpdatedFirstName] = useState("");
   // Update Last Name
-  const [updatedLastName, setUpdatedLastName] = useState();
+  const [updatedLastName, setUpdatedLastName] = useState("");
   // Update Email
   const [updatedEmail, setUpdatedEmail] = useState("");
   // Update Bio
@@ -55,8 +55,11 @@ const MentorProfileEdit = (props) => {
       setUpdatedBio("");
       setUpdatedQuestionToAsk("");
       // Toggles whether the update form is shown
-      setShowForm(false);
+      props.setShowForm(false);
+      //Fetch mentor data
+      props.fetchMentorData();
       // Response Object
+      console.log("Token:", props.token);
       let data = await response.json();
       console.log(data);
     } catch (error) {
