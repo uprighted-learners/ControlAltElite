@@ -31,7 +31,7 @@ const CardPreview = (props) => {
   }
   return (
     <>
-      <div className="flex justify-center mt-4 box-border w-full max-w-sm mx-auto bg-white rounded-sm shadow-sm card">
+      <div className="mt-4 box-border w-full max-w-sm mx-auto bg-white rounded-sm shadow-sm card">
         <figure className="px-10 pt-10">
           {/* Profile Image */}
           <img

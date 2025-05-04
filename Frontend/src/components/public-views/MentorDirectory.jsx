@@ -84,15 +84,17 @@ const MentorDirectory = (props) => {
     <>
       {/* Swiper Carousel */}
       <Swiper
-        // direction="vertical"
-        spaceBetween={30}
-        slidesPerView={3}
-        style={{ height: "auto", width: "100%"}} // adjust as needed
-        onSlideChange={() => console.log("slide change")}
-        onSwiper={(swiper) => console.log(swiper)}
+  direction="vertical"
+  spaceBetween={20}
+  slidesPerView={2}
+  mousewheel={true}
+  pagination={{
+    clickable: true,
+  }}
+  className="h-[1100px] w-full"
       >
         {mentorData.map((mentor) => (
-          <SwiperSlide key={mentor.id} className="flex items-center justify-center">
+          <SwiperSlide key={mentor.id} className="flex items-center justify-center min-h-[500px]">
             {/* <CardPreview
               imageUrl={mentor.imageUrl}
               title={mentor.title}

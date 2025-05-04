@@ -27,7 +27,6 @@ const MentorProfile = ({ token }) => {
     }
   };
 
-  // ✅ Still use it in useEffect
   useEffect(() => {
     if (token) fetchMentorData();
   }, [token]);
