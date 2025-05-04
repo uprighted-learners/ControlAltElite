@@ -44,25 +44,26 @@ const MenteeSchema = new mongoose.Schema({
     type: Number,
     required: false, // Initially false for basic signup, but is required for profile completion
   },
-  interests: [{
-    type: String,
-    enum: [
-      "Music (listening and/or dancing, singing)",
-      "Technology",
-      "Sports",
-      "Outdoors activities (hiking, camping, fishing, etc.)",
-      "Books and writing",
-      "Creating (art, knitting, etc.)",
-      "Working out",
-      "Food (cooking and yummy eating)",
-      "Video gaming",
-      "Non-video gaming",
-      "Pets and animals",
-      "Gardening",
-      "Cars, motorcycles, boats, power equipment",
-      "Government, politics, debating",
-    ],
-  }],
+  interests: [
+    {
+      type: String,
+      enum: [
+        "Music (listening and/or dancing, singing)",
+        "Technology",
+        "Sports",
+        "Outdoors activities (hiking, camping, fishing, etc.)",
+        "Books and writing",
+        "Art",
+        "Exercising",
+        "Food",
+        "Gaming",
+        "Pets and animals",
+        "Gardening",
+        "Cars, motorcycles, boats, power equipment",
+        "Politics",
+      ],
+    },
+  ],
   school: {
     type: String,
     enum: [
