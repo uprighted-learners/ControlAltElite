@@ -51,19 +51,29 @@ const MentorDashboard = (props) => {
           </h1>
         </div>
       </div>
+      {/* TWO COLUMN LAYOUT */}
+      <div className="container mx-auto p-4 px-4">
+  <div className="flex flex-col md:flex-row gap-6">
+      {/* LEFT SIDE */}
+      <div className="w-full md:w-1/2 space-y-4 flex flex-col items-center pt-6">
       {/* View Pending Requests */}
       <MentorPendingRequest token={props.token} />
-      {/* Mentors Profile */}
-      <MentorProfile token={props.token} />
       {/* Toggle Mentee Preview Button */}
-      <button className="mt-4 btn" onClick={togglePreview}>
+      <button className="btn mt-2 btn-soft btn-primary text-xl px-8 py-4 pt-4" onClick={togglePreview}>
         {showMenteePreview ? "Hide Matched Mentee " : "View Matched Mentee"}
       </button>
       {showMenteePreview && (
-        <div className="p-4 mt-4 rounded-md shadow bg-base-200">
+        <div className="p-4 mt-4 rounded-md w-full md:w-[90%] shadow bg-sky-50">
           <MenteePreview token={props.token} />
         </div>
       )}
+      </div>
+      {/* RIGHT SIDE */}
+      <div className="w-full md:w-1/2 space-y-4">
+      {/* Mentors Profile */}
+      <MentorProfile token={props.token} />
+      </div>
+      </div></div>
     </>
   );
 };
