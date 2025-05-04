@@ -159,7 +159,7 @@ const MentorProfileEdit = (props) => {
               onChange={(e) => setUpdatedFirstName(e.target.value)}
               id="firstNameUpdate"
               name="firstName"
-              placeholder="Type Here"
+              placeholder={props.mentor.firstName || "Type Here"}
               type="text"
             />
             
@@ -170,7 +170,7 @@ const MentorProfileEdit = (props) => {
               onChange={(e) => setUpdatedLastName(e.target.value)}
               id="lastNameUpdate"
               name="LastName"
-              placeholder="Type Here"
+              placeholder={props.mentor.lastName || "Type Here"}
               type="text"
             />
             
@@ -181,7 +181,7 @@ const MentorProfileEdit = (props) => {
               onChange={(e) => setUpdatedEmail(e.target.value)}
               id="emailUpdate"
               name="email"
-              placeholder="Type Here"
+              placeholder={props.mentor.email || "Type Here"}
               type="text"
             />
             
@@ -192,7 +192,7 @@ const MentorProfileEdit = (props) => {
               onChange={(e) => setUpdatedBio(e.target.value)}
               id="bioUpdate"
               name="bio"
-              placeholder="Type Here"
+              placeholder={props.mentor.bio || "Type Here"}
               type="text"
             />
             
@@ -204,7 +204,7 @@ const MentorProfileEdit = (props) => {
               onChange={(e) => setUpdatedQuestionToAsk(e.target.value)}
               id="questionToAskUpdate"
               name="questionToAsk"
-              placeholder="Type Here"
+              placeholder={props.mentor.questionToAsk || "Type Here"}
               type="text"
               className="input input-bordered bg-white text-black w-full max-w-xl mb-2 mt-2"
             />
