@@ -6,7 +6,7 @@ import {
   API_MENTOR_PROFILE_PREVIEW,
   API_VIEW_MENTOR_MATCH,
 } from "../../constants/endpoints";
-import MentorProfileEdit from "./MentorProfileEdit";
+import MentorProfile from "./MentorProfile";
 
 const MentorDashboard = (props) => {
   const [showMenteePreview, setShowMenteePreview] = useState(false);
@@ -41,7 +41,6 @@ const MentorDashboard = (props) => {
   return (
     <>
       {/* <MentorNavbar /> */}
-
       <div className="container h-full p-4 mx-auto">
         <div className="bg-[#1b0a5f] text-white flex flex-col md:flex-row items-center justify-center md:justify-between p-4 rounded-md">
           <h1 className="text-2xl font-bold text-center uppercase">
@@ -52,18 +51,14 @@ const MentorDashboard = (props) => {
           </h1>
         </div>
       </div>
-
       {/* View Pending Requests */}
       <MentorPendingRequest token={props.token} />
-
-      {/* Toggle Preview Button */}
+      {/* Mentors Profile */}
+      <MentorProfile token={props.token} />
+      {/* Toggle Mentee Preview Button */}
       <button className="mt-4 btn" onClick={togglePreview}>
         {showMenteePreview ? "Hide Matched Mentee " : "View Matched Mentee"}
       </button>
-      <div className="flex flex-col-reverse items-center justify-center p-4 mt-4 text-center text-black rounded-md">
-        <MentorProfileEdit token={props.token} />
-      </div>
-
       {showMenteePreview && (
         <div className="p-4 mt-4 rounded-md shadow bg-base-200">
           <MenteePreview token={props.token} />
