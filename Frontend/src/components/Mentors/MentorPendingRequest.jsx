@@ -78,7 +78,7 @@ const MentorPendingRequest = (props) => {
 
   return (
     <>
-      <div className="w-1/2 mx-auto">
+      <div className="w-full md:w-[95%] px-4 pb-4">
         <ul className="list rounded-box shadow-md">
           <li className="p-4 pb-2 text-lg opacity-90 tracking-wide font-semibold text-white bg-[#1b0a5f] rounded-box shadow-md text-center">
             Pending Requests

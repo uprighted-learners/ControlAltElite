@@ -16,7 +16,7 @@ const MentorProfileEdit = (props) => {
   const [updatedQuestionToAsk, setUpdatedQuestionToAsk] = useState("");
 
   // Toggle for update form
-  const [showForm, setShowForm] = useState(false);
+  // const [showForm, setShowForm] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -66,25 +66,17 @@ const MentorProfileEdit = (props) => {
 
   return (
     <>
-      {/* Toggle button */}
-      <button
-        className="btn btn-outline mt-2 btn-soft btn-primary"
-        onClick={() => setShowForm(!showForm)}
-      >
-        {showForm ? "Cancel" : "Update"}
-      </button>
-      {/* Only shows update input box if the button (above) is clicked */}
-      {showForm && (
+      
         <form
           // onSubmit={handleSubmit}
-          className="w-xs bg-base-200 border border-base-300 p-4 rounded-box " class="flex flex-col justify-center items-center"
+          className="w-full max-w-5xl bg-sky-50 p-6 rounded-xl mx-auto shadow-lg flex flex-col justify-center items-center"
         >
-          <fieldset className="fieldset">
+          <fieldset className="fieldset w-full space-y-4">
             {/* Form to update Profile */}
-
-            <label className="label-text font-bold">Update First Name Here:</label>
+            <div className="flex flex-col items-center w-full">
+            <label className="label-text font-bold text-lg text-center mb-2 mt-2">Update First Name Here:</label>
             <input
-              className="input input-bordered bg-white text-black"
+              className="input input-bordered bg-white text-black w-full max-w-xl mb-2 mt-2"
               value={updatedFirstName}
               onChange={(e) => {
                 console.log(e.target.value);
@@ -95,9 +87,9 @@ const MentorProfileEdit = (props) => {
               placeholder="Type Here"
               type="text"
             />
-            <label className="label-text font-bold">Update Last Name Here:</label>
+            <label className="label-text font-bold text-lg text-center mb-2 mt-2">Update Last Name Here:</label>
             <input
-              className="input input-bordered bg-white text-black"
+              className="input input-bordered bg-white text-black w-full max-w-xl mb-2 mt-2"
               value={updatedLastName}
               onChange={(e) => {
                 console.log(e.target.value);
@@ -108,9 +100,9 @@ const MentorProfileEdit = (props) => {
               placeholder="Type Here"
               type="text"
             />
-            <label className="label-text font-bold">Update Email Here:</label>
+            <label className="label-text font-bold text-lg text-center mb-2 mt-2">Update Email Here:</label>
             <input
-              className="input input-bordered bg-white text-black"
+              className="input input-bordered bg-white text-black w-full max-w-xl mb-2 mt-2"
               value={updatedEmail}
               onChange={(e) => {
                 console.log(e.target.value);
@@ -121,9 +113,9 @@ const MentorProfileEdit = (props) => {
               placeholder="Type Here"
               type="text"
             />
-            <label className="label-text font-bold">Update Bio Here:</label>
+            <label className="label-text font-bold text-lg text-center mb-2 mt-2">Update Bio Here:</label>
             <input
-              className="input input-bordered bg-white text-black"
+              className="input input-bordered bg-white text-black w-full max-w-xl mb-2 mt-2"
               value={updatedBio}
               onChange={(e) => {
                 console.log(e.target.value);
@@ -147,7 +139,7 @@ const MentorProfileEdit = (props) => {
               placeholder="Type Here"
               type="text"
             /> */}
-            <label className="label-text font-bold">
+            <label className="label-text font-bold text-lg text-center mt-2 mb-2">
               Update Question To Ask Here:
             </label>
             <input
@@ -160,17 +152,19 @@ const MentorProfileEdit = (props) => {
               name="questionToAsk"
               placeholder="Type Here"
               type="text"
-              className="input input-bordered  bg-white text-black"
+              className="input input-bordered bg-white text-black w-full max-w-xl mb-2 mt-2"
             />
+            <div className="w-full flex justify-center">
             <button
-              className="btn mt-2 btn-soft btn-primary"
+              className="btn btn-soft btn-primary text-lg mt-4"
               onClick={handleSubmit}
             >
               Update
             </button>
+            </div></div>
           </fieldset>
         </form>
-      )}
+
     </>
   );
 };

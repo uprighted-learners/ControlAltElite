@@ -158,6 +158,7 @@ router.get("/view-requests", validateSession, async (req, res) => {
         firstName: mentee.firstName,
         lastName: mentee.lastName,
         email: mentee.email,
+        school: mentee.school,
         interests: mentee.interests,
         project: mentee.project,
       }));
@@ -228,6 +229,7 @@ router.get("/view-matches", validateSession, async (req, res) => {
         firstName: mentee.firstName,
         lastName: mentee.lastName,
         email: mentee.email,
+        school: mentee.school,
         interests: mentee.interests,
         project: mentee.project,
       }));
