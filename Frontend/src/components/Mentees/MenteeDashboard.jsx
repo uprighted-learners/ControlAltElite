@@ -1,7 +1,6 @@
 // Mentee Dashboard
 import React, { useState, useEffect } from "react";
 import MentorProfile from "../Mentors/MentorProfile";
-import MenteeProfileEdit from "./MenteeProfileEdit";
 import { API_MENTEE_PROFILE_PREVIEW, API_VIEW_MENTORS } from "../../constants/endpoints";
 import MentorDirectory from "../public-views/MentorDirectory";
 import MenteeProfile from "./MenteeProfile";
@@ -70,7 +69,6 @@ const MenteeDashboard = (props) => {
         <div className="container mx-auto py-18">
           <MentorDirectory token={props.token} />
           <MenteeProfile token={props.token} />
-          
           {/* Show or Hide Matched Mentor */}
           <div className="p-4 mt-4 rounded-md shadow bg-base-200">
             <button
@@ -81,11 +79,6 @@ const MenteeDashboard = (props) => {
             </button>
 
             {showMentorPreview && <MentorPreview token={props.token} />}
-          </div>
-
-          {/* Update Mentee Profile Button */}
-          <div className="flex flex-col-reverse items-center justify-center p-4 mt-4 text-center text-black rounded-md">
-            <MenteeProfileEdit token={props.token} />
           </div>
         </div>
       </div>
