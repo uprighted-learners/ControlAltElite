@@ -12,6 +12,7 @@ const MentorDashboard = (props) => {
   const [showMenteePreview, setShowMenteePreview] = useState(false);
   const [mentorName, setMentorName] = useState("");
   const [mentor, setMentor] = useState({});
+  const [showProfileReminder, setShowProfileReminder] = useState(false);
 
   const togglePreview = () => {
     setShowMenteePreview(!showMenteePreview);
@@ -30,6 +31,10 @@ const MentorDashboard = (props) => {
         console.log("MENTOR DASHBOARD DATA", data);
         if (data && data.user) {
           setMentor(data.user);
+          // Determine if the profile is incomplete
+          const isIncomplete =
+            !data.user.bio || !data.user.skills || data.user.skills.length === 0;
+          setShowProfileReminder(isIncomplete);
         }
       } catch (error) {
         console.error("Error fetching mentor info:", error);
@@ -50,6 +55,15 @@ const MentorDashboard = (props) => {
               : "Loading..."}
           </h1>
         </div>
+        {/* Notification Banner */}
+        {showProfileReminder && (
+          <div className="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-md shadow">
+            <p>
+              👋 Welcome! It looks like your profile is not fully complete.
+              Please take a moment to finish setting it up so mentees can find you!
+            </p>
+          </div>
+        )}
       </div>
       {/* TWO COLUMN LAYOUT */}
       <div className="container mx-auto p-4 px-4">
