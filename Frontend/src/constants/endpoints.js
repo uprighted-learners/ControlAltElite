@@ -29,5 +29,3 @@ export const API_REQUEST_MENTOR = `${API}/match/request`;
 export const API_MENTEE_PROFILE_PREVIEW = `${API}/user/mentee/profile`;
 
 export const API_MENTOR_PROFILE_PREVIEW = `${API}/user/mentor/profile`;
-
-
