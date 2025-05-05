@@ -35,7 +35,7 @@ const CardPreview = (props) => {
         <figure className="px-10 pt-10">
           {/* Profile Image */}
           <img
-            src={props.profilePhoto ? props.profilePhoto : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
+            src={props.profilePhoto ? props.profilePhoto : '../../../assets/blank-profile-picture-973460_1280.png'}
             alt= "Mentor"
             className="object-cover w-full h-64 rounded-t-sm"
           />

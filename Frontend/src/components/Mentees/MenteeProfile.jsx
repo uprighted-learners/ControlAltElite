@@ -50,7 +50,9 @@ const MenteeProfile = ({ token }) => {
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <span className="font-medium text-gray-700">Interests:</span>
-          <span className="text-gray-900 text-lg">{mentee.interests}</span>
+          <span className="text-gray-900 text-lg">
+  {Array.isArray(mentee.interests) ? mentee.interests.join(', ') : mentee.interests}
+</span>
         </div>
       </div>
       {/* Update Mentee Profile Button */}
