@@ -1,7 +1,10 @@
 // Mentee Dashboard
 import React, { useState, useEffect } from "react";
 import MentorProfile from "../Mentors/MentorProfile";
-import { API_MENTEE_PROFILE_PREVIEW, API_VIEW_MENTORS } from "../../constants/endpoints";
+import {
+  API_MENTEE_PROFILE_PREVIEW,
+  API_VIEW_MENTORS,
+} from "../../constants/endpoints";
 import MentorDirectory from "../public-views/MentorDirectory";
 import MenteeProfile from "./MenteeProfile";
 import MentorPreview from "./MentorPreview";
@@ -19,12 +22,12 @@ const MenteeDashboard = (props) => {
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", props.token);
-  //Request
+    //Request
     let requestOptions = {
       method: "GET",
       headers: myHeaders,
     };
-  //Send Request
+    //Send Request
     let response = await fetch(API_MENTEE_PROFILE_PREVIEW, requestOptions);
     let menteeData = await response.json();
     setMentee(menteeData.user);
@@ -62,23 +65,67 @@ const MenteeDashboard = (props) => {
 
   return (
     <>
-      <div className="container h-full p-4 mx-auto">
+      <div className="container min-h-screen h-full p-4 mx-auto">
         <div className="bg-[#1b0a5f] text-white flex flex-col md:flex-row items-center justify-center md:justify-between p-4 rounded-md">
-          <h1 className="text-2xl text-center uppercase">{`${mentee?.firstName}'s Dashboard` || "Loading..."}</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center uppercase w-full">
+            {`${mentee?.firstName}'s Dashboard` || "Loading..."}
+          </h1>
         </div>
-        <div className="container mx-auto py-18">
-          <MentorDirectory token={props.token} />
-          <MenteeProfile token={props.token} />
-          {/* Show or Hide Matched Mentor */}
-          <div className="p-4 mt-4 rounded-md shadow bg-base-200">
-            <button
-              className="mt-4 btn bg-[#1b0a5f] text-white hover:bg-[#6c50e1] rounded-md"
-              onClick={toggleMentorPreview}
-            >
-              {showMentorPreview ? "Hide Matched Mentor" : "View Matched Mentor"}
-            </button>
 
-            {showMentorPreview && <MentorPreview token={props.token} />}
+        {/* Two-column layout starts here */}
+        <div className="flex flex-col md:flex-row gap-6 mt-6 px-4">
+          {/* Left Column: Mentor Directory */}
+          <div className="w-full md:w-1/2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-6 border-b pb-2 pt-6 text-center">
+              Browse Mentors
+            </h2>
+            <div className="relative bg-sky-50 p-4 rounded-md shadow-lg">
+              {/* Swipe indicator arrows */}
+              <div className="hidden sm:flex absolute top-1/4 -left-4 flex-col items-center text-blue-500 text-4xl sm:text-5xl animate-bounce space-y-4 mb-24">
+                {/* Left Arrows */}
+                <div className="flex flex-col items-center space-y-2">
+                  <span className="text-8xl font-bold">↑</span>
+                  <span className="text-8xl font-bold">↓</span>
+                </div>
+                <span className="transform -rotate-90 text-5xl tracking-wider pr-6 mt-8 pb-2">
+                  Swipe
+                </span>
+              </div>
+
+              {/* Right Arrows */}
+              <div className="absolute top-1/4 -right-4 flex flex-col items-center text-blue-500 text-4xl sm:text-5xl animate-bounce space-y-4">
+                <span className="transform rotate-90 text-5xl tracking-wider pr-6 mt-8 pb-2">
+                  Swipe
+                </span>
+                <div className="flex flex-col items-center space-y-2">
+                  <span className="text-8xl font-bold">↑</span>
+                  <span className="text-8xl font-bold">↓</span>
+                </div>
+              </div>
+              <MentorDirectory token={props.token} />
+            </div>
+          </div>
+
+          {/* Right Column: Mentee Info + Matched Mentor Preview */}
+          <div className="w-full md:w-1/2 space-y-4">
+            <MenteeProfile token={props.token} />
+            {/* Show or Hide Matched Mentor */}
+            <div className="space-y-4 flex flex-col items-center pb-4">
+              <button
+                className="btn mt-2 btn-soft btn-primary text-base sm:text-xl px-4 sm:px-8 py-2 sm:py-4"
+                onClick={toggleMentorPreview}
+              >
+                {showMentorPreview
+                  ? "Hide Matched Mentor"
+                  : "View Matched Mentor"}
+              </button>
+
+              {showMentorPreview && (
+                <div className="p-4 mt-4 rounded-md w-full h-[60%] md:w-[90%] shadow-lg bg-sky-50">
+                  <MentorPreview token={props.token} />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

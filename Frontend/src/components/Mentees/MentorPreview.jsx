@@ -39,11 +39,11 @@ const MentorPreview = ({ token }) => {
   return (
     <>
           {/* Mentor Info Card */}
-          <div className="bg-sky-50 rounded-2xl shadow-lg p-4 sm:p-6 space-y-4">
+          <div className="bg-sky-50 rounded-2xl p-4 sm:p-6 space-y-1">
         {/* Mentor's first and last name */}
         <div className="text-center">
           <h1
-            className="text-gray-900 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center underline"
+            className="text-gray-900 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center underline pb-2"
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
           >
             {mentor.firstName + " " + mentor.lastName}

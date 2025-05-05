@@ -31,8 +31,8 @@ const CardPreview = (props) => {
   }
   return (
     <>
-      <div className="mt-4 box-border w-full max-w-sm mx-auto bg-white rounded-sm shadow-sm card">
-        <figure className="px-10 pt-10">
+      <div className="box-border w-full max-w-sm mx-auto bg-white rounded-sm shadow-sm card">
+        <figure className="px-2 pt-2">
           {/* Profile Image */}
           <img
             src={props.profilePhoto ? props.profilePhoto : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
