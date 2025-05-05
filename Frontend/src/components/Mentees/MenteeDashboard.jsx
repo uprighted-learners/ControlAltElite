@@ -79,7 +79,7 @@ const MenteeDashboard = (props) => {
             {" "}
             {/* Make this container relative */}
             {/* Swipe indicator arrows (outside the shadow box) */}
-            <div className="hidden sm:flex absolute top-1/4 -left-[8rem] transform -rotate-90 text-blue-500 z-10">
+            <div className="hidden sm:flex absolute top-1/4 -left-[10rem] transform -rotate-90 text-blue-500 z-10">
               <span className="px-4 py-2 font-bold flex items-center">
                 <span className="text-9xl leading-none">←</span>
                 <span className="mx-2 text-5xl">Swipe</span>
