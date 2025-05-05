@@ -65,9 +65,9 @@ const Login = (props) => {
   return (
     <>
       <div className="flex flex-col items-center justify-center p-4 h-[80vh]">
-        <div className="bg-blue-500 w-full max-w-[34.375rem] max-h-fit rounded-sm">
+        <div className="bg-sky-100 w-full max-w-[34.375rem] max-h-fit rounded-sm shadow-2xl text-black">
           <div className="flex flex-col justify-center p-5 rounded-sm">
-            <h2 className="p-4 text-4xl text-center text-white uppercase">
+            <h2 className="p-4 text-4xl text-center text-black uppercase">
               login
             </h2>
             {/* Form Goes Here */}

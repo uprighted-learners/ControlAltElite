@@ -9,7 +9,7 @@ const MentorProfileEdit = (props) => {
   const [updatedBio, setUpdatedBio] = useState("");
   // Update Question
   const [updatedQuestionToAsk, setUpdatedQuestionToAsk] = useState("");
-  // Image handling states
+  // Image handling 
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -23,14 +23,14 @@ const MentorProfileEdit = (props) => {
     if (file) {
       setSelectedImage(file);
       
-      // Create preview
+      // image preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
       
-      // Reset status messages
+      // Reset status message
       setUploadStatus("");
     }
   };
@@ -70,7 +70,7 @@ const MentorProfileEdit = (props) => {
         throw new Error("Failed to upload to S3");
       }
       
-      // Get permanent URL (removing query parameters)
+      // Get URL back from s3 and split
       const imageUrl = uploadUrl.split("?")[0];
       setProfilePhotoUrl(imageUrl);
       setUploadStatus("Upload successful!");
@@ -97,7 +97,7 @@ const MentorProfileEdit = (props) => {
       myHeaders.append("Authorization", props.token);
       console.log(props.token);
      
-      // Create request body with only filled fields
+      // req.body with only updated fields
       const body = {};
       
       if (updatedFirstName) body.firstName = updatedFirstName;
@@ -107,7 +107,7 @@ const MentorProfileEdit = (props) => {
       if (updatedQuestionToAsk) body.questionToAsk = updatedQuestionToAsk;
       if (profilePhotoUrl) body.profilePhoto = profilePhotoUrl;
       
-      // Only proceed if at least one field has been filled
+      // Only submit if at least one field has been updated
       if (Object.keys(body).length === 0) {
         alert("Please update at least one field");
         return;
@@ -144,7 +144,7 @@ const MentorProfileEdit = (props) => {
       
       // Close form and refresh data
       props.setShowForm(false);
-      // Trigger mentor info refresh in dashboard
+      // efresh in dashboard
       if (props.onProfileUpdate) {
         props.onProfileUpdate(); 
       }

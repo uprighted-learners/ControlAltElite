@@ -318,7 +318,7 @@ router.put(
         updatedInfo.password = bcrypt.hashSync(password, 10);
       if (guardianEmail !== undefined && guardianEmail.trim() !== "")
         updatedInfo.guardianEmail = guardianEmail;
-      if (interests !== undefined && interests.trim() !== "")
+      if (interests !== undefined && Array.isArray(interests) && interests.length > 0) 
         updatedInfo.interests = interests;
 
       // Update the mentee in database

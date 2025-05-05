@@ -36,7 +36,7 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
     }
   };
 
-  // Call this function when component mounts
+ 
   useEffect(() => {
     if (token) fetchMentorData();
   }, [token]);
@@ -52,7 +52,7 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
 
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-      {/* Title + Button on same row */}
+      {/* Title + update profile button button on same level */}
       <div className="flex justify-between items-center border-b border-blue-500 pb-2 mb-6">
         <h2 className="text-2xl sm:text-3xl font-bold text-blue-600">
           My Profile:
@@ -64,7 +64,7 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
           {showForm ? "Cancel" : "Update"}
         </button>
       </div>
-      {/* Conditionally show edit form */}
+      {/* Conditionally shows the edit/update form */}
       {showForm && (
         <div className="mb-6">
           <MentorProfileEdit
@@ -98,11 +98,11 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
             {mentor.projectCategory}
           </span>
         </div>
-        {/* Profile Photo - with error handling */}
+        {/* Profile Photo  */}
         <div className="flex justify-center items-center px-4 pt-6">
           <img
             src={
-              // Use profile photo if available and not errored, otherwise fallback to default
+              // Use profile photo if 
               imageError || !mentor.profilePhoto
                 ? "../../../assets/blank-profile-picture-973460_1280.png"
                 : mentor.profilePhoto

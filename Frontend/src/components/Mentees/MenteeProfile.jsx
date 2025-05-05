@@ -5,30 +5,31 @@ import MenteeProfileEdit from "./MenteeProfileEdit.jsx";
 
 const MenteeProfile = ({ token }) => {
   const [mentee, setMentee] = useState("");
+  const [showForm, setShowForm] = useState(false);
+
+  const fetchMenteeData = async () => {
+    try {
+      const response = await fetch(API_MENTEE_PROFILE_PREVIEW, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch mentee data");
+
+      const data = await response.json();
+      console.log(data);
+
+      // Adjust this depending on the shape of your backend response
+      setMentee(data.user || data);
+    } catch (error) {
+      console.error("Error fetching mentee data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchMenteeData = async () => {
-      try {
-        const response = await fetch(API_MENTEE_PROFILE_PREVIEW, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch mentee data");
-
-        const data = await response.json();
-        console.log(data);
-
-        // Adjust this depending on the shape of your backend response
-        setMentee(data.user || data);
-      } catch (error) {
-        console.error("Error fetching mentee data:", error);
-      }
-    };
-
     if (token) fetchMenteeData();
   }, [token]);
 
@@ -36,12 +37,34 @@ const MenteeProfile = ({ token }) => {
 
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-3xl mx-auto">
-      {/* Project Title */}
-      <h1 className="text-2xl sm:text-3xl font-bold text-center text-blue-600 mb-6 border-b pb-2">
-        My Profile:
-      </h1>
+      {/* Title + update profile button button on same level */}
+      <div className="flex justify-between items-center border-b border-blue-500 pb-2 mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-blue-600">
+          My Profile:
+        </h2>
+        <button
+          className="btn btn-soft btn-primary text-lg px-6"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? "Cancel" : "Update Profile"}
+        </button>
+      </div>
+      
+      {/* Conditionally shows the edit/update form */}
+      {showForm && (
+        <div className="mb-6">
+          <MenteeProfileEdit
+            mentee={mentee}
+            setMentee={setMentee}
+            setShowForm={setShowForm}
+            token={token}
+            fetchMenteeData={fetchMenteeData}
+          />
+        </div>
+      )}
+
       {/* Mentee Info Card */}
-<div className="bg-sky-50 rounded-2xl shadow-lg p-4 sm:p-6 space-y-4">
+      <div className="bg-sky-50 rounded-2xl shadow-lg p-4 sm:p-6 space-y-4">
         {/* Mentee's first and last name */}
         <div className="text-center">
           <h1
@@ -51,6 +74,7 @@ const MenteeProfile = ({ token }) => {
             {mentee.firstName + " " + mentee.lastName}
           </h1>
         </div>
+        
         {/* Interest List */}
         <div className="flex flex-col items-center text-center py-4">
           <p className="font-bold text-xl text-gray-700 mb-1">Interests:</p>
@@ -64,6 +88,7 @@ const MenteeProfile = ({ token }) => {
             )}
           </ul>
         </div>
+        
         {/* Mentee's email */}
         <div className="bg-sky-100 p-4 rounded-md text-center">
           <p className="italic text-gray-500 text-sm mb-1">
