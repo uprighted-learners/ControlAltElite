@@ -3,13 +3,16 @@ const Mentee = require("../models/mentee.model");
 
 const validateMentee = async (req, res, next) => {
   try {
+    // Check if user is logged in
     if (!req.user) {
       return res.status(401).json({ message: "You must be logged in as a mentee" });
     }
     
     // Ensure userType is Mentee
     if (req.userType !== "Mentee") {
-      return res.status(403).json({ message: "You must have mentee privileges to access this" });
+      return res.status(403).json({ 
+        message: "Access denied. This page is only for mentees." 
+      });
     }
     
     // Verify that the user exists as a mentee
