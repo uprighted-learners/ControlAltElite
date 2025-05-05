@@ -67,7 +67,7 @@ const MentorPendingRequest = (props) => {
       const data = await response.json();
       console.log("Reject response:", data);
       if (response.ok) {
-        setMentees((prev) => prev.filter((mentee) => mentee.id !== menteeId));
+        setMentees((prev) => prev.filter((mentee) => mentee.menteeId !== menteeId));
       }
     } catch (error) {
       console.error("Error rejecting mentee:", error);

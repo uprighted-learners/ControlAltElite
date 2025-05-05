@@ -144,17 +144,10 @@ const MentorProfileEdit = (props) => {
       
       // Close form and refresh data
       props.setShowForm(false);
- //Maddie13
       // Trigger mentor info refresh in dashboard
       if (props.onProfileUpdate) {
         props.onProfileUpdate(); 
       }
-      // Response Object
-      // console.log("Token:", props.token);
-      let data = await response.json();
-      console.log(data);
- //Nick
-      props.fetchMentorData();
       
       alert(data.message || "Profile updated successfully!");
     } catch (error) {
