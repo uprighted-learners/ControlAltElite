@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { API_MENTOR_PROFILE_PREVIEW } from "../../constants/endpoints.js";
 import MentorProfileEdit from "./MentorProfileEdit.jsx";
 
-const MentorProfile = ({ token }) => {
+const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
   const [mentor, setMentor] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [imageError, setImageError] = useState(false);
+
 
   const fetchMentorData = async () => {
     try {
@@ -23,6 +24,11 @@ const MentorProfile = ({ token }) => {
       const data = await response.json();
       console.log("Mentor data:", data);
       setMentor(data.user || data);
+
+     // Check if the profile is complete and pass to parent
+       const requiredFields = ["firstName", "lastName", "profilePhoto", "bio", "email"];
+       const isComplete = requiredFields.every((field) => data.user[field]);
+       onProfileUpdate(isComplete); // Trigger parent update with completeness status
       // Reset image error state when we get new data
       setImageError(false);
     } catch (error) {
@@ -41,6 +47,7 @@ const MentorProfile = ({ token }) => {
     setImageError(true);
   };
 
+
   if (!mentor) return <div className="text-center mt-10">Loading...</div>;
 
   return (
@@ -57,16 +64,16 @@ const MentorProfile = ({ token }) => {
           {showForm ? "Cancel" : "Update"}
         </button>
       </div>
-
       {/* Conditionally show edit form */}
       {showForm && (
         <div className="mb-6">
           <MentorProfileEdit
-            fetchMentorData={fetchMentorData}
+            // fetchMentorData={fetchMentorData}
             mentor={mentor}
             setMentor={setMentor}
             setShowForm={setShowForm}
             token={token}
+            onProfileUpdate={onProfileUpdate}
           />
         </div>
       )}

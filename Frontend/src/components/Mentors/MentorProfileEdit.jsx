@@ -7,8 +7,8 @@ const MentorProfileEdit = (props) => {
   const [updatedLastName, setUpdatedLastName] = useState("");
   const [updatedEmail, setUpdatedEmail] = useState("");
   const [updatedBio, setUpdatedBio] = useState("");
+  // Update Question
   const [updatedQuestionToAsk, setUpdatedQuestionToAsk] = useState("");
-  
   // Image handling states
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -90,6 +90,13 @@ const MentorProfileEdit = (props) => {
     e.preventDefault();
     
     try {
+      console.log("Submmit Clicked");
+      // Headers
+      let myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization", props.token);
+      console.log(props.token);
+     
       // Create request body with only filled fields
       const body = {};
       
@@ -137,6 +144,16 @@ const MentorProfileEdit = (props) => {
       
       // Close form and refresh data
       props.setShowForm(false);
+ //Maddie13
+      // Trigger mentor info refresh in dashboard
+      if (props.onProfileUpdate) {
+        props.onProfileUpdate(); 
+      }
+      // Response Object
+      // console.log("Token:", props.token);
+      let data = await response.json();
+      console.log(data);
+ //Nick
       props.fetchMentorData();
       
       alert(data.message || "Profile updated successfully!");
