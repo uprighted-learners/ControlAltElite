@@ -45,7 +45,7 @@ const MentorPreview = ({ token }) => {
       <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:justify-between">
           <span className="font-medium text-gray-700">Interest:</span>
-          <span className="text-gray-900">{mentor.interests}</span>
+          <span className="text-gray-900">{Array.isArray(mentor.interests) ? mentor.interests.join(', ') : mentor.interests}</span>
         </div>
         <div className="flex flex-col sm:flex-row sm:justify-between">
           <span className="font-medium text-gray-700">Project:</span>

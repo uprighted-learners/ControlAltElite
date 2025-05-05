@@ -47,14 +47,13 @@ const MentorDashboard = (props) => {
     <>
       {/* <MentorNavbar /> */}
       <div className="container h-full p-4 mx-auto">
-        <div className="bg-[#1b0a5f] text-white flex flex-col md:flex-row items-center justify-center md:justify-between p-4 rounded-md">
-          <h1 className="text-2xl font-bold text-center uppercase">
-            Mentor Name:{" "}
-            {mentor.firstName && mentor.lastName
-              ? `${mentor.firstName} ${mentor.lastName}`
-              : "Loading..."}
-          </h1>
-        </div>
+  <div className="bg-[#1b0a5f] text-white flex flex-col items-center justify-center p-4 rounded-md">
+    <h1 className="text-2xl font-bold text-center uppercase w-full">
+      {mentor.firstName && mentor.lastName
+        ? `${mentor.firstName}'s Dashboard`
+        : "Loading..."}
+    </h1>
+  </div>
         {/* Notification Banner */}
         {showProfileReminder && (
           <div className="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-md shadow">

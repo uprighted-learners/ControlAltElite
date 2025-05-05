@@ -1,5 +1,9 @@
 const router = require("express").Router();
 const validateSession = require("../middleware/validate-session");
+const validateAdmin = require("../middleware/validate-admin");
+const validateMentee = require("../middleware/validate-mentee");
+const validateMentor = require("../middleware/validate-mentor");
+
 // Import JSONWEBTOKEN for token creation
 const jwt = require("jsonwebtoken");
 // Import BCRYPT to hash passwords
@@ -180,7 +184,7 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({ id: user._id, userType: userType }, "secret", {
       expiresIn: "7d",
     });
-console.log(token)
+    console.log(token);
     res.status(200).json({
       message: `Welcome, ${user.firstName}. You have been successfuly logged in.`,
       token: token,
@@ -201,145 +205,156 @@ console.log(token)
 // ENDPOINT: http://localhost:4000/user/mentor/update
 // Request Type: PUT
 
-router.put("/mentor/update", validateSession, async (req, res) => {
-  try {
-    //1. get id from JWT
-    const id = req.user._id;
+router.put(
+  "/mentor/update",
+  validateSession,
+  validateMentor,
+  async (req, res) => {
+    try {
+      //1. get id from JWT
+      const id = req.user._id;
 
-    // Get mentor's profile fields from req.body
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      bio,
-      profilePhoto,
-      interests,
-      questionToAsk,
-      projectCategory,
-    } = req.body;
+      // Get mentor's profile fields from req.body
+      const {
+        firstName,
+        lastName,
+        email,
+        password,
+        bio,
+        profilePhoto,
+        interests,
+        questionToAsk,
+        projectCategory,
+      } = req.body;
 
-    // Empty object to hold updated info
-    const updatedInfo = {};
+      // Empty object to hold updated info
+      const updatedInfo = {};
 
-    // only update if provided values are NOT undefined (this way fields can be left empty)
-    // ! added .trim() to make sure empty fields wont overwrite existing data
-    if (firstName !== undefined && firstName.trim() !== "")
-      updatedInfo.firstName = firstName;
-    if (lastName !== undefined && lastName.trim() !== "")
-      updatedInfo.lastName = lastName;
-    if (email !== undefined && email.trim() !== "") updatedInfo.email = email;
-    if (password !== undefined && password.trim() !== "")
-      updatedInfo.password = bcrypt.hashSync(password, 10);
-    if (bio !== undefined && bio.trim() !== "") updatedInfo.bio = bio;
-    if (profilePhoto !== undefined && profilePhoto.trim() !== "")
-      updatedInfo.profilePhoto = profilePhoto;
-    if (interests !== undefined && interests.trim() !== "")
-      updatedInfo.interests = interests;
-    if (questionToAsk !== undefined && questionToAsk.trim() !== "")
-      updatedInfo.questionToAsk = questionToAsk;
-    if (projectCategory !== undefined && projectCategory.trim() !== "")
-      updatedInfo.projectCategory = projectCategory;
+      // only update if provided values are NOT undefined (this way fields can be left empty)
+      // ! added .trim() to make sure empty fields wont overwrite existing data
+      if (firstName !== undefined && firstName.trim() !== "")
+        updatedInfo.firstName = firstName;
+      if (lastName !== undefined && lastName.trim() !== "")
+        updatedInfo.lastName = lastName;
+      if (email !== undefined && email.trim() !== "") updatedInfo.email = email;
+      if (password !== undefined && password.trim() !== "")
+        updatedInfo.password = bcrypt.hashSync(password, 10);
+      if (bio !== undefined && bio.trim() !== "") updatedInfo.bio = bio;
+      if (profilePhoto !== undefined && profilePhoto.trim() !== "")
+        updatedInfo.profilePhoto = profilePhoto;
+      if (interests !== undefined && interests.trim() !== "")
+        updatedInfo.interests = interests;
+      if (questionToAsk !== undefined && questionToAsk.trim() !== "")
+        updatedInfo.questionToAsk = questionToAsk;
+      if (projectCategory !== undefined && projectCategory.trim() !== "")
+        updatedInfo.projectCategory = projectCategory;
 
-    // Take new data from updatedMentor and update the mentor's info
-    const updatedMentor = await Mentor.findByIdAndUpdate(id, updatedInfo, {
-      new: true,
-    });
+      // Take new data from updatedMentor and update the mentor's info
+      const updatedMentor = await Mentor.findByIdAndUpdate(id, updatedInfo, {
+        new: true,
+      });
 
-    // error if update was unsuccessful
-    if (!updatedMentor) {
-      return res
-        .status(404)
-        .json({ message: "Error updating your profile - please try again" });
+      // error if update was unsuccessful
+      if (!updatedMentor) {
+        return res
+          .status(404)
+          .json({ message: "Error updating your profile - please try again" });
+      }
+
+      // Give success message if info is updated
+      res.status(200).json({
+        message: "Your mentor profile was successfully updated",
+        user: {
+          id: updatedMentor._id,
+          firstName: updatedMentor.firstName,
+          lastName: updatedMentor.lastName,
+          email: updatedMentor.email,
+          bio: updatedMentor.bio,
+          profilePhoto: updatedMentor.profilePhoto,
+          interests: updatedMentor.interests,
+          questionToAsk: updatedMentor.questionToAsk,
+          projectCategory: updatedMentor.projectCategory,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-
-    // Give success message if info is updated
-    res.status(200).json({
-      message: "Your mentor profile was successfully updated",
-      user: {
-        id: updatedMentor._id,
-        firstName: updatedMentor.firstName,
-        lastName: updatedMentor.lastName,
-        email: updatedMentor.email,
-        bio: updatedMentor.bio,
-        profilePhoto: updatedMentor.profilePhoto,
-        interests: updatedMentor.interests,
-        questionToAsk: updatedMentor.questionToAsk,
-        projectCategory: updatedMentor.projectCategory,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
-});
+);
 
 // ! Route for Mentee to update their info
 // ENDPOINT: http://localhost:4000/user/mentee/update
 // Request type: PUT
-router.put("/mentee/update", validateSession, async (req, res) => {
-  try {
-    // Get mentee's id from token
-    const id = req.user._id;
+router.put(
+  "/mentee/update",
+  validateSession,
+  validateMentee,
+  async (req, res) => {
+    try {
+      // Get mentee's id from token
+      const id = req.user._id;
 
-    // make sure user is a mentee
-    if (req.userType !== "Mentee") {
-      return res
-        .status(403)
-        .json({ message: "This page is only valid for mentees" });
+      // make sure user is a mentee
+      if (req.userType !== "Mentee") {
+        return res
+          .status(403)
+          .json({ message: "This page is only valid for mentees" });
+      }
+      // Get profile fields from the req.body
+      const { firstName, lastName, email, password, guardianEmail, interests } =
+        req.body;
+
+      // Empty object to hold updated info:
+      const updatedInfo = {};
+
+      // only update if provided values are NOT undefined (this way fields can be left empty)
+      // !Added .trim() to make sure empty fields wont overwrite existing data when updating
+      if (firstName !== undefined && firstName.trim() !== "")
+        updatedInfo.firstName = firstName;
+      if (lastName !== undefined && lastName.trim() !== "")
+        updatedInfo.lastName = lastName;
+      if (email !== undefined && email.trim() !== "") updatedInfo.email = email;
+      if (password !== undefined && password.trim() !== "")
+        updatedInfo.password = bcrypt.hashSync(password, 10);
+      if (guardianEmail !== undefined && guardianEmail.trim() !== "")
+        updatedInfo.guardianEmail = guardianEmail;
+      if (interests !== undefined && interests.trim() !== "")
+        updatedInfo.interests = interests;
+
+      // Update the mentee in database
+      const updatedMentee = await Mentee.findByIdAndUpdate(id, updatedInfo, {
+        new: true,
+      });
+      // give error if update was unsuccessful
+      if (!updatedMentee) {
+        return res
+          .status(404)
+          .json({ message: "Error updating your profile - please try again." });
+      }
+
+      // Give success message with updated info
+      res.status(200).json({
+        message: "Your mentee profile was successfully updated",
+        user: {
+          id: updatedMentee._id,
+          firstName: updatedMentee.firstName,
+          lastName: updatedMentee.lastName,
+          email: updatedMentee.email,
+          guardianEmail: updatedMentee.guardianEmail,
+          interests: updatedMentee.interests,
+          project: updatedMentee.project,
+        },
+      });
+    } catch (error) {
+      res.json({ message: error.message });
     }
-    // Get profile fields from the req.body
-    const { firstName, lastName, email, password, guardianEmail, interests } = req.body;
-
-    // Empty object to hold updated info:
-    const updatedInfo = {};
-
-    // only update if provided values are NOT undefined (this way fields can be left empty)
-    // !Added .trim() to make sure empty fields wont overwrite existing data when updating
-    if (firstName !== undefined && firstName.trim() !== "")
-      updatedInfo.firstName = firstName;
-    if (lastName !== undefined && lastName.trim() !== "")
-      updatedInfo.lastName = lastName;
-    if (email !== undefined && email.trim() !== "") updatedInfo.email = email;
-    if (password !== undefined && password.trim() !== "")
-      updatedInfo.password = bcrypt.hashSync(password, 10);
-    if (guardianEmail !== undefined && guardianEmail.trim() !== "")
-      updatedInfo.guardianEmail = guardianEmail;
-    if (interests !== undefined && interests.trim() !== "")
-      updatedInfo.interests = interests;
-
-    // Update the mentee in database
-    const updatedMentee = await Mentee.findByIdAndUpdate(id, updatedInfo, {
-      new: true,
-    });
-    // give error if update was unsuccessful
-    if (!updatedMentee) {
-      return res
-        .status(404)
-        .json({ message: "Error updating your profile - please try again." });
-    }
-
-    // Give success message with updated info
-    res.status(200).json({
-      message: "Your mentee profile was successfully updated",
-      user: {
-        id: updatedMentee._id,
-        firstName: updatedMentee.firstName,
-        lastName: updatedMentee.lastName,
-        email: updatedMentee.email,
-        guardianEmail: updatedMentee.guardianEmail,
-        interests: updatedMentee.interests,
-        project: updatedMentee.project,
-      },
-    });
-  } catch (error) {
-    res.json({ message: error.message });
   }
-});
+);
 
 // ToDo Route to delete user
 // ENDPOINT: http://localhost:4000/user/delete/
 // Request type: DELETE
-router.delete("/delete", validateSession, async (req, res) => {
+router.delete("/delete", validateSession, validateAdmin, async (req, res) => {
   try {
     //1. GEt user ID from the token
     const id = req.user._id;

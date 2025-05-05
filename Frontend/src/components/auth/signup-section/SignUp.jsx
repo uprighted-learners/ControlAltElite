@@ -1,44 +1,93 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { API_REGISTER } from "../../../constants/endpoints";
 
 const SignUp = (props) => {
-  // TODO: Create state variables for first name, last name, email, and password using the useState hook.
+  // State variables for form fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [guardianEmail, setGuardianEmail] = useState(""); // added by nick
-  const [school, setSchool] = useState(""); // added by nick
-  const [ageCheck, setAgeCheck] = useState(false); // added by nick
-  const [project, setProject] = useState(""); //added by Maddie
-  const [interests, setInterests] = useState("");//added by Maddie
-  // const [zipcode, setZipcode] = useState("");
+  const [guardianEmail, setGuardianEmail] = useState("");
+  const [school, setSchool] = useState("");
+  const [ageCheck, setAgeCheck] = useState(false);
+  // const [project, setProject] = useState("");
 
-  // TODO: Create a function called handleSubmit that will console.log("Click Worked")
+  // Interest selection related states
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [interestError, setInterestError] = useState("");
+
+  // Available interests from the mentee model
+  const availableInterests = [
+    "Music",
+    "Technology",
+    "Sports",
+    "Outdoor activities",
+    "Books and writing",
+    "Art",
+    "Exercising",
+    "Food",
+    "Gaming",
+    "Pets and animals",
+    "Gardening",
+    "Cars",
+    "Politics",
+  ];
+
+  // Handle when user clicks on an interest checkbox
+  const handleInterestSelection = (interest) => {
+    // Check if interest is already selected
+    if (selectedInterests.includes(interest)) {
+      // Remove from selected list if already checked
+      const updatedInterests = selectedInterests.filter(
+        (item) => item !== interest
+      );
+      setSelectedInterests(updatedInterests);
+      setInterestError("");
+      return;
+    }
+
+    // Don't allow more than 4 interests
+    if (selectedInterests.length >= 4) {
+      setInterestError("You can only select 4 interests");
+      return;
+    }
+
+    // add selected interest to list
+    setSelectedInterests([...selectedInterests, interest]);
+    setInterestError("");
+  };
+
+  // Form submission handler
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("Click Worked");
-    signUp();
+
+    // ! select only 4 interests
+    if (selectedInterests.length !== 4) {
+      setInterestError("You need to select 4 interests");
+      return;
+    }
+
+    registerMentee();
   }
 
-  // TODO: Create the function for adding user to database
-  const signUp = async () => {
-    console.log("Sign up function acalled");
+  // Register new mentee
+  const registerMentee = async () => {
     try {
       const requestBody = {
         firstName,
         lastName,
         email,
         password,
-        userType: "Mentee", // Explicitly set this
+        userType: "Mentee",
         guardianEmail,
         school,
         ageCheck,
-        project,
-        interests,
+        interests: selectedInterests,
       };
-      console.log(requestBody);
+
+      console.log("Signup request:", requestBody);
+
       const response = await fetch(API_REGISTER, {
         method: "POST",
         headers: {
@@ -53,14 +102,12 @@ const SignUp = (props) => {
       // Handle response
       if (data.token) {
         props.updateToken(data.token);
-
-        // Redirect to mentee dashboard page after registere
-        window.location.href = "/mentee"; 
+        window.location.href = "/mentee";
         alert(`You were successfully registered! Welcome, ${firstName}!`);
       } else {
         alert(
           data.message ||
-            "Registration failed. Please make sure required fields are filled oout and try again."
+            "Registration failed. Please make sure required fields are filled out and try again."
         );
       }
     } catch (error) {
@@ -71,15 +118,14 @@ const SignUp = (props) => {
   return (
     <>
       <div className="flex justify-center items-center p-4">
-        <div className="bg-blue-500 w-full max-w-[34.375rem] p-8 rounded-sm flex flex-col justify-center items-center">
+        <div className="bg-sky-100 w-full max-w-[34.375rem] p-8 rounded-sm flex flex-col justify-center items-center shadow-2xl text-black">
+          {" "}
           <h2 className="text-center font-bold text-3xl">MENTEE SIGN UP</h2>
-          {/* Form Goes Here */}
           <form className="flex flex-col w-full" onSubmit={handleSubmit}>
-            {/* Form Group for First Name */}
+            {/* First Name */}
             <label className="pb-2 uppercase" htmlFor="firstName">
               First Name:
             </label>
-
             <input
               className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
               type="text"
@@ -90,6 +136,8 @@ const SignUp = (props) => {
               onChange={(e) => setFirstName(e.target.value)}
               required
             />
+
+            {/* Last Name */}
             <label className="pb-2 uppercase" htmlFor="lastName">
               Last Name:
             </label>
@@ -103,6 +151,8 @@ const SignUp = (props) => {
               onChange={(e) => setLastName(e.target.value)}
               required
             />
+
+            {/* Email */}
             <label className="pb-2 uppercase" htmlFor="email">
               Your Email:
             </label>
@@ -116,6 +166,8 @@ const SignUp = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+
+            {/* Password */}
             <label className="pb-2 uppercase" htmlFor="password">
               Password:
             </label>
@@ -129,7 +181,8 @@ const SignUp = (props) => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            {/* Guardian Email field */}
+
+            {/* Guardian Email */}
             <label className="pb-2 uppercase" htmlFor="guardianEmail">
               Guardian Email:
             </label>
@@ -141,10 +194,10 @@ const SignUp = (props) => {
               placeholder="Guardian Email"
               value={guardianEmail}
               onChange={(e) => setGuardianEmail(e.target.value)}
-              // required
+              required
             />
 
-            {/* TODO dropdown for Select School */}
+            {/* School Selection */}
             <label className="pb-2 uppercase" htmlFor="school">
               School:
             </label>
@@ -167,33 +220,62 @@ const SignUp = (props) => {
                 Mount Anthony Union High School
               </option>
             </select>
-            <label className="pb-2 uppercase" htmlFor="interests">
-              Interests:
-            </label>
-            <input
-              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
-              type="text"
-              name="interests"
-              id="interests"
-              placeholder="Interests"
-              value={interests}
-              onChange={(e) => setInterests(e.target.value)}
-              // required
-            />
-            <label className="pb-2 uppercase" htmlFor="project">
-              Project: (Must Chose "Video" or "Science")
-            </label>
-            <input
-              className="bg-white border-2 border-gray-300 rounded-md p-2 mb-4"
-              type="text"
-              name="project"
-              id="project"
-              placeholder="Project"
-              value={project}
-              onChange={(e) => setProject(e.target.value)}
-              // required
-            />
-            {/* TODO checkbox for age verification */}
+
+            {/* DaisyUI Collapsible for Interest Selection */}
+            <div className="mb-4">
+              <label className="pb-2 uppercase block">
+                Select Interests (Choose exactly 4):
+              </label>
+
+              {/* Collapsible interests */}
+              <div className="collapse collapse-arrow border border-base-300 bg-white rounded-md">
+                <input type="checkbox" className="peer" />
+                <div className="collapse-title text-md font-medium">
+                  {selectedInterests.length === 0
+                    ? "Click to select your interests"
+                    : `Selected: ${selectedInterests.length}/4 interests`}
+                </div>
+                <div className="collapse-content">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                    {availableInterests.map((interest) => (
+                      <div key={interest} className="form-control">
+                        <label className="cursor-pointer label py-1 justify-start gap-2">
+                          <input
+                            type="checkbox"
+                            className="checkbox checkbox-primary checkbox-sm"
+                            checked={selectedInterests.includes(interest)}
+                            onChange={() => handleInterestSelection(interest)}
+                          />
+                          <span className="label-text text-xs">{interest}</span>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Display selected interests */}
+              {selectedInterests.length > 0 && (
+                <div className="mt-2 p-2 bg-blue-100 rounded-md">
+                  <p className="font-semibold text-sm">
+                    Your selected interests:
+                  </p>
+                  <ul className="list-disc pl-5">
+                    {selectedInterests.map((interest) => (
+                      <li key={interest} className="text-xs mt-1">
+                        {interest}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Error message for interest selection */}
+              {interestError && (
+                <p className="text-red-500 text-xs mt-1">{interestError}</p>
+              )}
+            </div>
+
             {/* Age Check */}
             <div className="flex items-center mb-4">
               <input
@@ -208,9 +290,9 @@ const SignUp = (props) => {
               <label htmlFor="ageCheck">
                 I confirm that I am over 13 years old
               </label>
-              
             </div>
 
+            {/* Submit Button */}
             <button
               className="bg-blue-950 rounded-sm text-white py-2 hover:bg-blue-950/50 hover:border-2 hover:border-blue-950"
               type="submit"

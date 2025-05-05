@@ -48,10 +48,10 @@ const MenteeSchema = new mongoose.Schema({
     {
       type: String,
       enum: [
-        "Music (listening and/or dancing, singing)",
+        "Music",
         "Technology",
         "Sports",
-        "Outdoors activities (hiking, camping, fishing, etc.)",
+        "Outdoor activities",
         "Books and writing",
         "Art",
         "Exercising",
@@ -59,7 +59,7 @@ const MenteeSchema = new mongoose.Schema({
         "Gaming",
         "Pets and animals",
         "Gardening",
-        "Cars, motorcycles, boats, power equipment",
+        "Cars",
         "Politics",
       ],
     },
