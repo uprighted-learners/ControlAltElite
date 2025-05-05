@@ -79,7 +79,7 @@ const HomepageCardDisplay = (props) => {
         </select>
   
         {/* Grid Layout for Cards */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-2">
           {filteredMentorData.map((mentor) => (
             <div
               key={mentor.id}
@@ -90,6 +90,7 @@ const HomepageCardDisplay = (props) => {
                 lastName={mentor.lastName}
                 profilePhoto={mentor.profilePhoto}
                 interests={mentor.interests}
+                questionToAsk={mentor.questionToAsk}
                 mentorId={mentor.id}
                 token={props.token}
               />

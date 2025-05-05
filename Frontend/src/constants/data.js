@@ -17,4 +17,4 @@ export const navMenu = [
     }
 ]
 
-export const interests = ["Music (listening and/or dancing, singing)", "Technology", "Sports", "Outdoors activities (hiking, camping, fishing, etc.)", "Books and writing", "Art", "Exercising", "Food", "Gaming", "Pets and animals", "Gardening", "Cars, motorcycles, boats, power equipment", "Politics"];
+export const interests = ["Music", "Technology", "Sports", "Outdoor activities", "Books and writing", "Art", "Exercising", "Food", "Gaming", "Pets and animals", "Gardening", "Cars", "Politics"];
