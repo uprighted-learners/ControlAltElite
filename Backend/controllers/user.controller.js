@@ -242,7 +242,7 @@ router.put(
       if (bio !== undefined && bio.trim() !== "") updatedInfo.bio = bio;
       if (profilePhoto !== undefined && profilePhoto.trim() !== "")
         updatedInfo.profilePhoto = profilePhoto;
-      if (interests !== undefined && interests.trim() !== "")
+      if (interests !== undefined && Array.isArray(interests) && interests.length > 0) 
         updatedInfo.interests = interests;
       if (questionToAsk !== undefined && questionToAsk.trim() !== "")
         updatedInfo.questionToAsk = questionToAsk;
