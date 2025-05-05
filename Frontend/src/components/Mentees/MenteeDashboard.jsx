@@ -75,33 +75,22 @@ const MenteeDashboard = (props) => {
         {/* Two-column layout starts here */}
         <div className="flex flex-col md:flex-row gap-6 mt-6 px-4">
           {/* Left Column: Mentor Directory */}
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/2 relative">
+            {" "}
+            {/* Make this container relative */}
+            {/* Swipe indicator arrows (outside the shadow box) */}
+            <div className="hidden sm:flex absolute top-1/4 -left-[8rem] transform -rotate-90 text-blue-500 z-10">
+              <span className="px-4 py-2 font-bold flex items-center">
+                <span className="text-9xl leading-none">←</span>
+                <span className="mx-2 text-5xl">Swipe</span>
+                <span className="text-9xl leading-none">→</span>
+              </span>
+            </div>
+            {/* Heading and MentorDirectory box */}
             <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-6 border-b pb-2 pt-6 text-center">
               Browse Mentors
             </h2>
-            <div className="relative bg-sky-50 p-4 rounded-md shadow-lg">
-              {/* Swipe indicator arrows */}
-              <div className="hidden sm:flex absolute top-1/4 -left-4 flex-col items-center text-blue-500 text-4xl sm:text-5xl animate-bounce space-y-4 mb-24">
-                {/* Left Arrows */}
-                <div className="flex flex-col items-center space-y-2">
-                  <span className="text-8xl font-bold">↑</span>
-                  <span className="text-8xl font-bold">↓</span>
-                </div>
-                <span className="transform -rotate-90 text-5xl tracking-wider pr-6 mt-8 pb-2">
-                  Swipe
-                </span>
-              </div>
-
-              {/* Right Arrows */}
-              <div className="absolute top-1/4 -right-4 flex flex-col items-center text-blue-500 text-4xl sm:text-5xl animate-bounce space-y-4">
-                <span className="transform rotate-90 text-5xl tracking-wider pr-6 mt-8 pb-2">
-                  Swipe
-                </span>
-                <div className="flex flex-col items-center space-y-2">
-                  <span className="text-8xl font-bold">↑</span>
-                  <span className="text-8xl font-bold">↓</span>
-                </div>
-              </div>
+            <div className="bg-sky-50 p-4 rounded-md shadow-lg">
               <MentorDirectory token={props.token} />
             </div>
           </div>
