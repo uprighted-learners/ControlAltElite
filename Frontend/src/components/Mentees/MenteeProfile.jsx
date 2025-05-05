@@ -37,27 +37,45 @@ const MenteeProfile = ({ token }) => {
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-3xl mx-auto">
       {/* Project Title */}
-      <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 mb-6 border-b pb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-center text-blue-600 mb-6 border-b pb-2">
         My Profile:
-      </h2>
+      </h1>
       {/* Mentee Info Card */}
-      <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-medium text-gray-700">Name:</span>
-          <span className="text-gray-900 text-lg">
+<div className="bg-sky-50 rounded-2xl shadow-lg p-4 sm:p-6 space-y-4">
+        {/* Mentee's first and last name */}
+        <div className="text-center">
+          <h1
+            className="text-gray-900 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center underline"
+            style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
+          >
             {mentee.firstName + " " + mentee.lastName}
-          </span>
+          </h1>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-medium text-gray-700">Interests:</span>
-          <span className="text-gray-900 text-lg">
-  {Array.isArray(mentee.interests) ? mentee.interests.join(', ') : mentee.interests}
-</span>
+        {/* Interest List */}
+        <div className="flex flex-col items-center text-center py-4">
+          <p className="font-bold text-xl text-gray-700 mb-1">Interests:</p>
+          <ul className="list-disc list-inside text-left text-gray-900 text-lg space-y-1">
+            {mentee.interests && mentee.interests.length > 0 ? (
+              mentee.interests.map((interest, index) => (
+                <li key={index}>{interest}</li>
+              ))
+            ) : (
+              <li>No interests listed</li>
+            )}
+          </ul>
         </div>
-      </div>
-      {/* Update Mentee Profile Button */}
-      <div className="flex flex-col-reverse items-center justify-center p-4 mt-4 text-center text-black rounded-md">
-        <MenteeProfileEdit />
+        {/* Mentee's email */}
+        <div className="bg-sky-100 p-4 rounded-md text-center">
+          <p className="italic text-gray-500 text-sm mb-1">
+            Only visible to you
+          </p>
+          <div className="flex items-center justify-center">
+            <p className="font-bold text-xl text-gray-700 mr-2">Email:</p>
+            <span className="text-blue-500 text-xl font-bold">
+              {mentee.email}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

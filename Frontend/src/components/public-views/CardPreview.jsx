@@ -31,8 +31,8 @@ const CardPreview = (props) => {
   }
   return (
     <>
-      <div className="flex justify-center mt-4 box-border w-full max-w-sm mx-auto bg-white rounded-sm shadow-sm card">
-        <figure className="px-10 pt-10">
+      <div className="box-border w-full max-w-sm mx-auto bg-white rounded-sm shadow-sm card">
+        <figure className="px-2 pt-2">
           {/* Profile Image */}
           <img
             src={props.profilePhoto ? props.profilePhoto : '../../../assets/blank-profile-picture-973460_1280.png'}
