@@ -8,7 +8,6 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
   const [showForm, setShowForm] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-
   const fetchMentorData = async () => {
     try {
       const response = await fetch(API_MENTOR_PROFILE_PREVIEW, {
@@ -25,18 +24,24 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
       console.log("Mentor data:", data);
       setMentor(data.user || data);
 
-     // Check if the profile is complete and pass to parent
-       const requiredFields = ["firstName", "lastName", "profilePhoto", "bio", "email"];
-       const isComplete = requiredFields.every((field) => data.user[field]);
-       onProfileUpdate(isComplete); // Trigger parent update with completeness status
-      // Reset image error state when we get new data
+      // Check if the profile is complete
+      const requiredFields = [
+        "firstName",
+        "lastName",
+        "profilePhoto",
+        "bio",
+        "email, interests",
+      ];
+      const isComplete = requiredFields.every((field) => data.user[field]);
+      onProfileUpdate(isComplete); // Trigger parent update with completeness status
+
+      // Reset image error when we get updated data is found
       setImageError(false);
     } catch (error) {
       console.error("Error fetching mentor data:", error);
     }
   };
 
- 
   useEffect(() => {
     if (token) fetchMentorData();
   }, [token]);
@@ -46,7 +51,6 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
     console.log("Image failed to load");
     setImageError(true);
   };
-
 
   if (!mentor) return <div className="text-center mt-10">Loading...</div>;
 
@@ -68,7 +72,7 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
       {showForm && (
         <div className="mb-6">
           <MentorProfileEdit
-            // fetchMentorData={fetchMentorData}
+            fetchMentorData={fetchMentorData}
             mentor={mentor}
             setMentor={setMentor}
             setShowForm={setShowForm}
@@ -102,7 +106,7 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
         <div className="flex justify-center items-center px-4 pt-6">
           <img
             src={
-              // Use profile photo if 
+              // Use profile photo if provided or use placeholder
               imageError || !mentor.profilePhoto
                 ? "../../../assets/blank-profile-picture-973460_1280.png"
                 : mentor.profilePhoto
@@ -125,7 +129,7 @@ const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
             )}
           </ul>
         </div>
-        {/* Mentor's question */}
+        {/* Mentor questionToAsk */}
         <div className="flex flex-col items-center text-center py-4">
           <p className="font-bold text-xl text-gray-700 mb-1">Question:</p>
           <span className="text-gray-900 text-xl italic">
