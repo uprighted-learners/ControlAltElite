@@ -67,9 +67,7 @@ const MentorPendingRequest = (props) => {
       const data = await response.json();
       console.log("Reject response:", data);
       if (response.ok) {
-        setMentees((prev) =>
-          prev.filter((mentee) => mentee.menteeId !== menteeId)
-        );
+        setMentees((prev) => prev.filter((mentee) => mentee.id !== menteeId));
       }
     } catch (error) {
       console.error("Error rejecting mentee:", error);
@@ -101,8 +99,10 @@ const MentorPendingRequest = (props) => {
                 <div className="font-semibold">
                   {mentee.firstName} {mentee.lastName}
                 </div>
-                <div className="text-xs uppercase font-semibold opacity-60">
-                  {mentee.email}
+                <div className="text-xs uppercase font-semibold opacity-80">
+                  {mentee.school}
+                </div>
+                <div className="text-xs uppercase font-semibold opacity-80"> Interests: {mentee.interests?.join(" ")}
                 </div>
               </div>
 
@@ -155,27 +155,6 @@ const MentorPendingRequest = (props) => {
         </ul>
       </div>
     </>
-    // <div>
-    //   <h1>Mentor Match List</h1>
-    //   <table border="1">
-    //     <thead>
-    //       <tr>
-    //         <th>First Name</th>
-    //         <th>Last Name</th>
-    //         <th>Email</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {mentees.map((mentee, index) => (
-    //         <tr key={index}>
-    //           <td>{mentee.firstName}</td>
-    //           <td>{mentee.lastName}</td>
-    //           <td>{mentee.email}</td>
-    //         </tr>
-    //       ))}
-    //     </tbody>
-    //   </table>
-    // </div>
   );
 };
 

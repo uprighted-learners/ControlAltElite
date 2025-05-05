@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { API_MENTOR_PROFILE_PREVIEW } from "../../constants/endpoints.js";
 import MentorProfileEdit from "./MentorProfileEdit.jsx";
 
-const MentorProfile = ({ token }) => {
+const MentorProfile = ({ token, onProfileUpdate, profileComplete }) => {
   const [mentor, setMentor] = useState("");
   // Toggle for update form
   const [showForm, setShowForm] = useState(false);
+
   const fetchMentorData = async () => {
     try {
       const response = await fetch(API_MENTOR_PROFILE_PREVIEW, {
@@ -22,16 +23,19 @@ const MentorProfile = ({ token }) => {
       const data = await response.json();
       console.log(data);
       setMentor(data.user || data);
-    } catch (error) {
+      // Check if the profile is complete and pass to parent
+       const requiredFields = ["firstName", "lastName", "profilePhoto", "bio", "email"];
+       const isComplete = requiredFields.every((field) => data.user[field]);
+       onProfileUpdate(isComplete); // Trigger parent update with completeness status
+     } catch (error) {
       console.error("Error fetching mentor data:", error);
     }
   };
 
-  // ✅ Still use it in useEffect
   useEffect(() => {
     if (token) fetchMentorData();
   }, [token]);
-
+  
   if (!mentor) return <div className="text-center mt-10">Loading...</div>;
 
   return (
@@ -48,16 +52,16 @@ const MentorProfile = ({ token }) => {
           {showForm ? "Cancel" : "Update"}
         </button>
       </div>
-
       {/* Conditionally show edit form */}
       {showForm && (
         <div className="mb-6">
           <MentorProfileEdit
-            fetchMentorData={fetchMentorData}
+            // fetchMentorData={fetchMentorData}
             mentor={mentor}
             setMentor={setMentor}
             setShowForm={setShowForm}
             token={token}
+            onProfileUpdate={onProfileUpdate}
           />
         </div>
       )}
@@ -124,10 +128,6 @@ const MentorProfile = ({ token }) => {
           </div>
         </div>
       </div>
-      {/* Update Mentor Profile Button
-      <div className="flex flex-col items-center justify-center p-4 mt-4 text-center text-black rounded-md w-full max-w-3xl mx-auto">
-        <MentorProfileEdit />
-      </div> */}
     </div>
   );
 };

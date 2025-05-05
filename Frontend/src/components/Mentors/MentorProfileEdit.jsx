@@ -10,8 +10,6 @@ const MentorProfileEdit = (props) => {
   const [updatedEmail, setUpdatedEmail] = useState("");
   // Update Bio
   const [updatedBio, setUpdatedBio] = useState("");
-  // Update Profile Photo
-  // const [updatedProfilePhoto, setUpdatedProfilePhoto] = useState("");
   // Update Question
   const [updatedQuestionToAsk, setUpdatedQuestionToAsk] = useState("");
 
@@ -25,7 +23,6 @@ const MentorProfileEdit = (props) => {
       // Headers
       let myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
-      // Add an authorization to the headers if you need a token for that route
       myHeaders.append("Authorization", props.token);
       console.log(props.token);
       // Request Body
@@ -56,10 +53,12 @@ const MentorProfileEdit = (props) => {
       setUpdatedQuestionToAsk("");
       // Toggles whether the update form is shown
       props.setShowForm(false);
-      //Fetch mentor data
-      props.fetchMentorData();
+      // Trigger mentor info refresh in dashboard
+      if (props.onProfileUpdate) {
+        props.onProfileUpdate(); 
+      }
       // Response Object
-      console.log("Token:", props.token);
+      // console.log("Token:", props.token);
       let data = await response.json();
       console.log(data);
     } catch (error) {
