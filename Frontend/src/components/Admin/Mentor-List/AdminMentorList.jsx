@@ -188,9 +188,9 @@ const AdminMentorList = (props) => {
           <table className="w-full bg-white rounded-lg shadow-md">
             <thead className="sticky top-0 bg-[#1b0a5f]">
               <tr className="text-left text-white">
-                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                {/* <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
                   ID:
-                </th>
+                </th> */}
                 <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
                   First Name:
                 </th>
@@ -204,6 +204,12 @@ const AdminMentorList = (props) => {
                   Project Category:
                 </th>
                 <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                  Interests:
+                </th>
+                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
+                  Question:
+                </th>
+                <th className="px-4 py-2 border-2 border-[#1b0a5f] text-white text-center font-semibold">
                   Actions:
                 </th>
               </tr>
@@ -211,21 +217,23 @@ const AdminMentorList = (props) => {
             <tbody>
               {mentors.map((mentor) => (
                 <tr key={mentor.id} className="hover:bg-blue-100 transition-colors">
-                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                  {/* <td className="px-4 py-3 border-2 border-[#1b0a5f]">
                     {mentor.id}
-                  </td>
-                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                  </td> */}
+                  <td className="px-4 py-3 border-2 font-bold border-[#1b0a5f]">
                     {mentor.firstName}
                   </td>
-                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                  <td className="px-4 py-3 border-2 font-bold border-[#1b0a5f]">
                     {mentor.lastName}
                   </td>
                   <td className="px-4 py-3 border-2 border-[#1b0a5f]">
                     {mentor.email}
                   </td>
-                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">
+                  <td className="px-4 py-3 border-2 text-blue-500 font-bold border-[#1b0a5f]">
                     {mentor.projectCategory || "N/A"}
                   </td>
+                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">{mentor.interests.join(', ')}</td>
+                  <td className="px-4 py-3 border-2 border-[#1b0a5f]">{mentor.questionToAsk}</td>
                   <td className="px-4 py-3 border-2 border-[#1b0a5f]">
                     <div className="flex justify-center gap-4">
                       <button
