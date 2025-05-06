@@ -89,6 +89,7 @@ const HomepageCardDisplay = (props) => {
                 firstName={mentor.firstName}
                 lastName={mentor.lastName}
                 profilePhoto={mentor.profilePhoto}
+                projectCategory={mentor.projectCategory}
                 interests={mentor.interests}
                 questionToAsk={mentor.questionToAsk}
                 mentorId={mentor.id}
