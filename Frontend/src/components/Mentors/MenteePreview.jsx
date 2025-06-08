@@ -4,6 +4,7 @@ import { API_VIEW_MENTOR_MATCH } from "../../constants/endpoints";
 
 const MenteePreview = ({ token }) => {
   const [mentee, setMentee] = useState(null);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchMenteeData = async () => {
