@@ -12,6 +12,8 @@ const bcrypt = require("bcrypt");
 const Mentor = require("../models/mentor.model");
 const Mentee = require("../models/mentee.model");
 const Admin = require("../models/admin.model");
+// Import email service
+const { sendWelcomeEmail } = require("../services/emailService");
 
 // ! Register user route
 // Endpoint: http://localhost:4000/user/register
@@ -106,8 +108,8 @@ router.post("/register", async (req, res) => {
         lastName: lastName,
         email: email,
         password: bcrypt.hashSync(password, 10),
-        guardianEmail: "placeholder@placeholder.com",
-        school: "Grace Christian School",
+        guardianEmail: guardianEmail || "placeholder@placeholder.com",
+        school: school,
         ageCheck: true,
         interests: interests,
         project: project,
@@ -117,6 +119,20 @@ router.post("/register", async (req, res) => {
     }
     //  Save the new user in the database and store the response in a variable (saved user)
     const newUser = await user.save();
+
+    // Send welcome email to new mentees
+    if (userType === "Mentee") {
+      try {
+        await sendWelcomeEmail(
+          newUser.email,
+          `${newUser.firstName} ${newUser.lastName}`
+        );
+        console.log("Welcome email sent successfully");
+      } catch (emailError) {
+        console.error("Failed to send welcome email:", emailError);
+        // Don't fail the registration if email fails
+      }
+    }
 
     // Create JWT token
     const token = jwt.sign({ id: newUser._id, userType: userType }, "secret", {
@@ -222,6 +238,8 @@ router.put(
         password,
         bio,
         profilePhoto,
+        profilePhoto1,
+        profilePhoto2,
         interests,
         questionToAsk,
         projectCategory,
@@ -240,9 +258,20 @@ router.put(
       if (password !== undefined && password.trim() !== "")
         updatedInfo.password = bcrypt.hashSync(password, 10);
       if (bio !== undefined && bio.trim() !== "") updatedInfo.bio = bio;
+
+      // Handle both old single photo and new two-photo system
       if (profilePhoto !== undefined && profilePhoto.trim() !== "")
         updatedInfo.profilePhoto = profilePhoto;
-      if (interests !== undefined && Array.isArray(interests) && interests.length > 0) 
+      if (profilePhoto1 !== undefined && profilePhoto1.trim() !== "")
+        updatedInfo.profilePhoto1 = profilePhoto1;
+      if (profilePhoto2 !== undefined && profilePhoto2.trim() !== "")
+        updatedInfo.profilePhoto2 = profilePhoto2;
+
+      if (
+        interests !== undefined &&
+        Array.isArray(interests) &&
+        interests.length > 0
+      )
         updatedInfo.interests = interests;
       if (questionToAsk !== undefined && questionToAsk.trim() !== "")
         updatedInfo.questionToAsk = questionToAsk;
@@ -271,6 +300,8 @@ router.put(
           email: updatedMentor.email,
           bio: updatedMentor.bio,
           profilePhoto: updatedMentor.profilePhoto,
+          profilePhoto1: updatedMentor.profilePhoto1,
+          profilePhoto2: updatedMentor.profilePhoto2,
           interests: updatedMentor.interests,
           questionToAsk: updatedMentor.questionToAsk,
           projectCategory: updatedMentor.projectCategory,
@@ -318,7 +349,11 @@ router.put(
         updatedInfo.password = bcrypt.hashSync(password, 10);
       if (guardianEmail !== undefined && guardianEmail.trim() !== "")
         updatedInfo.guardianEmail = guardianEmail;
-      if (interests !== undefined && Array.isArray(interests) && interests.length > 0) 
+      if (
+        interests !== undefined &&
+        Array.isArray(interests) &&
+        interests.length > 0
+      )
         updatedInfo.interests = interests;
 
       // Update the mentee in database
@@ -404,7 +439,12 @@ router.get("/mentor/view-all", async (req, res) => {
       interests: mentor.interests || "",
       questionToAsk: mentor.questionToAsk || "",
       profilePhoto: mentor.profilePhoto || "",
+      profilePhoto1: mentor.profilePhoto1 || "",
+      profilePhoto2: mentor.profilePhoto2 || "",
       projectCategory: mentor.projectCategory || "",
+      // Add these fields so frontend knows if team is full
+      approvedMentees: mentor.approvedMentees || [],
+      isTeamFull: mentor.approvedMentees && mentor.approvedMentees.length > 0, // Team is full if they have any approved mentee
     }));
 
     res.status(200).json({
@@ -431,21 +471,32 @@ router.put("/completion", validateSession, async (req, res) => {
     // ! If user is mentor, update MENTOR specific profile fields
     if (req.userType === "Mentor") {
       // Extract mentor fields from req.body
-      const { bio, profilePhoto, interests, questionToAsk, projectCategory } =
-        req.body;
+      const {
+        bio,
+        profilePhoto,
+        profilePhoto1,
+        profilePhoto2,
+        interests,
+        questionToAsk,
+        projectCategory,
+      } = req.body;
 
       profileInfo = {
         bio: bio || "",
         profilePhoto: profilePhoto || "",
+        profilePhoto1: profilePhoto1 || "",
+        profilePhoto2: profilePhoto2 || "",
         interests: interests || "",
         questionToAsk: questionToAsk || "",
         projectCategory: projectCategory || "",
       };
 
       // Check if all required fields are completed, if not set isProfileComplete = false
+      // Now requiring both photos for complete profile
       if (
         !bio ||
-        !profilePhoto ||
+        !profilePhoto1 ||
+        !profilePhoto2 ||
         !interests ||
         !questionToAsk ||
         !projectCategory
@@ -495,7 +546,7 @@ router.put("/profile-photo", validateSession, async (req, res) => {
     const id = req.user._id;
 
     //  2. get image URL from req.body
-    const { profilePhoto } = req.body;
+    const { profilePhoto, profilePhoto1, profilePhoto2 } = req.body;
 
     // Check that user is a mentor before updating
     if (req.userType !== "Mentor") {
@@ -503,25 +554,35 @@ router.put("/profile-photo", validateSession, async (req, res) => {
         message: "Only mentors need to upload a profile photo",
       });
     }
-    // if no photo url is found, return error
-    if (!profilePhoto) {
+
+    // Build update object based on which photos are provided
+    const updateData = {};
+    if (profilePhoto) updateData.profilePhoto = profilePhoto;
+    if (profilePhoto1) updateData.profilePhoto1 = profilePhoto1;
+    if (profilePhoto2) updateData.profilePhoto2 = profilePhoto2;
+
+    // if no photo urls are found, return error
+    if (Object.keys(updateData).length === 0) {
       return res
         .status(400)
         .json({ message: "Photo seems to be missing! Try again" });
     }
 
     // Update user info with profilePhoto (findByIdAndUpdate)
-    const updatedMentor = await Mentor.findByIdAndUpdate(
-      id,
-      { profilePhoto: profilePhoto },
-      { new: true }
-    );
+    const updatedMentor = await Mentor.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
 
     // if no user found, give error
     if (!updatedMentor) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: `route works` });
+    res.status(200).json({
+      message: `Profile photo(s) updated successfully`,
+      profilePhoto: updatedMentor.profilePhoto,
+      profilePhoto1: updatedMentor.profilePhoto1,
+      profilePhoto2: updatedMentor.profilePhoto2,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -530,43 +591,72 @@ router.put("/profile-photo", validateSession, async (req, res) => {
 // !ROUTE to view single MENTOR's profile by id
 // ENDPOINT: http://localhost:4000/user/mentor/profile
 // Request Type: GET
-router.get("/mentor/profile", validateSession, async (req, res) => {
-  try {
-    // Get the Mentor's id from token
-    const id = req.user._id;
+router.get(
+  "/mentor/profile",
+  validateSession,
+  validateMentor,
+  async (req, res) => {
+    try {
+      // Get the Mentor's id from token
+      const id = req.user._id;
 
-    // Make sure userType = Mentor
-    if (req.userType !== "Mentor") {
-      return res
-        .status(403)
-        .json({ message: "You must be a mentor to view this page" });
+      // Make sure userType = Mentor
+      if (req.userType !== "Mentor") {
+        return res
+          .status(403)
+          .json({ message: "You must be a mentor to view this page" });
+      }
+
+      // If userType is Mentor, find their data from their id
+      // Populate the approvedMentees to get full mentee details
+      const mentor = await Mentor.findById(id).populate(
+        "approvedMentees",
+        "firstName lastName email school interests project"
+      );
+
+      // If the mentor has approved mentees, get their answers too
+      let menteeWithAnswer = null;
+      if (mentor.approvedMentees && mentor.approvedMentees.length > 0) {
+        // Get the answer for the first (and only) approved mentee
+        const Answer = require("../models/match.model");
+        const answer = await Answer.findOne({
+          menteeId: mentor.approvedMentees[0]._id,
+          mentorId: mentor._id,
+        });
+
+        // Combine mentee data with their answer
+        menteeWithAnswer = {
+          ...mentor.approvedMentees[0].toObject(),
+          answer: answer ? answer.menteeAnswer : "No answer found",
+        };
+      }
+
+      // Respond with mentor profile info if successful"
+      // return empty string if field was left empty
+      res.status(200).json({
+        message: `${mentor.firstName} ${mentor.lastName}'s profile found sucessfully`,
+        user: {
+          mentorId: mentor._id,
+          firstName: mentor.firstName,
+          lastName: mentor.lastName,
+          email: mentor.email,
+          bio: mentor.bio || "",
+          profilePhoto: mentor.profilePhoto || "",
+          profilePhoto1: mentor.profilePhoto1 || "",
+          profilePhoto2: mentor.profilePhoto2 || "",
+          interests: mentor.interests || "",
+          questionToAsk: mentor.questionToAsk || "",
+          projectCategory: mentor.projectCategory || "",
+          menteeRequests: mentor.menteeRequests || [], // arrray not a string
+          approvedMentees: mentor.approvedMentees || [], // array not a string
+          approvedMenteeDetails: menteeWithAnswer, // Add the full mentee details with answer
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-
-    // If userType is Mentor, find their data from their id
-    const mentor = await Mentor.findById(id);
-
-    // Respond with mentor profile info if successful"
-    // return empty string if field was left empty
-    res.status(200).json({
-      message: `${mentor.firstName} ${mentor.lastName}'s profile found sucessfully`,
-      user: {
-        mentorId: mentor._id,
-        firstName: mentor.firstName,
-        lastName: mentor.lastName,
-        email: mentor.email,
-        bio: mentor.bio || "",
-        profilePhoto: mentor.profilePhoto || "",
-        interests: mentor.interests || "",
-        questionToAsk: mentor.questionToAsk || "",
-        projectCategory: mentor.projectCategory || "",
-        menteeRequests: mentor.menteeRequests || [], // arrray not a string
-        approvedMentees: mentor.approvedMentees || [], // array not a string
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
-});
+);
 
 // !ROUTE to view single MENTEE's profile by ID:
 // ENDPOINT: http://localhost:4000/user/mentee/profile
@@ -608,5 +698,164 @@ router.get("/mentee/profile", validateSession, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// ! Route to view all mentees (for admin)
+// Endpoint: http://localhost:4000/user/mentee/view-all
+// Request type: GET
+router.get(
+  "/mentee/view-all",
+  validateSession,
+  validateAdmin,
+  async (req, res) => {
+    try {
+      const mentees = await Mentee.find({ userType: "Mentee" });
+
+      const formattedMentees = mentees.map((mentee) => ({
+        id: mentee._id,
+        firstName: mentee.firstName,
+        lastName: mentee.lastName,
+        email: mentee.email,
+        school: mentee.school || "",
+        interests: mentee.interests || [],
+        project: mentee.project || "",
+        guardianEmail: mentee.guardianEmail || "",
+        requestedMentors: mentee.requestedMentors || [],
+        approvedMentors: mentee.approvedMentors || [],
+        ageCheck: mentee.ageCheck,
+      }));
+
+      res.status(200).json({
+        message: `All mentees retrieved successfully`,
+        mentees: formattedMentees,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+// Add these routes to your admin.controller.js file
+
+// TODO DELETE /admin/mentee/delete/:id
+router.delete(
+  "/mentee/delete/:id",
+  validateSession,
+  validateAdmin,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deletedMentee = await Mentee.deleteOne({ _id: id });
+
+      if (deletedMentee.deletedCount === 0) {
+        return res.status(404).json({ message: "Mentee not found." });
+      } else {
+        return res.status(200).json({
+          message: "Mentee successfully deleted.",
+          deletedUserId: id,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+// TODO PUT /admin/mentee/update/:id (optional - for future use)
+router.put(
+  "/mentee/update/:id",
+  validateSession,
+  validateAdmin,
+  async (req, res) => {
+    try {
+      const menteeId = req.params.id;
+      console.log("Received mentee ID: ", menteeId);
+
+      const { firstName, lastName, email, school, guardianEmail, interests } =
+        req.body;
+
+      const updatedInfo = {};
+      // only update if provided values are NOT undefined
+      if (firstName !== undefined && firstName.trim() !== "")
+        updatedInfo.firstName = firstName;
+      if (lastName !== undefined && lastName.trim() !== "")
+        updatedInfo.lastName = lastName;
+      if (email !== undefined && email.trim() !== "") updatedInfo.email = email;
+      if (school !== undefined && school.trim() !== "")
+        updatedInfo.school = school;
+      if (guardianEmail !== undefined && guardianEmail.trim() !== "")
+        updatedInfo.guardianEmail = guardianEmail;
+      if (interests !== undefined && Array.isArray(interests))
+        updatedInfo.interests = interests;
+
+      // Update the mentee's info
+      const updatedMentee = await Mentee.findByIdAndUpdate(
+        menteeId,
+        updatedInfo,
+        {
+          new: true,
+        }
+      );
+
+      // error if update was unsuccessful
+      if (!updatedMentee) {
+        return res
+          .status(404)
+          .json({
+            message: "Error updating mentee profile - please try again",
+          });
+      }
+      // success
+      res.status(200).json({
+        message: "Mentee profile was successfully updated",
+        user: {
+          id: updatedMentee._id.toString(),
+          firstName: updatedMentee.firstName,
+          lastName: updatedMentee.lastName,
+          email: updatedMentee.email,
+          school: updatedMentee.school,
+          guardianEmail: updatedMentee.guardianEmail,
+          interests: updatedMentee.interests,
+        },
+      });
+    } catch (error) {
+      res.json({ message: error.message });
+    }
+  }
+);
+
+// ! route to view all mentees (fellows)
+// Endpoint: http://localhost:4000/user/mentee/view-all
+// request type: GET
+router.get(
+  "/mentee/view-all",
+  validateSession,
+  validateAdmin,
+  async (req, res) => {
+    try {
+      const mentees = await Mentee.find({ userType: "Mentee" });
+
+      const formattedMentees = mentees.map((mentee) => ({
+        id: mentee._id,
+        firstName: mentee.firstName,
+        lastName: mentee.lastName,
+        email: mentee.email,
+        school: mentee.school || "",
+        age: mentee.age || null,
+        interests: mentee.interests || [],
+        project: mentee.project || "",
+        guardianEmail: mentee.guardianEmail || "",
+        approvedMentors: mentee.approvedMentors || [],
+        requestedMentors: mentee.requestedMentors || [],
+      }));
+
+      res.status(200).json({
+        message: `All mentees retrieved successfully`,
+        mentees: formattedMentees,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
 
 module.exports = router;
